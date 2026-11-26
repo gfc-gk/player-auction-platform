@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif}
+header{background:#1e293b;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h2{margin:0}
+button{border:0;padding:11px 16px;border-radius:7px;background:#eab308;color:#111827;font-weight:bold;cursor:pointer}
+.logout{background:#ef4444;color:white}
+main{max-width:1000px;margin:30px auto;padding:0 18px}
+.card{background:#1e293b;padding:22px;border-radius:12px;margin-bottom:22px}
+input{width:100%;padding:13px;margin:8px 0 14px;border-radius:7px;border:1px solid #475569;background:#0f172a;color:white}
+label{color:#cbd5e1}
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #475569}
+th{color:#eab308}
+.table-wrap{overflow-x:auto}
+#message{margin-top:12px;color:#facc15}
+@media(max-width:500px){header{padding:15px}main{margin:20px auto}.card{padding:16px}}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>🏏 Super Admin</h2>
+  <button class="logout" id="logoutBtn">Logout</button>
+</header>
+
+<main>
+
+  <div class="card">
+    <h3>Create New Client</h3>
+
+    <form id="clientForm">
+      <label>Client / Club Name</label>
+      <input id="clientName" type="text" placeholder="Enter club name" required>
+
+      <label>Email</label>
+      <input id="clientEmail" type="email" placeholder="Enter email (optional)">
+
+      <label>Phone</label>
+      <input id="clientPhone" type="tel" placeholder="Enter phone (optional)">
+
+      <button type="submit" id="createBtn">Create Client</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <div class="card">
+    <h3>All Clients</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="clientList">
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const message = document.getElementById("message");
+
+async function checkAdmin(){
+  const {data:{session},error:sessionError} = await db.auth.getSession();
+
+  if(sessionError || !session){
+    window.location.href = "index.html";
+    return false;
+  }
+
+  const {data,error} = await db.rpc("is_platform_admin");
+
+  if(error || data !== true){
+    await db.auth.signOut();
+    window.location.href = "index.html";
+    return false;
+  }
+
+  return true;
+}
+
+async function loadClients(){
+  const tbody = document.getElementById("clientList");
+  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  const {data,error} = await db
+    .from("clients")
+    .select("client_name,email,phone,status")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    tbody.innerHTML = "<tr><td colspan='4'>Could not load clients</td></tr>";
+    message.textContent = error.message;
+    return;
+  }
+
+  if(!data.length){
+    tbody.innerHTML = "<tr><td colspan='4'>No clients created yet.</td></tr>";
+    return;
+  }
+
+  tbody.innerHTML = "";
+
+  data.forEach(client=>{
+    const tr = document.createElement("tr");
+
+    [client.client_name,client.email || "-",client.phone || "-",client.status]
+    .forEach(value=>{
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+document.getElementById("clientForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+
+  const btn = document.getElementById("createBtn");
+  btn.disabled = true;
+  btn.textContent = "Creating...";
+  message.textContent = "";
+
+  const {data,error} = await db.rpc("create_client",{
+    p_client_name:document.getElementById("clientName").value.trim(),
+    p_email:document.getElementById("clientEmail").value.trim() || null,
+    p_phone:document.getElementById("clientPhone").value.trim() || null
+  });
+
+  if(error){
+    message.textContent = "Error: " + error.message;
+  }else{
+    message.textContent = "Client created successfully!";
+    document.getElementById("clientForm").reset();
+    await loadClients();
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Create Client";
+});
+
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+  await db.auth.signOut();
+  window.location.href = "index.html";
+});
+
+(async()=>{
+  if(await checkAdmin()){
+    await loadClients();
+  }
+})();
+</script>
+
+</body>
+</html>

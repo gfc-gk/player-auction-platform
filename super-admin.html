@@ -28,20 +28,12 @@ button{cursor:pointer}
 .brand-name{font-size:14px;font-weight:900}
 .brand-sub{font-size:9px;color:var(--muted);margin-top:5px;letter-spacing:1.3px}
 .nav-heading{color:#658474;font-size:10px;letter-spacing:1.5px;margin:23px 10px 9px}
-.nav-item{
- display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;
- border:0;border-radius:9px;background:transparent;color:#b6cbbd;
- text-align:left;font-size:13px;margin:3px 0
-}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;border:0;border-radius:9px;background:transparent;color:#b6cbbd;text-align:left;font-size:13px;margin:3px 0}
 .nav-item:hover,.nav-item.active{background:#143d2a;color:var(--green)}
 .nav-item.active{box-shadow:inset 3px 0 var(--green)}
 .sidebar-bottom{margin-top:auto;padding-top:17px;border-top:1px solid var(--border)}
 .main{margin-left:255px;width:calc(100% - 255px);min-width:0}
-.topbar{
- height:68px;position:sticky;top:0;z-index:10;display:flex;
- align-items:center;justify-content:space-between;padding:0 28px;
- background:#0a2117;border-bottom:1px solid var(--border)
-}
+.topbar{height:68px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#0a2117;border-bottom:1px solid var(--border)}
 .page-title{font-size:14px;font-weight:bold}
 .online{font-size:10px;color:var(--green);background:#123a29;padding:8px 11px;border-radius:20px}
 .logout{border:1px solid #744040;background:#321b1b;color:#ff9999;border-radius:7px;padding:9px 13px;font-size:11px}
@@ -63,10 +55,7 @@ button{cursor:pointer}
 .panel-body{padding:19px}
 .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .field label{display:block;color:#a9c2b3;font-size:10px;margin-bottom:7px;letter-spacing:.4px}
-.field input,.field select{
- width:100%;padding:12px;border:1px solid #28533c;background:#071b12;
- color:white;border-radius:7px;outline:none;font-size:12px
-}
+.field input,.field select{width:100%;padding:12px;border:1px solid #28533c;background:#071b12;color:white;border-radius:7px;outline:none;font-size:12px}
 .field input:focus,.field select:focus{border-color:var(--green)}
 .field select option{background:#0d251b}
 .form-footer{grid-column:1/-1;margin-top:5px}
@@ -77,12 +66,18 @@ button{cursor:pointer}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 #message{font-size:12px;margin-top:12px;line-height:1.5}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-th{text-align:left;padding:13px 16px;background:#102c20;color:#86a796;font-size:9px;letter-spacing:.7px;white-space:nowrap}
-td{padding:14px 16px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+th{text-align:left;padding:13px 14px;background:#102c20;color:#86a796;font-size:9px;letter-spacing:.7px;white-space:nowrap}
+td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertical-align:middle}
 .empty{text-align:center;padding:27px;color:var(--muted)}
 .badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:9px;font-weight:bold}
 .badge.active{background:#164a31;color:#54e8a0}
+.search-box{width:100%;max-width:350px;padding:11px 13px;background:#071b12;color:white;border:1px solid #28533c;border-radius:7px;outline:none;font-size:12px}
+.search-box:focus{border-color:var(--green)}
+.club-name{font-weight:bold;color:var(--green)}
+.club-id{font-size:10px;color:var(--muted);max-width:180px;overflow-wrap:anywhere}
+.owner-name{font-weight:bold}
+.owner-email{color:#9fcab0}
 .info-card{padding:22px}
 .info-card h3{font-size:15px;margin:0 0 10px}
 .info-card p{font-size:12px;color:var(--muted);line-height:1.8}
@@ -147,18 +142,9 @@ td{padding:14px 16px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2}
  </div>
 
  <div class="stats">
-  <div class="stat">
-   <div class="stat-label">TOTAL CLUBS</div>
-   <div class="stat-value" id="totalClubs">—</div>
-  </div>
-  <div class="stat">
-   <div class="stat-label">TOTAL SUBSCRIPTIONS</div>
-   <div class="stat-value" id="totalSubscriptions">—</div>
-  </div>
-  <div class="stat">
-   <div class="stat-label">LIVE AUCTIONS</div>
-   <div class="stat-value">—</div>
-  </div>
+  <div class="stat"><div class="stat-label">TOTAL CLUBS</div><div class="stat-value" id="totalClubs">—</div></div>
+  <div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="totalSubscriptions">—</div></div>
+  <div class="stat"><div class="stat-label">LIVE AUCTIONS</div><div class="stat-value">—</div></div>
  </div>
 
  <div class="panel">
@@ -174,10 +160,7 @@ td{padding:14px 16px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2}
 
 <section class="section" id="clubs">
  <div class="welcome">
-  <div>
-   <h1>Club Management</h1>
-   <p>Create and manage clubs and their owner accounts.</p>
-  </div>
+  <div><h1>Club Management</h1><p>Manage clubs and their owner accounts.</p></div>
  </div>
 
  <div class="panel">
@@ -249,20 +232,31 @@ td{padding:14px 16px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2}
      <button class="btn btn-green" type="submit" id="createBtn">＋ CREATE CLUB + OWNER ACCOUNT</button>
      <div id="message"></div>
     </div>
-
    </form>
   </div>
  </div>
 
  <div class="panel">
   <div class="panel-head">
-   <div><h3>ALL CLUBS</h3><p>Registered clubs.</p></div>
+   <div><h3>ALL CLUBS</h3><p>Club and owner information.</p></div>
+   <input id="clubSearch" class="search-box" type="search" placeholder="Search club, ID, owner, phone or email...">
    <button class="btn btn-dark" id="refreshClubs">↻ REFRESH</button>
   </div>
   <div class="table-wrap">
    <table>
-    <thead><tr><th>CLUB NAME</th><th>OWNER ID</th><th>CREATED</th></tr></thead>
-    <tbody id="clubList"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody>
+    <thead>
+     <tr>
+      <th>CLUB NAME</th>
+      <th>CLUB ID</th>
+      <th>OWNER NAME</th>
+      <th>MOBILE</th>
+      <th>EMAIL</th>
+      <th>CREATED</th>
+     </tr>
+    </thead>
+    <tbody id="clubList">
+     <tr><td colspan="6" class="empty">Loading...</td></tr>
+    </tbody>
    </table>
   </div>
  </div>
@@ -312,10 +306,8 @@ td{padding:14px 16px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2}
 </div>
 
 <script>
-/* SUPABASE CONFIGURATION */
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
-
 const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const titles={
@@ -326,6 +318,8 @@ const titles={
  players:"Player Database",
  teams:"Teams Management"
 };
+
+let allClubs=[];
 
 function showPage(page){
  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
@@ -342,7 +336,6 @@ document.querySelectorAll(".nav-item").forEach(btn=>{
 document.getElementById("today").textContent=
  new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
 
-/* IST DATE HELPERS */
 function getISTInputValue(date){
  const parts=new Intl.DateTimeFormat("en-CA",{
   timeZone:"Asia/Kolkata",
@@ -361,21 +354,18 @@ function inputToISTISOString(value){
 
 function setDateDefaults(){
  const now=new Date();
- const start=getISTInputValue(now);
- const endDate=new Date(now.getTime()+30*24*60*60*1000);
- document.getElementById("startDate").value=start;
- document.getElementById("endDate").value=getISTInputValue(endDate);
+ document.getElementById("startDate").value=getISTInputValue(now);
+ document.getElementById("endDate").value=
+  getISTInputValue(new Date(now.getTime()+30*24*60*60*1000));
 }
 setDateDefaults();
 
-/* AUTHENTICATION */
 async function checkAdmin(){
  const {data,error}=await db.auth.getSession();
  if(error||!data.session){
   location.replace("index.html");
   return false;
  }
-
  const {data:allowed,error:rpcError}=await db.rpc("is_platform_admin");
  if(rpcError||allowed!==true){
   await db.auth.signOut();
@@ -385,38 +375,111 @@ async function checkAdmin(){
  return true;
 }
 
-/* CLUB LIST */
+function addCell(row,value,className=""){
+ const td=document.createElement("td");
+ td.textContent=value??"-";
+ if(className)td.className=className;
+ row.appendChild(td);
+}
+
+function formatDate(value){
+ if(!value)return "-";
+ const date=new Date(value);
+ if(Number.isNaN(date.getTime()))return value;
+ return date.toLocaleString("en-IN",{
+  timeZone:"Asia/Kolkata",
+  day:"2-digit",month:"short",year:"numeric",
+  hour:"2-digit",minute:"2-digit"
+ });
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+/* LOAD CLUBS WITH OWNER INFORMATION */
 async function loadClubs(){
  const tbody=document.getElementById("clubList");
- tbody.innerHTML='<tr><td colspan="3" class="empty">Loading clubs...</td></tr>';
+ tbody.innerHTML='<tr><td colspan="6" class="empty">Loading clubs...</td></tr>';
 
- const {data,error}=await db.from("clubs")
-  .select("id,club_name,owner_user_id,created_at")
+ const {data,error}=await db
+  .from("clubs")
+  .select(`
+   id,
+   club_name,
+   owner_user_id,
+   owner_email,
+   created_at,
+   profiles!clubs_owner_user_id_fkey (
+    full_name,
+    phone
+   )
+  `)
   .order("created_at",{ascending:false});
 
  if(error){
-  tbody.innerHTML='<tr><td colspan="3" class="empty">Could not load clubs: '+escapeHTML(error.message)+'</td></tr>';
+  tbody.innerHTML=
+   '<tr><td colspan="6" class="empty">Could not load clubs: '+
+   escapeHTML(error.message)+'</td></tr>';
   return;
  }
 
- document.getElementById("totalClubs").textContent=(data||[]).length;
+ allClubs=data||[];
+ document.getElementById("totalClubs").textContent=allClubs.length;
+ renderClubs();
+}
+
+function renderClubs(){
+ const tbody=document.getElementById("clubList");
+ const search=document.getElementById("clubSearch").value.trim().toLowerCase();
+
+ const filtered=allClubs.filter(club=>{
+  const profile=Array.isArray(club.profiles)
+   ? club.profiles[0]
+   : club.profiles;
+
+  const values=[
+   club.club_name,
+   club.id,
+   club.owner_user_id,
+   club.owner_email,
+   profile?.full_name,
+   profile?.phone
+  ];
+
+  return values.some(v=>String(v??"").toLowerCase().includes(search));
+ });
+
  tbody.innerHTML="";
 
- if(!data?.length){
-  tbody.innerHTML='<tr><td colspan="3" class="empty">No clubs registered yet.</td></tr>';
+ if(!filtered.length){
+  tbody.innerHTML='<tr><td colspan="6" class="empty">No matching clubs found.</td></tr>';
   return;
  }
 
- data.forEach(club=>{
+ filtered.forEach(club=>{
+  const profile=Array.isArray(club.profiles)
+   ? club.profiles[0]
+   : club.profiles;
+
   const tr=document.createElement("tr");
-  addCell(tr,club.club_name);
-  addCell(tr,club.owner_user_id);
+
+  addCell(tr,club.club_name,"club-name");
+  addCell(tr,club.id,"club-id");
+  addCell(tr,profile?.full_name||"-","owner-name");
+  addCell(tr,profile?.phone||"-");
+  addCell(tr,club.owner_email||"-","owner-email");
   addCell(tr,formatDate(club.created_at));
+
   tbody.appendChild(tr);
  });
 }
 
-/* SUBSCRIPTIONS */
+document.getElementById("clubSearch").addEventListener("input",renderClubs);
+
+/* LOAD SUBSCRIPTIONS */
 async function loadSubscriptions(){
  const tbody=document.getElementById("subscriptionList");
  tbody.innerHTML='<tr><td colspan="7" class="empty">Loading subscriptions...</td></tr>';
@@ -433,12 +496,14 @@ async function loadSubscriptions(){
  const items=data||[];
  document.getElementById("totalSubscriptions").textContent=items.length;
  document.getElementById("subTotal").textContent=items.length;
- document.getElementById("subActive").textContent=items.filter(x=>x.status==="active").length;
+ document.getElementById("subActive").textContent=
+  items.filter(x=>x.status==="active"&&new Date(x.end_date)>new Date()).length;
 
  const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);
  document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
 
  tbody.innerHTML="";
+
  if(!items.length){
   tbody.innerHTML='<tr><td colspan="7" class="empty">No subscriptions found.</td></tr>';
   return;
@@ -452,32 +517,14 @@ async function loadSubscriptions(){
   addCell(tr,sub.duration_days+" days");
   addCell(tr,formatDate(sub.start_date));
   addCell(tr,formatDate(sub.end_date));
-  addCell(tr,sub.status);
+
+  const statusCell=document.createElement("td");
+  const isActive=sub.status==="active"&&new Date(sub.start_date)<=new Date()&&new Date(sub.end_date)>new Date();
+  statusCell.textContent=isActive?"ACTIVE":(new Date(sub.end_date)<=new Date()?"EXPIRED":sub.status.toUpperCase());
+  tr.appendChild(statusCell);
+
   tbody.appendChild(tr);
  });
-}
-
-function addCell(row,value){
- const td=document.createElement("td");
- td.textContent=value??"-";
- row.appendChild(td);
-}
-
-function formatDate(value){
- if(!value)return "-";
- const date=new Date(value);
- if(Number.isNaN(date.getTime()))return value;
- return date.toLocaleString("en-IN",{
-  timeZone:"Asia/Kolkata",
-  day:"2-digit",month:"short",year:"numeric",
-  hour:"2-digit",minute:"2-digit"
- });
-}
-
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
 }
 
 /* CREATE CLUB */
@@ -527,7 +574,6 @@ document.getElementById("clubForm").addEventListener("submit",async e=>{
 
  try{
   const {data,error}=await db.functions.invoke("create-club",{body:payload});
-
   if(error)throw error;
   if(!data?.success)throw new Error(data?.error||"Club creation failed.");
 
@@ -556,7 +602,6 @@ document.getElementById("logoutBtn").onclick=async()=>{
  location.replace("index.html");
 };
 
-/* START */
 (async()=>{
  const allowed=await checkAdmin();
  if(!allowed)return;

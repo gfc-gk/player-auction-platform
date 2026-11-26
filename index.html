@@ -5,150 +5,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Player Auction Platform | Login</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#071510;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  padding:20px;
-}
-.login-box{
-  width:100%;
-  max-width:420px;
-  background:#10251c;
-  border:1px solid #244b37;
-  border-radius:18px;
-  padding:35px;
-  box-shadow:0 20px 60px #0006;
-}
-.logo{
-  width:55px;height:55px;
-  display:grid;place-items:center;
-  background:#174c32;
-  border-radius:14px;
-  font-size:27px;
-  margin-bottom:22px;
-}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#071510;color:#fff;font-family:Arial,sans-serif;padding:20px}
+.login-box{width:100%;max-width:420px;background:#10251c;border:1px solid #244b37;border-radius:18px;padding:35px;box-shadow:0 20px 60px #0006}
+.logo{width:55px;height:55px;display:grid;place-items:center;background:#174c32;border-radius:14px;font-size:27px;margin-bottom:22px}
 h1{font-size:25px;margin-bottom:8px}
 .subtitle{color:#9db5a7;font-size:14px;margin-bottom:28px}
 label{display:block;font-size:13px;margin:17px 0 8px;color:#c7d9ce}
-input{
-  width:100%;padding:14px;
-  background:#091b13;
-  border:1px solid #31513f;
-  border-radius:9px;color:white;
-  outline:none;font-size:14px;
-}
+input{width:100%;padding:14px;background:#091b13;border:1px solid #31513f;border-radius:9px;color:white;outline:none;font-size:14px}
 input:focus{border-color:#37bd78}
-button{
-  width:100%;padding:14px;
-  margin-top:24px;
-  background:#20a765;color:white;
-  border:0;border-radius:9px;
-  font-size:15px;font-weight:bold;
-  cursor:pointer;
-}
+button{width:100%;padding:14px;margin-top:24px;background:#20a765;color:white;border:0;border-radius:9px;font-size:15px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
-#message{margin-top:17px;font-size:13px;line-height:1.5}
+#message{margin-top:17px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
 .footer{margin-top:25px;text-align:center;color:#708c7a;font-size:11px}
 </style>
 </head>
-
 <body>
 <div class="login-box">
   <div class="logo">🏏</div>
   <h1>Welcome Back Super Admin</h1>
   <p class="subtitle">Super Admin Portal</p>
-
   <form id="loginForm">
     <label>Email Address</label>
     <input type="email" id="email" placeholder="Enter admin email" required>
-
     <label>Password</label>
     <input type="password" id="password" placeholder="Enter password" required>
-
     <button type="submit" id="loginBtn">Sign In</button>
   </form>
-
   <div id="message"></div>
   <div class="footer">PLAYER AUCTION PLATFORM · ADMIN ACCESS</div>
 </div>
 
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lL8ef-UYWjGQ_mHepMoYX";
+const AUTH_STORAGE_KEY = "player-auction-platform-auth";
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
-  SUPABASE_KEY
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage,
+      storageKey: AUTH_STORAGE_KEY
+    }
+  }
 );
 
 const message = document.getElementById("message");
 const loginBtn = document.getElementById("loginBtn");
+const DASHBOARD_URL = new URL("super-admin.html", window.location.href).href;
 
-async function checkSession(){
-  const {data,error} = await db.auth.getSession();
-
-  if(error) return;
-
-  if(data.session){
-    const {data:isAdmin,error:adminError} =
-      await db.rpc("is_platform_admin");
-
-    if(!adminError && isAdmin === true){
-      window.location.href = "super-admin.html";
-    }
-  }
+function showMessage(text,color="#f5c56b"){
+  message.style.color=color;
+  message.textContent=text;
 }
 
-checkSession();
+async function checkExistingSession(){
+  try{
+    const {data,error} = await db.auth.getSession();
+
+    if(error){
+      showMessage("SESSION ERROR: "+error.message,"#ff7777");
+      console.error("Session check error:",error);
+      return;
+    }
+
+    if(!data.session)return;
+
+    showMessage("Existing session found. Checking admin permission...");
+
+    const {data:allowed,error:adminError} =
+      await db.rpc("is_platform_admin");
+
+    if(adminError){
+      showMessage("ADMIN CHECK ERROR: "+adminError.message,"#ff7777");
+      console.error("Admin RPC error:",adminError);
+      return;
+    }
+
+    if(allowed !== true){
+      showMessage("This account does not have Super Admin access.","#ff7777");
+      return;
+    }
+
+    window.location.replace(DASHBOARD_URL);
+  }catch(error){
+    showMessage("ERROR: "+(error.message||String(error)),"#ff7777");
+    console.error(error);
+  }
+}
 
 document.getElementById("loginForm").addEventListener("submit",async(e)=>{
   e.preventDefault();
 
-  message.style.color = "#f5c56b";
-  message.textContent = "Signing in...";
-  loginBtn.disabled = true;
+  loginBtn.disabled=true;
+  loginBtn.textContent="SIGNING IN...";
+  showMessage("Signing in...");
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
 
-  const {data,error} = await db.auth.signInWithPassword({
-    email,
-    password
-  });
+  try{
+    const {data,error} = await db.auth.signInWithPassword({email,password});
 
-  if(error){
-    message.style.color = "#ff7777";
-    message.textContent = error.message;
-    loginBtn.disabled = false;
-    return;
+    if(error)throw error;
+
+    if(!data.session){
+      const sessionResult=await db.auth.getSession();
+      if(sessionResult.error)throw sessionResult.error;
+      if(!sessionResult.data.session){
+        throw new Error("Login completed but no session was saved in browser storage.");
+      }
+    }
+
+    const {data:allowed,error:adminError} =
+      await db.rpc("is_platform_admin");
+
+    if(adminError){
+      showMessage("LOGIN OK, BUT ADMIN CHECK FAILED: "+adminError.message,"#ff7777");
+      console.error("Admin RPC error:",adminError);
+      return;
+    }
+
+    if(allowed !== true){
+      showMessage("Login successful, but this account is not a Super Admin.","#ff7777");
+      return;
+    }
+
+    const savedSession=await db.auth.getSession();
+
+    if(savedSession.error)throw savedSession.error;
+    if(!savedSession.data.session){
+      throw new Error("Session could not be found after login. Browser storage may be blocked.");
+    }
+
+    showMessage("Login successful. Opening dashboard...","#65e6a0");
+    window.location.replace(DASHBOARD_URL);
+
+  }catch(error){
+    console.error("Login error:",error);
+    showMessage("LOGIN ERROR: "+(error.message||String(error)),"#ff7777");
+  }finally{
+    loginBtn.disabled=false;
+    loginBtn.textContent="Sign In";
   }
-
-  const {data:isAdmin,error:adminError} =
-    await db.rpc("is_platform_admin");
-
-  if(adminError || isAdmin !== true){
-    await db.auth.signOut();
-    message.style.color = "#ff7777";
-    message.textContent = "This account does not have Super Admin access.";
-    loginBtn.disabled = false;
-    return;
-  }
-
-  message.style.color = "#65e6a0";
-  message.textContent = "Login successful. Opening dashboard...";
-
-  window.location.href = "super-admin.html";
 });
+
+checkExistingSession();
 </script>
 </body>
 </html>

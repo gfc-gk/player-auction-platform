@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club Owner Login | Player Auction Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+ --bg:#071a13;
+ --panel:#0d251b;
+ --green:#27d58c;
+ --text:#f1fff7;
+ --muted:#91aa9d;
+ --border:#214535;
+ --red:#f16c6c;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,sans-serif;
+}
+.login-card{
+ width:100%;
+ max-width:420px;
+ padding:35px;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:16px;
+ box-shadow:0 15px 50px #0005;
+}
+.logo{
+ width:55px;
+ height:55px;
+ display:grid;
+ place-items:center;
+ background:var(--green);
+ color:#062015;
+ font-size:29px;
+ font-weight:900;
+ border-radius:14px;
+ margin-bottom:22px;
+}
+h1{font-size:23px;margin:0 0 9px}
+.subtitle{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
+ margin-bottom:27px;
+}
+.field{margin-bottom:17px}
+label{
+ display:block;
+ font-size:11px;
+ color:#a9c2b3;
+ margin-bottom:8px;
+}
+input{
+ width:100%;
+ padding:13px;
+ border:1px solid #28533c;
+ background:#071b12;
+ color:white;
+ border-radius:8px;
+ outline:none;
+ font-size:13px;
+}
+input:focus{border-color:var(--green)}
+.login-btn{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:8px;
+ background:var(--green);
+ color:#062015;
+ font-size:12px;
+ font-weight:900;
+ cursor:pointer;
+ margin-top:7px;
+}
+.login-btn:disabled{opacity:.55;cursor:not-allowed}
+#message{
+ display:none;
+ margin-top:17px;
+ padding:12px;
+ border-radius:7px;
+ font-size:12px;
+ line-height:1.6;
+}
+.error{display:block!important;background:#401d1d;color:#ffaaaa}
+.success{display:block!important;background:#123c29;color:#76efb0}
+.footer{
+ margin-top:27px;
+ text-align:center;
+ color:#658474;
+ font-size:9px;
+ letter-spacing:1px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+ <div class="logo">P</div>
+
+ <h1>Club Owner Login</h1>
+ <div class="subtitle">
+  Welcome back! Login to manage your cricket club and auction.
+ </div>
+
+ <form id="loginForm">
+
+  <div class="field">
+   <label>EMAIL ADDRESS</label>
+   <input
+    type="email"
+    id="email"
+    placeholder="owner@example.com"
+    autocomplete="username"
+    required
+   >
+  </div>
+
+  <div class="field">
+   <label>PASSWORD</label>
+   <input
+    type="password"
+    id="password"
+    placeholder="Enter your password"
+    autocomplete="current-password"
+    required
+   >
+  </div>
+
+  <button type="submit" class="login-btn" id="loginBtn">
+   LOGIN TO DASHBOARD →
+  </button>
+
+  <div id="message"></div>
+
+ </form>
+
+ <div class="footer">
+  PLAYER AUCTION PLATFORM · CLUB OWNER PORTAL
+ </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+const form = document.getElementById("loginForm");
+const button = document.getElementById("loginBtn");
+const message = document.getElementById("message");
+
+function showMessage(text,type){
+ message.className = type;
+ message.textContent = text;
+ message.style.display = "block";
+}
+
+async function verifyOwner(user){
+
+ // Check owner profile
+ const {data:profile,error:profileError} = await db
+  .from("profiles")
+  .select("id,role,club_id")
+  .eq("id",user.id)
+  .maybeSingle();
+
+ if(profileError){
+  throw new Error("Unable to verify account. Please try again.");
+ }
+
+ if(!profile || profile.role !== "club_owner"){
+  throw new Error("Access denied. This account is not a Club Owner.");
+ }
+
+ if(!profile.club_id){
+  throw new Error("No club is assigned to this account.");
+ }
+
+ // Check active subscription
+ const now = new Date().toISOString();
+
+ const {data:subscription,error:subscriptionError} = await db
+  .from("subscriptions")
+  .select("id,plan_name,start_date,end_date,status")
+  .eq("club_id",profile.club_id)
+  .eq("status","active")
+  .lte("start_date",now)
+  .gt("end_date",now)
+  .order("end_date",{ascending:false})
+  .limit(1)
+  .maybeSingle();
+
+ if(subscriptionError){
+  throw new Error("Unable to verify subscription. Please try again.");
+ }
+
+ if(!subscription){
+  throw new Error("Your subscription is not active. Please contact the platform administrator.");
+ }
+
+ return true;
+}
+
+form.addEventListener("submit",async function(event){
+
+ event.preventDefault();
+
+ message.style.display="none";
+
+ const email = document.getElementById("email").value.trim();
+ const password = document.getElementById("password").value;
+
+ button.disabled = true;
+ button.textContent = "VERIFYING ACCOUNT...";
+
+ try{
+
+  // Login with Supabase Auth
+  const {data,error} = await db.auth.signInWithPassword({
+   email:email,
+   password:password
+  });
+
+  if(error) throw error;
+
+  if(!data.user){
+   throw new Error("Login failed. Please try again.");
+  }
+
+  // Verify role, club and subscription
+  await verifyOwner(data.user);
+
+  showMessage("Login successful! Opening dashboard...","success");
+
+  window.location.replace("owner-dashboard.html");
+
+ }catch(error){
+
+  console.error("Owner login error:",error);
+
+  await db.auth.signOut();
+
+  showMessage(error.message || "Login failed.","error");
+
+  button.disabled = false;
+  button.textContent = "LOGIN TO DASHBOARD →";
+ }
+
+});
+
+</script>
+
+</body>
+</html>

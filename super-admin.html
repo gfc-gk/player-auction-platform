@@ -4,178 +4,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Admin Dashboard</title>
+<title>Player Auction | Super Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+:root{
+  --bg:#f4f6fa;--white:#fff;--navy:#111c35;
+  --navy2:#1b2a49;--accent:#f2a900;--text:#17233b;
+  --muted:#778198;--line:#e8ecf2;--green:#159b69;
+  --red:#e05252;--blue:#3979d9;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif}
-header{background:#1e293b;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h2{margin:0}
-button{border:0;padding:11px 16px;border-radius:7px;background:#eab308;color:#111827;font-weight:bold;cursor:pointer}
-.logout{background:#ef4444;color:white}
-main{max-width:1000px;margin:30px auto;padding:0 18px}
-.card{background:#1e293b;padding:22px;border-radius:12px;margin-bottom:22px}
-input{width:100%;padding:13px;margin:8px 0 14px;border-radius:7px;border:1px solid #475569;background:#0f172a;color:white}
-label{color:#cbd5e1}
-table{width:100%;border-collapse:collapse}
-th,td{padding:13px;text-align:left;border-bottom:1px solid #475569}
-th{color:#eab308}
+body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--text)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+ width:250px;background:var(--navy);color:white;
+ position:fixed;inset:0 auto 0 0;padding:22px 15px;
+ display:flex;flex-direction:column;z-index:10;
+}
+.brand{display:flex;align-items:center;gap:12px;padding:5px 10px 28px}
+.brand-icon{
+ width:42px;height:42px;border-radius:12px;background:var(--accent);
+ display:grid;place-items:center;color:#111;font-size:23px;font-weight:900
+}
+.brand h2{font-size:17px;margin:0}
+.brand small{display:block;color:#9ba8c2;font-size:10px;margin-top:4px;letter-spacing:1.4px}
+.nav-label{font-size:10px;color:#71809e;letter-spacing:1.5px;padding:12px 12px 8px}
+.nav-item{
+ width:100%;display:flex;align-items:center;gap:12px;
+ padding:12px;border:0;border-radius:9px;background:transparent;
+ color:#b9c4d8;text-align:left;margin:3px 0;font-size:13px;
+}
+.nav-item:hover,.nav-item.active{background:var(--navy2);color:white}
+.nav-item.active{border-left:3px solid var(--accent)}
+.nav-icon{width:20px;text-align:center;font-size:17px}
+.sidebar-bottom{margin-top:auto;border-top:1px solid #2c3b58;padding-top:15px}
+.admin-mini{display:flex;align-items:center;gap:10px;padding:10px}
+.avatar{width:35px;height:35px;border-radius:50%;background:#344766;display:grid;place-items:center;font-weight:bold}
+.admin-mini small{display:block;color:#93a1ba;margin-top:3px}
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.topbar{
+ height:72px;background:white;border-bottom:1px solid var(--line);
+ display:flex;align-items:center;justify-content:space-between;
+ padding:0 30px;position:sticky;top:0;z-index:5
+}
+.top-left{display:flex;align-items:center;gap:12px}
+.menu-btn{display:none;border:0;background:#f0f2f7;padding:9px;border-radius:8px}
+.top-title{font-size:14px;font-weight:700}
+.top-right{display:flex;align-items:center;gap:15px}
+.status-pill{font-size:11px;color:var(--green);background:#e9f8f1;padding:7px 10px;border-radius:20px}
+.logout{border:1px solid #f0dada;background:#fff5f5;color:var(--red);padding:9px 13px;border-radius:8px;font-size:12px}
+.content{padding:28px 30px;max-width:1500px;margin:auto}
+.welcome{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}
+.welcome h1{font-size:25px;margin:0 0 7px}
+.welcome p{font-size:13px;color:var(--muted);margin:0}
+.date-label{font-size:12px;color:var(--muted);background:white;padding:10px 14px;border:1px solid var(--line);border-radius:8px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.stat{
+ background:white;border:1px solid var(--line);border-radius:13px;
+ padding:19px;box-shadow:0 3px 12px #17233b06
+}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-name{font-size:12px;color:var(--muted)}
+.stat-icon{width:37px;height:37px;border-radius:10px;display:grid;place-items:center;font-size:18px}
+.stat-value{font-size:27px;font-weight:800;margin:14px 0 5px}
+.stat-foot{font-size:11px;color:var(--muted)}
+.gold{background:#fff4d9}.green{background:#e8f7ef}.blue{background:#eaf1ff}.red{background:#fff0f0}
+.panel{background:white;border:1px solid var(--line);border-radius:13px;margin-bottom:22px;overflow:hidden}
+.panel-head{padding:19px 21px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.panel-head h3{font-size:15px;margin:0}
+.panel-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.primary{
+ background:var(--navy);color:white;border:0;padding:11px 15px;
+ border-radius:8px;font-size:12px;font-weight:700
+}
+.primary:hover{background:#263c63}
+.panel-body{padding:20px}
+.client-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.field label{display:block;font-size:11px;color:#66728a;margin-bottom:7px}
+.field input{
+ width:100%;border:1px solid #dfe4ed;border-radius:8px;
+ padding:12px;background:#fbfcfe;outline:none;font-size:13px
+}
+.field input:focus{border-color:#718cb8}
+.form-actions{display:flex;align-items:end}
+.form-actions button{width:100%;padding:12px}
+#message{font-size:12px;margin-top:13px;color:var(--green)}
+.toolbar{display:flex;gap:10px;align-items:center}
+.search{
+ border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+ min-width:220px;outline:none;font-size:12px
+}
 .table-wrap{overflow-x:auto}
-#message{margin-top:12px;color:#facc15}
-@media(max-width:500px){header{padding:15px}main{margin:20px auto}.card{padding:16px}}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th{text-align:left;background:#fafbfd;color:#8490a4;font-size:10px;letter-spacing:.7px;padding:13px 18px}
+td{padding:15px 18px;border-top:1px solid #f0f2f6;font-size:12px}
+.client-name{font-weight:700}
+.client-id{color:#9aa4b5;font-size:10px;margin-top:4px}
+.pill{display:inline-block;padding:6px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.pill.active{background:#e7f7ef;color:#12865a}
+.pill.inactive{background:#fff5df;color:#a87500}
+.pill.suspended{background:#ffeded;color:#c33e3e}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.section{display:none}
+.section.active{display:block}
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.info-card{background:white;border:1px solid var(--line);padding:20px;border-radius:12px}
+.info-card h4{margin:0 0 8px;font-size:14px}
+.info-card p{font-size:12px;color:var(--muted);line-height:1.6}
+.footer{text-align:center;color:#9aa4b5;font-size:10px;padding:18px}
+.overlay{display:none}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+ .sidebar{transform:translateX(-100%);transition:.25s}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0;width:100%}
+ .menu-btn{display:block}
+ .topbar{padding:0 15px}
+ .content{padding:22px 14px}
+ .welcome{align-items:flex-start;flex-direction:column}
+ .welcome h1{font-size:22px}
+ .stats{gap:10px}
+ .stat{padding:14px}
+ .stat-value{font-size:23px}
+ .client-form{grid-template-columns:1fr}
+ .form-actions{padding-top:3px}
+ .panel-head{align-items:flex-start;flex-direction:column}
+ .toolbar{width:100%}
+ .search{width:100%;min-width:0}
+ .info-grid{grid-template-columns:1fr}
+ .overlay.show{display:block;position:fixed;inset:0;background:#0007;z-index:8}
+}
 </style>
 </head>
 
 <body>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
 
-<header>
-  <h2>🏏 Super Admin</h2>
-  <button class="logout" id="logoutBtn">Logout</button>
-</header>
+<aside class="sidebar" id="sidebar">
+ <div class="brand">
+  <div class="brand-icon">🏏</div>
+  <div><h2>PLAYER AUCTION</h2><small>PLATFORM CONTROL</small></div>
+ </div>
 
-<main>
+ <div class="nav-label">MAIN MENU</div>
+ <button class="nav-item active" data-section="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
+ <button class="nav-item" data-section="clients"><span class="nav-icon">🏢</span> Client Management</button>
+ <button class="nav-item" data-section="auctions"><span class="nav-icon">🏆</span> Auction Management</button>
+ <button class="nav-item" data-section="players"><span class="nav-icon">👤</span> Player Database</button>
+ <button class="nav-item" data-section="teams"><span class="nav-icon">🛡️</span> Teams</button>
 
-  <div class="card">
-    <h3>Create New Client</h3>
+ <div class="nav-label">PLATFORM</div>
+ <button class="nav-item" data-section="staff"><span class="nav-icon">👥</span> Staff & Users</button>
+ <button class="nav-item" data-section="reports"><span class="nav-icon">📊</span> Reports</button>
+ <button class="nav-item" data-section="settings"><span class="nav-icon">⚙️</span> Settings</button>
 
-    <form id="clientForm">
-      <label>Client / Club Name</label>
-      <input id="clientName" type="text" placeholder="Enter club name" required>
-
-      <label>Email</label>
-      <input id="clientEmail" type="email" placeholder="Enter email (optional)">
-
-      <label>Phone</label>
-      <input id="clientPhone" type="tel" placeholder="Enter phone (optional)">
-
-      <button type="submit" id="createBtn">Create Client</button>
-    </form>
-
-    <div id="message"></div>
+ <div class="sidebar-bottom">
+  <div class="admin-mini">
+   <div class="avatar">SA</div>
+   <div><b style="font-size:12px">Super Admin</b><small>Platform Owner</small></div>
   </div>
+ </div>
+</aside>
 
-  <div class="card">
-    <h3>All Clients</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Client Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="clientList">
-          <tr><td colspan="4">Loading...</td></tr>
-        </tbody>
-      </table>
+<div class="main">
+ <header class="topbar">
+  <div class="top-left">
+   <button class="menu-btn" id="menuBtn">☰</button>
+   <div class="top-title" id="pageTitle">Dashboard Overview</div>
+  </div>
+  <div class="top-right">
+   <span class="status-pill">● System Online</span>
+   <button class="logout" id="logoutBtn">↪ Logout</button>
+  </div>
+ </header>
+
+ <main class="content">
+
+  <section class="section active" id="dashboard">
+   <div class="welcome">
+    <div><h1>Dashboard Overview</h1><p>Welcome to your Player Auction Platform control center.</p></div>
+    <div class="date-label" id="today"></div>
+   </div>
+
+   <div class="stats">
+    <div class="stat">
+     <div class="stat-top"><span class="stat-name">TOTAL CLIENTS</span><span class="stat-icon gold">🏢</span></div>
+     <div class="stat-value" id="totalClients">—</div>
+     <div class="stat-foot">Registered organizations</div>
     </div>
-  </div>
+    <div class="stat">
+     <div class="stat-top"><span class="stat-name">ACTIVE CLIENTS</span><span class="stat-icon green">✓</span></div>
+     <div class="stat-value" id="activeClients">—</div>
+     <div class="stat-foot">Currently active accounts</div>
+    </div>
+    <div class="stat">
+     <div class="stat-top"><span class="stat-name">INACTIVE / SUSPENDED</span><span class="stat-icon red">!</span></div>
+     <div class="stat-value" id="inactiveClients">—</div>
+     <div class="stat-foot">Accounts needing attention</div>
+    </div>
+    <div class="stat">
+     <div class="stat-top"><span class="stat-name">PLATFORM STATUS</span><span class="stat-icon blue">◉</span></div>
+     <div class="stat-value" style="font-size:20px">ONLINE</div>
+     <div class="stat-foot">Database connection checked</div>
+    </div>
+   </div>
 
-</main>
+   <div class="panel">
+    <div class="panel-head">
+     <div><h3>Recent Clients</h3><p>Recently registered organizations</p></div>
+     <button class="primary" onclick="showSection('clients')">View All Clients →</button>
+    </div>
+    <div class="table-wrap">
+     <table><thead><tr><th>CLIENT</th><th>EMAIL</th><th>PHONE</th><th>STATUS</th></tr></thead>
+     <tbody id="recentList"><tr><td colspan="4" class="empty">Loading clients...</td></tr></tbody></table>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="clients">
+   <div class="welcome">
+    <div><h1>Client Management</h1><p>Create and manage organizations using the platform.</p></div>
+    <div class="date-label">Organization Directory</div>
+   </div>
+
+   <div class="panel">
+    <div class="panel-head"><div><h3>Register New Client</h3><p>Add a club, academy or tournament organizer.</p></div></div>
+    <div class="panel-body">
+     <form id="clientForm" class="client-form">
+      <div class="field"><label>CLIENT / ORGANIZATION NAME *</label><input id="clientName" required maxlength="100" placeholder="e.g. GFC Cricket Club"></div>
+      <div class="field"><label>EMAIL ADDRESS</label><input id="clientEmail" type="email" placeholder="Email address"></div>
+      <div class="field"><label>PHONE NUMBER</label><input id="clientPhone" type="tel" placeholder="Phone number"></div>
+      <div class="form-actions"><button class="primary" type="submit" id="createBtn">＋ Create Client</button></div>
+     </form>
+     <div id="message"></div>
+    </div>
+   </div>
+
+   <div class="panel">
+    <div class="panel-head">
+     <div><h3>All Organizations</h3><p>Manage all registered clients.</p></div>
+     <div class="toolbar"><input class="search" id="searchBox" placeholder="Search clients..."></div>
+    </div>
+    <div class="table-wrap">
+     <table>
+      <thead><tr><th>ORGANIZATION</th><th>EMAIL</th><th>PHONE</th><th>STATUS</th></tr></thead>
+      <tbody id="clientList"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+     </table>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="auctions">
+   <div class="welcome"><div><h1>Auction Management</h1><p>Platform-wide auction overview.</p></div></div>
+   <div class="info-card"><h4>Auction Management</h4><p>Auction creation and monitoring will be connected after the client management module and its security policies are complete.</p></div>
+  </section>
+
+  <section class="section" id="players">
+   <div class="welcome"><div><h1>Player Database</h1><p>Player records across the platform.</p></div></div>
+   <div class="info-card"><h4>Player Database</h4><p>Player statistics and database management will be enabled in a later module.</p></div>
+  </section>
+
+  <section class="section" id="teams">
+   <div class="welcome"><div><h1>Teams</h1><p>Team directory and management.</p></div></div>
+   <div class="info-card"><h4>Team Management</h4><p>Team creation and management will be connected in the auction setup module.</p></div>
+  </section>
+
+  <section class="section" id="staff">
+   <div class="welcome"><div><h1>Staff & Users</h1><p>Platform user administration.</p></div></div>
+   <div class="info-card"><h4>User Management</h4><p>Client administrators, auction operators and team owners will be provisioned through a secure server-side process. No passwords will be stored in this dashboard.</p></div>
+  </section>
+
+  <section class="section" id="reports">
+   <div class="welcome"><div><h1>Reports & Analytics</h1><p>Platform performance and activity reports.</p></div></div>
+   <div class="info-card"><h4>Reports</h4><p>Reports will be available after auction activity and reporting data are connected.</p></div>
+  </section>
+
+  <section class="section" id="settings">
+   <div class="welcome"><div><h1>Platform Settings</h1><p>Platform configuration.</p></div></div>
+   <div class="info-card"><h4>Platform Configuration</h4><p>Global settings and platform preferences will be added here.</p></div>
+  </section>
+
+  <div class="footer">PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL PANEL</div>
+ </main>
+</div>
+</div>
 
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const titles={
+ dashboard:"Dashboard Overview",clients:"Client Management",
+ auctions:"Auction Management",players:"Player Database",
+ teams:"Teams",staff:"Staff & Users",reports:"Reports & Analytics",
+ settings:"Platform Settings"
+};
 
-const message = document.getElementById("message");
+document.getElementById("today").textContent =
+ new Date().toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+
+function showSection(name){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+ document.getElementById(name).classList.add("active");
+ const nav=document.querySelector('[data-section="'+name+'"]');
+ if(nav)nav.classList.add("active");
+ document.getElementById("pageTitle").textContent=titles[name]||"Dashboard";
+ document.getElementById("sidebar").classList.remove("open");
+ document.getElementById("overlay").classList.remove("show");
+}
+
+document.querySelectorAll(".nav-item").forEach(btn=>{
+ btn.addEventListener("click",()=>showSection(btn.dataset.section));
+});
+
+document.getElementById("menuBtn").onclick=()=>{
+ document.getElementById("sidebar").classList.toggle("open");
+ document.getElementById("overlay").classList.toggle("show");
+};
+document.getElementById("overlay").onclick=()=>{
+ document.getElementById("sidebar").classList.remove("open");
+ document.getElementById("overlay").classList.remove("show");
+};
 
 async function checkAdmin(){
-  const {data:{session},error:sessionError} = await db.auth.getSession();
+ const {data:{session},error:sessionError}=await db.auth.getSession();
+ if(sessionError||!session){
+  location.replace("index.html");return false;
+ }
+ const {data,error}=await db.rpc("is_platform_admin");
+ if(error||data!==true){
+  await db.auth.signOut();
+  location.replace("index.html");return false;
+ }
+ return true;
+}
 
-  if(sessionError || !session){
-    window.location.href = "index.html";
-    return false;
-  }
+let allClients=[];
 
-  const {data,error} = await db.rpc("is_platform_admin");
+function makeCell(row,value){
+ const td=document.createElement("td");
+ td.textContent=value||"-";
+ row.appendChild(td);
+}
 
-  if(error || data !== true){
-    await db.auth.signOut();
-    window.location.href = "index.html";
-    return false;
-  }
-
-  return true;
+function renderRows(target,items){
+ const tbody=document.getElementById(target);
+ tbody.innerHTML="";
+ if(!items.length){
+  tbody.innerHTML='<tr><td colspan="4" class="empty">No clients found.</td></tr>';
+  return;
+ }
+ items.forEach(c=>{
+  const tr=document.createElement("tr");
+  const name=document.createElement("td");
+  name.innerHTML='<div class="client-name"></div><div class="client-id"></div>';
+  name.querySelector(".client-name").textContent=c.client_name;
+  name.querySelector(".client-id").textContent="ID: "+c.id;
+  tr.appendChild(name);
+  makeCell(tr,c.email);
+  makeCell(tr,c.phone);
+  const status=document.createElement("td");
+  const pill=document.createElement("span");
+  pill.className="pill "+c.status;
+  pill.textContent=c.status.toUpperCase();
+  status.appendChild(pill);
+  tr.appendChild(status);
+  tbody.appendChild(tr);
+ });
 }
 
 async function loadClients(){
-  const tbody = document.getElementById("clientList");
-  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+ const {data,error}=await db.from("clients")
+  .select("id,client_name,email,phone,status,created_at")
+  .order("created_at",{ascending:false});
 
-  const {data,error} = await db
-    .from("clients")
-    .select("client_name,email,phone,status")
-    .order("created_at",{ascending:false});
+ if(error){
+  document.getElementById("clientList").innerHTML=
+   '<tr><td colspan="4" class="empty">Could not load clients. '+error.message+'</td></tr>';
+  document.getElementById("recentList").innerHTML=
+   '<tr><td colspan="4" class="empty">Could not load clients.</td></tr>';
+  return;
+ }
 
-  if(error){
-    tbody.innerHTML = "<tr><td colspan='4'>Could not load clients</td></tr>";
-    message.textContent = error.message;
-    return;
-  }
+ allClients=data||[];
+ const active=allClients.filter(c=>c.status==="active").length;
+ document.getElementById("totalClients").textContent=allClients.length;
+ document.getElementById("activeClients").textContent=active;
+ document.getElementById("inactiveClients").textContent=allClients.length-active;
 
-  if(!data.length){
-    tbody.innerHTML = "<tr><td colspan='4'>No clients created yet.</td></tr>";
-    return;
-  }
-
-  tbody.innerHTML = "";
-
-  data.forEach(client=>{
-    const tr = document.createElement("tr");
-
-    [client.client_name,client.email || "-",client.phone || "-",client.status]
-    .forEach(value=>{
-      const td = document.createElement("td");
-      td.textContent = value;
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
+ renderRows("clientList",allClients);
+ renderRows("recentList",allClients.slice(0,5));
 }
 
+document.getElementById("searchBox").addEventListener("input",e=>{
+ const q=e.target.value.toLowerCase().trim();
+ const filtered=allClients.filter(c=>
+  [c.client_name,c.email,c.phone,c.status].some(v=>(v||"").toLowerCase().includes(q))
+ );
+ renderRows("clientList",filtered);
+});
+
 document.getElementById("clientForm").addEventListener("submit",async e=>{
-  e.preventDefault();
+ e.preventDefault();
+ const btn=document.getElementById("createBtn");
+ const msg=document.getElementById("message");
+ const name=document.getElementById("clientName").value.trim();
+ const email=document.getElementById("clientEmail").value.trim()||null;
+ const phone=document.getElementById("clientPhone").value.trim()||null;
 
-  const btn = document.getElementById("createBtn");
-  btn.disabled = true;
-  btn.textContent = "Creating...";
-  message.textContent = "";
+ if(!name){msg.textContent="Please enter a client name.";return;}
 
-  const {data,error} = await db.rpc("create_client",{
-    p_client_name:document.getElementById("clientName").value.trim(),
-    p_email:document.getElementById("clientEmail").value.trim() || null,
-    p_phone:document.getElementById("clientPhone").value.trim() || null
-  });
+ btn.disabled=true;btn.textContent="Creating...";
+ msg.textContent="";
 
-  if(error){
-    message.textContent = "Error: " + error.message;
-  }else{
-    message.textContent = "Client created successfully!";
-    document.getElementById("clientForm").reset();
-    await loadClients();
-  }
+ const {data,error}=await db.rpc("create_client",{
+  p_client_name:name,p_email:email,p_phone:phone
+ });
 
-  btn.disabled = false;
-  btn.textContent = "Create Client";
+ if(error){
+  msg.style.color="var(--red)";
+  msg.textContent="Error: "+error.message;
+ }else{
+  msg.style.color="var(--green)";
+  msg.textContent="Client created successfully.";
+  document.getElementById("clientForm").reset();
+  await loadClients();
+ }
+ btn.disabled=false;btn.textContent="＋ Create Client";
 });
 
-document.getElementById("logoutBtn").addEventListener("click",async()=>{
-  await db.auth.signOut();
-  window.location.href = "index.html";
-});
+document.getElementById("logoutBtn").onclick=async()=>{
+ await db.auth.signOut();
+ location.replace("index.html");
+};
 
 (async()=>{
-  if(await checkAdmin()){
-    await loadClients();
-  }
+ if(await checkAdmin())await loadClients();
 })();
 </script>
-
 </body>
 </html>

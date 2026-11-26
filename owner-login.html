@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,7 +161,7 @@ input:focus{border-color:var(--green)}
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+"sb_publishable_VfvcHqVH67lL8ef-UYWjGQ_mHepMoYX";
 
 const db = window.supabase.createClient(
  SUPABASE_URL,
@@ -180,7 +180,7 @@ function showMessage(text,type){
 
 async function verifyOwner(user){
 
- // Check owner profile
+ // 1. Verify owner profile
  const {data:profile,error:profileError} = await db
   .from("profiles")
   .select("id,role,club_id")
@@ -199,16 +199,38 @@ async function verifyOwner(user){
   throw new Error("No club is assigned to this account.");
  }
 
- // Check active subscription
- const now = new Date().toISOString();
+ // 2. Verify club status
+ const {data:club,error:clubError} = await db
+  .from("clubs")
+  .select("id,status")
+  .eq("id",profile.club_id)
+  .maybeSingle();
 
+ if(clubError){
+  throw new Error("Unable to verify club status. Please try again.");
+ }
+
+ if(!club){
+  throw new Error("Your club could not be found. Contact the administrator.");
+ }
+
+ if(club.status === "suspended"){
+  throw new Error("Your club account is suspended. Please contact the platform administrator.");
+ }
+
+ if(club.status === "archived"){
+  throw new Error("Your club account has been archived. Please contact the platform administrator.");
+ }
+
+ if(club.status !== "active"){
+  throw new Error("Your club is not active. Please contact the administrator.");
+ }
+
+ // 3. Check latest subscription
  const {data:subscription,error:subscriptionError} = await db
   .from("subscriptions")
   .select("id,plan_name,start_date,end_date,status")
   .eq("club_id",profile.club_id)
-  .eq("status","active")
-  .lte("start_date",now)
-  .gt("end_date",now)
   .order("end_date",{ascending:false})
   .limit(1)
   .maybeSingle();
@@ -218,7 +240,31 @@ async function verifyOwner(user){
  }
 
  if(!subscription){
-  throw new Error("Your subscription is not active. Please contact the platform administrator.");
+  throw new Error("No subscription found. Please contact the platform administrator.");
+ }
+
+ const now = new Date();
+ const startDate = new Date(subscription.start_date);
+ const endDate = new Date(subscription.end_date);
+
+ if(subscription.status !== "active" || endDate <= now){
+  throw new Error("Your subscription has expired or is inactive. Please contact the administrator for renewal.");
+ }
+
+ if(startDate > now){
+  throw new Error("Your subscription has not started yet.");
+ }
+
+ // 4. Final server-side permission check
+ const {data:isActive,error:activeError} = await db
+  .rpc("is_active_club_owner");
+
+ if(activeError){
+  throw new Error("Unable to verify account permissions. Please try again.");
+ }
+
+ if(isActive !== true){
+  throw new Error("Owner access is currently unavailable. Please contact the administrator.");
  }
 
  return true;
@@ -250,7 +296,7 @@ form.addEventListener("submit",async function(event){
    throw new Error("Login failed. Please try again.");
   }
 
-  // Verify role, club and subscription
+  // Verify owner, club and subscription
   await verifyOwner(data.user);
 
   showMessage("Login successful! Opening dashboard...","success");
@@ -270,8 +316,8 @@ form.addEventListener("submit",async function(event){
  }
 
 });
-
 </script>
 
 </body>
 </html>
+```

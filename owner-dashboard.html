@@ -509,6 +509,12 @@ document.querySelectorAll(".nav-btn").forEach(button=>{
 
   const page=button.dataset.page;
 
+  // Players is a separate standalone page
+  if(page==="players"){
+   window.location.href="players.html";
+   return;
+  }
+
   document.querySelectorAll(".nav-btn").forEach(item=>{
    item.classList.remove("active");
   });

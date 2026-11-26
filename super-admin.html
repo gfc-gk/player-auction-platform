@@ -412,7 +412,7 @@ async function loadClubs(){
    owner_user_id,
    owner_email,
    created_at,
-   profiles!clubs_owner_user_id_fkey (
+   profiles!clubs_owner_profile_fkey (
     full_name,
     phone
    )
@@ -423,6 +423,7 @@ async function loadClubs(){
   tbody.innerHTML=
    '<tr><td colspan="6" class="empty">Could not load clubs: '+
    escapeHTML(error.message)+'</td></tr>';
+  console.error("Club loading error:",error);
   return;
  }
 
@@ -490,6 +491,7 @@ async function loadSubscriptions(){
 
  if(error){
   tbody.innerHTML='<tr><td colspan="7" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';
+  console.error("Subscription loading error:",error);
   return;
  }
 
@@ -520,7 +522,7 @@ async function loadSubscriptions(){
 
   const statusCell=document.createElement("td");
   const isActive=sub.status==="active"&&new Date(sub.start_date)<=new Date()&&new Date(sub.end_date)>new Date();
-  statusCell.textContent=isActive?"ACTIVE":(new Date(sub.end_date)<=new Date()?"EXPIRED":sub.status.toUpperCase());
+  statusCell.textContent=isActive?"ACTIVE":(new Date(sub.end_date)<=new Date()?"EXPIRED":String(sub.status||"INACTIVE").toUpperCase());
   tr.appendChild(statusCell);
 
   tbody.appendChild(tr);
@@ -586,6 +588,7 @@ document.getElementById("clubForm").addEventListener("submit",async e=>{
   await Promise.all([loadClubs(),loadSubscriptions()]);
 
  }catch(error){
+  console.error("Create club error:",error);
   msg.style.color="#f16c6c";
   msg.textContent="ERROR: "+(error.message||"Something went wrong.");
  }finally{

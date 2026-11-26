@@ -1,0 +1,734 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Players Management | Player Auction Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+ --bg:#071a13;
+ --sidebar:#0a2117;
+ --panel:#10291e;
+ --green:#27d58c;
+ --text:#effff5;
+ --muted:#91aa9d;
+ --border:#244735;
+ --red:#ef7777;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+ width:225px;background:var(--sidebar);
+ border-right:1px solid var(--border);
+ padding:22px 14px;flex-shrink:0;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 23px;border-bottom:1px solid var(--border)}
+.logo{
+ width:39px;height:39px;display:grid;place-items:center;
+ background:var(--green);color:#062015;
+ font-size:21px;font-weight:900;border-radius:10px
+}
+.brand-name{font-size:13px;font-weight:900}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:5px}
+.menu-title{font-size:9px;color:#668a75;letter-spacing:1.5px;margin:25px 10px 12px}
+.nav-btn{
+ display:block;width:100%;padding:12px;margin:4px 0;
+ border:0;border-radius:8px;background:transparent;
+ color:#a8c2b2;text-align:left;font-size:12px;
+ text-decoration:none;cursor:pointer
+}
+.nav-btn:hover,.nav-btn.active{background:#173d2b;color:var(--green)}
+.main{flex:1;min-width:0}
+.topbar{
+ height:70px;padding:0 28px;border-bottom:1px solid var(--border);
+ display:flex;align-items:center;justify-content:space-between
+}
+.topbar h2{font-size:16px;margin:0}
+.owner{font-size:11px;color:var(--muted)}
+.content{padding:26px}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
+.heading h1{font-size:23px;margin:0 0 7px}
+.heading p{font-size:11px;color:var(--muted);margin:0}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px}
+.card h3{font-size:14px;margin:0 0 18px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.field label{display:block;font-size:10px;color:#a9c2b3;margin-bottom:8px}
+.field input,.field select{
+ width:100%;padding:12px;border:1px solid #28533c;
+ background:#071b12;color:white;border-radius:7px;
+ outline:none;font-size:12px;min-width:0
+}
+.field input:focus,.field select:focus{border-color:var(--green)}
+.actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}
+.btn{
+ padding:11px 16px;border:0;border-radius:7px;
+ background:var(--green);color:#062015;
+ font-size:11px;font-weight:900;cursor:pointer
+}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.secondary{background:#294637;color:#d7f5e3}
+.btn.danger{background:#482222;color:#ffaaaa}
+.toolbar{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}
+.toolbar input,.toolbar select{
+ padding:11px;background:#071b12;border:1px solid var(--border);
+ border-radius:7px;color:white;font-size:11px;outline:none
+}
+.toolbar input{flex:1;min-width:170px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:800px}
+th,td{text-align:left;padding:13px 11px;border-bottom:1px solid var(--border);font-size:11px}
+th{color:var(--muted);font-size:9px;letter-spacing:.5px}
+td{color:#e1f3e8}
+.player-name{font-weight:bold}
+.muted{color:var(--muted)}
+.status{
+ display:inline-block;padding:5px 9px;border-radius:20px;
+ font-size:9px;background:#123e2b;color:#7af0b5
+}
+.status.sold{background:#203c55;color:#a9d9ff}
+.status.unsold{background:#482222;color:#ffaaaa}
+.row-actions{display:flex;gap:6px}
+.small-btn{
+ padding:7px 9px;border:0;border-radius:5px;
+ font-size:9px;cursor:pointer;background:#294637;color:white
+}
+.small-btn.delete{background:#482222;color:#ffaaaa}
+#message{
+ display:none;margin-bottom:15px;padding:12px;
+ border-radius:7px;font-size:11px;line-height:1.5
+}
+#message.error{display:block;background:#401d1d;color:#ffaaaa}
+#message.success{display:block;background:#123c29;color:#76efb0}
+#loading,#fatal{
+ margin:25px;padding:18px;background:var(--panel);
+ border:1px solid var(--border);border-radius:10px;
+ font-size:12px;line-height:1.7
+}
+#fatal{display:none;color:#ffaaaa}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.hidden{display:none!important}
+@media(max-width:900px){
+ .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ .layout{display:block}
+ .sidebar{width:100%;padding:12px;border-right:0;border-bottom:1px solid var(--border)}
+ .brand{padding:0 5px 12px}
+ .menu-title{margin:13px 5px 7px}
+ .nav-list{display:flex;overflow-x:auto;gap:5px}
+ .nav-btn{white-space:nowrap;width:auto;margin:0;padding:10px}
+ .topbar{height:60px;padding:0 15px}
+ .content{padding:15px}
+ .heading{align-items:flex-start;flex-direction:column}
+ .heading h1{font-size:20px}
+ .form-grid{grid-template-columns:1fr}
+ .card{padding:15px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading">Verifying account and subscription...</div>
+<div id="fatal"></div>
+
+<div class="layout hidden" id="app">
+
+ <aside class="sidebar">
+  <div class="brand">
+   <div class="logo">P</div>
+   <div>
+    <div class="brand-name">PLAYER AUCTION</div>
+    <div class="brand-sub">CLUB OWNER PORTAL</div>
+   </div>
+  </div>
+
+  <div class="menu-title">MAIN MENU</div>
+  <div class="nav-list">
+   <a class="nav-btn" href="owner-dashboard.html">▦ Dashboard</a>
+   <a class="nav-btn active" href="players.html">♟ Players</a>
+   <button class="nav-btn" type="button" onclick="showComingSoon('Teams')">◈ Teams</button>
+   <button class="nav-btn" type="button" onclick="showComingSoon('Auction')">⚡ Auction</button>
+   <button class="nav-btn" type="button" onclick="showComingSoon('Subscription')">▤ Subscription</button>
+  </div>
+  <div style="margin-top:25px">
+   <button class="nav-btn" id="logoutBtn">↪ Logout</button>
+  </div>
+ </aside>
+
+ <main class="main">
+
+  <header class="topbar">
+   <h2>Players Management</h2>
+   <div class="owner" id="ownerName">Club Owner</div>
+  </header>
+
+  <div class="content">
+
+   <div class="heading">
+    <div>
+     <h1>Players Management</h1>
+     <p id="clubLabel">Manage your club players</p>
+    </div>
+    <button class="btn" id="addPlayerBtn">+ ADD PLAYER</button>
+   </div>
+
+   <div id="message"></div>
+
+   <section class="card hidden" id="formCard">
+    <h3 id="formTitle">Add New Player</h3>
+
+    <form id="playerForm">
+     <div class="form-grid">
+
+      <div class="field">
+       <label>PLAYER NAME *</label>
+       <input id="playerName" type="text" maxlength="100" required placeholder="Enter player name">
+      </div>
+
+      <div class="field">
+       <label>PHONE NUMBER</label>
+       <input id="phone" type="tel" maxlength="20" placeholder="Mobile number">
+      </div>
+
+      <div class="field">
+       <label>AGE</label>
+       <input id="age" type="number" min="1" max="100" placeholder="Player age">
+      </div>
+
+      <div class="field">
+       <label>PLAYER ROLE</label>
+       <select id="playerRole">
+        <option value="">Select Role</option>
+        <option value="Batsman">Batsman</option>
+        <option value="Bowler">Bowler</option>
+        <option value="All-rounder">All-rounder</option>
+        <option value="Wicketkeeper">Wicketkeeper</option>
+        <option value="Wicketkeeper-Batsman">Wicketkeeper-Batsman</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label>BATTING STYLE</label>
+       <select id="battingStyle">
+        <option value="">Select Style</option>
+        <option value="Right Hand">Right Hand</option>
+        <option value="Left Hand">Left Hand</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label>BOWLING STYLE</label>
+       <select id="bowlingStyle">
+        <option value="">Select Style</option>
+        <option value="Right Arm Fast">Right Arm Fast</option>
+        <option value="Left Arm Fast">Left Arm Fast</option>
+        <option value="Right Arm Medium">Right Arm Medium</option>
+        <option value="Left Arm Medium">Left Arm Medium</option>
+        <option value="Right Arm Off Spin">Right Arm Off Spin</option>
+        <option value="Right Arm Leg Spin">Right Arm Leg Spin</option>
+        <option value="Left Arm Orthodox">Left Arm Orthodox</option>
+        <option value="Left Arm Chinaman">Left Arm Chinaman</option>
+        <option value="None">None</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label>BASE PRICE (₹)</label>
+       <input id="basePrice" type="number" min="0" step="0.01" value="0">
+      </div>
+
+      <div class="field">
+       <label>PLAYER PHOTO URL</label>
+       <input id="photoUrl" type="url" placeholder="https://example.com/photo.jpg">
+      </div>
+
+      <div class="field">
+       <label>PLAYER STATUS</label>
+       <select id="playerStatus">
+        <option value="available">Available</option>
+        <option value="sold">Sold</option>
+        <option value="unsold">Unsold</option>
+       </select>
+      </div>
+
+     </div>
+
+     <div class="actions">
+      <button class="btn" type="submit" id="saveBtn">SAVE PLAYER</button>
+      <button class="btn secondary" type="button" id="cancelBtn">CANCEL</button>
+     </div>
+    </form>
+   </section>
+
+   <section class="card">
+    <h3>Player List <span id="playerCount" class="muted"></span></h3>
+
+    <div class="toolbar">
+     <input type="search" id="searchInput" placeholder="Search player name or phone...">
+     <select id="statusFilter">
+      <option value="">All Status</option>
+      <option value="available">Available</option>
+      <option value="sold">Sold</option>
+      <option value="unsold">Unsold</option>
+     </select>
+    </div>
+
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>PLAYER</th>
+        <th>PHONE</th>
+        <th>AGE</th>
+        <th>ROLE</th>
+        <th>BATTING</th>
+        <th>BOWLING</th>
+        <th>BASE PRICE</th>
+        <th>STATUS</th>
+        <th>ACTION</th>
+       </tr>
+      </thead>
+      <tbody id="playerTable">
+       <tr><td colspan="9" class="empty">Loading players...</td></tr>
+      </tbody>
+     </table>
+    </div>
+   </section>
+
+  </div>
+ </main>
+</div>
+
+<script>
+const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser = null;
+let currentProfile = null;
+let currentClub = null;
+let players = [];
+let editingId = null;
+
+const el = id => document.getElementById(id);
+
+function showMessage(text,type){
+ const box=el("message");
+ box.textContent=text;
+ box.className=type;
+ box.style.display="block";
+ box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function clearMessage(){
+ el("message").style.display="none";
+}
+
+function showFatal(text){
+ el("loading").style.display="none";
+ el("app").classList.add("hidden");
+ el("fatal").textContent=text;
+ el("fatal").style.display="block";
+}
+
+function safeText(value){
+ return value===null || value===undefined || value==="" ? "—" : String(value);
+}
+
+function formatMoney(value){
+ return "₹"+Number(value || 0).toLocaleString("en-IN");
+}
+
+async function verifyAccount(){
+
+ const {data:sessionData,error:sessionError}=await db.auth.getSession();
+ if(sessionError) throw sessionError;
+
+ const session=sessionData.session;
+
+ if(!session){
+  window.location.replace("owner-login.html");
+  return false;
+ }
+
+ currentUser=session.user;
+
+ const {data:profile,error:profileError}=await db
+  .from("profiles")
+  .select("id,full_name,role,club_id")
+  .eq("id",currentUser.id)
+  .maybeSingle();
+
+ if(profileError) throw profileError;
+
+ if(!profile || profile.role!=="club_owner" || !profile.club_id){
+  throw new Error("This account is not assigned to a valid club.");
+ }
+
+ currentProfile=profile;
+
+ const {data:club,error:clubError}=await db
+  .from("clubs")
+  .select("id,club_name,owner_user_id")
+  .eq("id",profile.club_id)
+  .eq("owner_user_id",currentUser.id)
+  .maybeSingle();
+
+ if(clubError) throw clubError;
+ if(!club) throw new Error("Your club could not be found.");
+
+ currentClub=club;
+
+ const now=new Date().toISOString();
+
+ const {data:subscription,error:subError}=await db
+  .from("subscriptions")
+  .select("id")
+  .eq("club_id",club.id)
+  .eq("status","active")
+  .lte("start_date",now)
+  .gt("end_date",now)
+  .order("end_date",{ascending:false})
+  .limit(1)
+  .maybeSingle();
+
+ if(subError) throw subError;
+ if(!subscription) throw new Error("Your subscription is not active. Please contact the platform administrator.");
+
+ el("ownerName").textContent=profile.full_name || "Club Owner";
+ el("clubLabel").textContent=club.club_name+" · Players";
+
+ return true;
+}
+
+async function loadPlayers(){
+
+ el("playerTable").replaceChildren();
+
+ const {data,error}=await db
+  .from("players")
+  .select("*")
+  .eq("club_id",currentClub.id)
+  .order("created_at",{ascending:false});
+
+ if(error) throw error;
+
+ players=data || [];
+ renderPlayers();
+}
+
+function makeCell(value,className){
+ const td=document.createElement("td");
+ td.textContent=safeText(value);
+ if(className) td.className=className;
+ return td;
+}
+
+function renderPlayers(){
+
+ const tbody=el("playerTable");
+ tbody.replaceChildren();
+
+ const search=el("searchInput").value.trim().toLowerCase();
+ const status=el("statusFilter").value;
+
+ const filtered=players.filter(player=>{
+  const matchesSearch=
+   String(player.player_name || "").toLowerCase().includes(search) ||
+   String(player.phone || "").toLowerCase().includes(search);
+
+  const matchesStatus=!status || player.status===status;
+
+  return matchesSearch && matchesStatus;
+ });
+
+ el("playerCount").textContent="("+filtered.length+")";
+
+ if(filtered.length===0){
+  const tr=document.createElement("tr");
+  const td=document.createElement("td");
+  td.colSpan=9;
+  td.className="empty";
+  td.textContent=players.length===0 ? "No players added yet." : "No matching players found.";
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+  return;
+ }
+
+ filtered.forEach(player=>{
+
+  const tr=document.createElement("tr");
+
+  tr.appendChild(makeCell(player.player_name,"player-name"));
+  tr.appendChild(makeCell(player.phone));
+  tr.appendChild(makeCell(player.age));
+  tr.appendChild(makeCell(player.player_role));
+  tr.appendChild(makeCell(player.batting_style));
+  tr.appendChild(makeCell(player.bowling_style));
+  tr.appendChild(makeCell(formatMoney(player.base_price)));
+
+  const statusTd=document.createElement("td");
+  const badge=document.createElement("span");
+  badge.className="status "+(player.status || "available");
+  badge.textContent=player.status || "available";
+  statusTd.appendChild(badge);
+  tr.appendChild(statusTd);
+
+  const actionTd=document.createElement("td");
+  const actionBox=document.createElement("div");
+  actionBox.className="row-actions";
+
+  const editBtn=document.createElement("button");
+  editBtn.className="small-btn";
+  editBtn.textContent="EDIT";
+  editBtn.addEventListener("click",()=>editPlayer(player.id));
+
+  const deleteBtn=document.createElement("button");
+  deleteBtn.className="small-btn delete";
+  deleteBtn.textContent="DELETE";
+  deleteBtn.addEventListener("click",()=>deletePlayer(player.id));
+
+  actionBox.append(editBtn,deleteBtn);
+  actionTd.appendChild(actionBox);
+  tr.appendChild(actionTd);
+
+  tbody.appendChild(tr);
+ });
+}
+
+function openForm(){
+
+ editingId=null;
+ el("playerForm").reset();
+ el("basePrice").value="0";
+ el("playerStatus").value="available";
+ el("formTitle").textContent="Add New Player";
+ el("saveBtn").textContent="SAVE PLAYER";
+ el("formCard").classList.remove("hidden");
+ clearMessage();
+ el("formCard").scrollIntoView({behavior:"smooth"});
+}
+
+function closeForm(){
+ el("formCard").classList.add("hidden");
+ el("playerForm").reset();
+ editingId=null;
+}
+
+function editPlayer(id){
+
+ const player=players.find(p=>p.id===id);
+ if(!player) return;
+
+ editingId=id;
+
+ el("playerName").value=player.player_name || "";
+ el("phone").value=player.phone || "";
+ el("age").value=player.age ?? "";
+ el("playerRole").value=player.player_role || "";
+ el("battingStyle").value=player.batting_style || "";
+ el("bowlingStyle").value=player.bowling_style || "";
+ el("basePrice").value=player.base_price ?? 0;
+ el("photoUrl").value=player.photo_url || "";
+ el("playerStatus").value=player.status || "available";
+
+ el("formTitle").textContent="Edit Player";
+ el("saveBtn").textContent="UPDATE PLAYER";
+ el("formCard").classList.remove("hidden");
+ clearMessage();
+ el("formCard").scrollIntoView({behavior:"smooth"});
+}
+
+async function savePlayer(event){
+
+ event.preventDefault();
+ clearMessage();
+
+ const name=el("playerName").value.trim();
+ const ageValue=el("age").value;
+ const priceValue=el("basePrice").value;
+
+ if(!name){
+  showMessage("Player name is required.","error");
+  return;
+ }
+
+ if(ageValue && (Number(ageValue)<1 || Number(ageValue)>100)){
+  showMessage("Please enter a valid age.","error");
+  return;
+ }
+
+ if(priceValue==="" || Number(priceValue)<0 || !Number.isFinite(Number(priceValue))){
+  showMessage("Please enter a valid base price.","error");
+  return;
+ }
+
+ const photo=el("photoUrl").value.trim();
+
+ if(photo){
+  try{
+   const parsed=new URL(photo);
+   if(!["http:","https:"].includes(parsed.protocol)){
+    throw new Error("Invalid URL");
+   }
+  }catch{
+   showMessage("Please enter a valid photo URL.","error");
+   return;
+  }
+ }
+
+ const payload={
+  player_name:name,
+  phone:el("phone").value.trim() || null,
+  age:ageValue ? Number(ageValue) : null,
+  player_role:el("playerRole").value || null,
+  batting_style:el("battingStyle").value || null,
+  bowling_style:el("bowlingStyle").value || null,
+  base_price:Number(priceValue),
+  photo_url:photo || null,
+  status:el("playerStatus").value,
+  updated_at:new Date().toISOString()
+ };
+
+ const button=el("saveBtn");
+ button.disabled=true;
+ button.textContent=editingId ? "UPDATING..." : "SAVING...";
+
+ try{
+
+  let result;
+
+  if(editingId){
+
+   result=await db
+    .from("players")
+    .update(payload)
+    .eq("id",editingId)
+    .eq("club_id",currentClub.id);
+
+  }else{
+
+   result=await db
+    .from("players")
+    .insert({
+     ...payload,
+     club_id:currentClub.id
+    });
+
+  }
+
+  if(result.error) throw result.error;
+
+  closeForm();
+  await loadPlayers();
+
+  showMessage(
+   editingId ? "Player updated successfully." : "Player added successfully.",
+   "success"
+  );
+
+ }catch(error){
+
+  console.error(error);
+  showMessage(error.message || "Unable to save player.","error");
+
+ }finally{
+
+  button.disabled=false;
+  button.textContent=editingId ? "UPDATE PLAYER" : "SAVE PLAYER";
+ }
+}
+
+async function deletePlayer(id){
+
+ const player=players.find(p=>p.id===id);
+ if(!player) return;
+
+ if(!confirm('Delete player "'+player.player_name+'"? This action cannot be undone.')){
+  return;
+ }
+
+ clearMessage();
+
+ try{
+
+  const {error}=await db
+   .from("players")
+   .delete()
+   .eq("id",id)
+   .eq("club_id",currentClub.id);
+
+  if(error) throw error;
+
+  await loadPlayers();
+  showMessage("Player deleted successfully.","success");
+
+ }catch(error){
+
+  console.error(error);
+  showMessage(error.message || "Unable to delete player.","error");
+ }
+}
+
+function showComingSoon(name){
+ alert(name+" Management module will be available soon.");
+}
+
+el("addPlayerBtn").addEventListener("click",openForm);
+el("cancelBtn").addEventListener("click",closeForm);
+el("playerForm").addEventListener("submit",savePlayer);
+el("searchInput").addEventListener("input",renderPlayers);
+el("statusFilter").addEventListener("change",renderPlayers);
+
+el("logoutBtn").addEventListener("click",async()=>{
+
+ const {error}=await db.auth.signOut();
+
+ if(error){
+  alert("Logout failed. Please try again.");
+  return;
+ }
+
+ window.location.replace("owner-login.html");
+});
+
+async function start(){
+
+ try{
+
+  const verified=await verifyAccount();
+  if(!verified) return;
+
+  await loadPlayers();
+
+  el("loading").style.display="none";
+  el("app").classList.remove("hidden");
+
+ }catch(error){
+
+  console.error("Players page error:",error);
+
+  await db.auth.signOut();
+
+  showFatal(
+   (error.message || "Unable to load Players Management.")+
+   " Returning to login..."
+  );
+
+  setTimeout(()=>{
+   window.location.replace("owner-login.html");
+  },4000);
+ }
+}
+
+start();
+</script>
+
+</body>
+</html>

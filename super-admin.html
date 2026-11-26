@@ -96,6 +96,22 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 .info-card p{font-size:12px;color:var(--muted);line-height:1.8}
 .footer{text-align:center;padding:22px;color:#5e7d6a;font-size:9px;letter-spacing:1px}
 
+/* AUTH DIAGNOSTIC */
+.auth-error{
+display:none;
+margin-bottom:22px;
+padding:20px;
+border:1px solid #8a4545;
+background:#301b1b;
+border-radius:10px;
+color:#ffdede;
+overflow-wrap:anywhere;
+}
+.auth-error h3{font-size:16px;margin:0 0 12px;color:#ff9999}
+.auth-error p{font-size:12px;line-height:1.7;margin:7px 0}
+.auth-error a{color:#7cebb0;font-size:12px}
+.auth-error code{color:#ffd28a;white-space:pre-wrap;overflow-wrap:anywhere}
+
 @media(max-width:1000px){
 .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -150,6 +166,13 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 </header>
 
 <main class="content">
+
+<div id="authError" class="auth-error" role="alert">
+<h3 id="authErrorTitle">Authentication problem</h3>
+<p id="authErrorText"></p>
+<p id="authErrorDetail"></p>
+<p><a id="loginLink" href="index.html">Open Login Page</a></p>
+</div>
 
 <section class="section active" id="dashboard">
 
@@ -416,10 +439,20 @@ PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lL8ef-UYWjGQ_mHepMoYX";
+const AUTH_STORAGE_KEY = "player-auction-platform-auth";
 
 const db = window.supabase.createClient(
 SUPABASE_URL,
-SUPABASE_KEY
+SUPABASE_KEY,
+{
+  auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true,
+    storage:window.localStorage,
+    storageKey:AUTH_STORAGE_KEY
+  }
+}
 );
 
 const titles = {
@@ -432,6 +465,29 @@ teams:"Teams Management"
 };
 
 let allClubs = [];
+
+const authErrorBox=document.getElementById("authError");
+const authErrorTitle=document.getElementById("authErrorTitle");
+const authErrorText=document.getElementById("authErrorText");
+const authErrorDetail=document.getElementById("authErrorDetail");
+const loginLink=document.getElementById("loginLink");
+
+loginLink.href=new URL("index.html",window.location.href).href;
+
+function showAuthError(title,message,detail=""){
+authErrorBox.style.display="block";
+authErrorTitle.textContent=title;
+authErrorText.textContent=message;
+authErrorDetail.textContent=detail;
+console.error("Dashboard authentication diagnostic:",title,message,detail);
+}
+
+function hideAuthError(){
+authErrorBox.style.display="none";
+authErrorTitle.textContent="";
+authErrorText.textContent="";
+authErrorDetail.textContent="";
+}
 
 function showPage(page){
 document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
@@ -491,25 +547,66 @@ new Date(now.getTime()+30*24*60*60*1000)
 
 setDateDefaults();
 
+/* AUTHENTICATION CHECK */
+
 async function checkAdmin(){
+
+try{
 
 const {data,error} = await db.auth.getSession();
 
-if(error || !data.session){
-location.replace("index.html");
+if(error){
+showAuthError(
+"SESSION ERROR",
+"Supabase could not read the login session.",
+error.message
+);
+return false;
+}
+
+if(!data.session){
+showAuthError(
+"NO ACTIVE SESSION",
+"Dashboard did not find a saved login session in this browser.",
+"Storage key: "+AUTH_STORAGE_KEY
+);
 return false;
 }
 
 const {data:allowed,error:rpcError} =
 await db.rpc("is_platform_admin");
 
-if(rpcError || allowed !== true){
-await db.auth.signOut();
-location.replace("index.html");
+if(rpcError){
+showAuthError(
+"ADMIN PERMISSION CHECK FAILED",
+"Your login session exists, but the admin permission function returned an error.",
+rpcError.message
+);
 return false;
 }
 
+if(allowed !== true){
+showAuthError(
+"SUPER ADMIN ACCESS DENIED",
+"Your account is logged in, but is_platform_admin() did not return true.",
+"Returned value: "+JSON.stringify(allowed)
+);
+return false;
+}
+
+hideAuthError();
 return true;
+
+}catch(error){
+
+showAuthError(
+"AUTHENTICATION ERROR",
+"An unexpected error occurred while checking your account.",
+error.message||String(error)
+);
+return false;
+
+}
 }
 
 function addCell(row,value,className=""){
@@ -1016,8 +1113,6 @@ msg.textContent = "";
 
 try{
 
-/* GET CURRENT SUPER ADMIN SESSION */
-
 const {data:sessionData,error:sessionError} =
 await db.auth.getSession();
 
@@ -1026,10 +1121,8 @@ if(sessionError)throw sessionError;
 const session = sessionData?.session;
 
 if(!session?.access_token){
-throw new Error("Session expired. Please login again.");
+throw new Error("No active session. Please login again.");
 }
-
-/* VERIFY SUPER ADMIN BEFORE CREATING CLUB */
 
 const {data:allowed,error:adminCheckError} =
 await db.rpc("is_platform_admin");
@@ -1039,8 +1132,6 @@ if(adminCheckError)throw adminCheckError;
 if(allowed !== true){
 throw new Error("Super Admin permission required.");
 }
-
-/* CALL CREATE CLUB EDGE FUNCTION WITH ACCESS TOKEN */
 
 const {data,error} = await db.functions.invoke(
 "create-club",
@@ -1053,7 +1144,6 @@ Authorization:"Bearer "+session.access_token
 );
 
 if(error){
-
 console.error("Create club function error:",error);
 throw error;
 }
@@ -1099,8 +1189,14 @@ document.getElementById("refreshSubs").onclick = loadSubscriptions;
 
 document.getElementById("logoutBtn").onclick = async()=>{
 
-await db.auth.signOut();
-location.replace("index.html");
+const {error}=await db.auth.signOut();
+
+if(error){
+alert("Logout error: "+error.message);
+return;
+}
+
+location.replace(new URL("index.html",window.location.href).href);
 
 };
 
@@ -1112,10 +1208,19 @@ const allowed = await checkAdmin();
 
 if(!allowed)return;
 
+try{
 await Promise.all([
 loadClubs(),
 loadSubscriptions()
 ]);
+}catch(error){
+console.error("Dashboard loading error:",error);
+showAuthError(
+"DASHBOARD LOADING ERROR",
+"Authentication passed, but dashboard data could not be loaded.",
+error.message||String(error)
+);
+}
 
 })();
 </script>

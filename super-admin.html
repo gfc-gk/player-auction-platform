@@ -151,7 +151,6 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 
 <main class="content">
 
-<!-- DASHBOARD -->
 <section class="section active" id="dashboard">
 
 <div class="welcome">
@@ -193,7 +192,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
-<!-- CLUB MANAGEMENT -->
 <section class="section" id="clubs">
 
 <div class="welcome">
@@ -282,7 +280,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </div>
 
-<!-- ALL CLUBS -->
 <div class="panel">
 <div class="panel-head">
 <div>
@@ -315,7 +312,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
-<!-- SUBSCRIPTIONS -->
 <section class="section" id="subscriptions">
 
 <div class="welcome">
@@ -370,7 +366,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
-<!-- AUCTIONS -->
 <section class="section" id="auctions">
 <div class="welcome">
 <div>
@@ -384,7 +379,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
-<!-- PLAYERS -->
 <section class="section" id="players">
 <div class="welcome">
 <div>
@@ -398,7 +392,6 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
-<!-- TEAMS -->
 <section class="section" id="teams">
 <div class="welcome">
 <div>
@@ -422,7 +415,7 @@ PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026
 
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lL8ef-UYWjGQ_mHepMoYX";
 
 const db = window.supabase.createClient(
 SUPABASE_URL,
@@ -653,8 +646,6 @@ addCell(tr,profile?.phone||"-");
 addCell(tr,club.owner_email||"-","owner-email");
 addCell(tr,formatDate(club.created_at));
 
-/* STATUS */
-
 const status = club.status || "active";
 
 const statusCell = document.createElement("td");
@@ -666,16 +657,12 @@ statusBadge.textContent = status.toUpperCase();
 statusCell.appendChild(statusBadge);
 tr.appendChild(statusCell);
 
-/* ACTIONS */
-
 const actionCell = document.createElement("td");
 const actionButtons = document.createElement("div");
 
 actionButtons.className = "action-buttons";
 
 if(status !== "archived"){
-
-/* EDIT BUTTON */
 
 const editBtn = document.createElement("button");
 
@@ -684,25 +671,13 @@ editBtn.textContent = "EDIT";
 
 editBtn.onclick = async()=>{
 
-const newClubName = prompt(
-"Enter Club Name:",
-club.club_name
-);
-
+const newClubName = prompt("Enter Club Name:",club.club_name);
 if(newClubName === null)return;
 
-const newOwnerName = prompt(
-"Enter Owner Name:",
-profile?.full_name || ""
-);
-
+const newOwnerName = prompt("Enter Owner Name:",profile?.full_name || "");
 if(newOwnerName === null)return;
 
-const newOwnerPhone = prompt(
-"Enter Owner Phone:",
-profile?.phone || ""
-);
-
+const newOwnerPhone = prompt("Enter Owner Phone:",profile?.phone || "");
 if(newOwnerPhone === null)return;
 
 if(!newClubName.trim() || !newOwnerName.trim()){
@@ -735,13 +710,11 @@ throw new Error(data?.error || "Update failed");
 }
 
 alert("Club details updated successfully!");
-
 await loadClubs();
 
 }catch(error){
 
 console.error("Edit club error:",error);
-
 alert("ERROR: "+(error.message || "Update failed"));
 
 editBtn.disabled = false;
@@ -753,8 +726,6 @@ editBtn.textContent = "EDIT";
 
 actionButtons.appendChild(editBtn);
 
-/* SUSPEND / ACTIVATE BUTTON */
-
 const statusBtn = document.createElement("button");
 
 statusBtn.className =
@@ -765,8 +736,7 @@ status==="active"?"SUSPEND":"ACTIVATE";
 
 statusBtn.onclick = async()=>{
 
-const nextStatus =
-status==="active"?"suspended":"active";
+const nextStatus = status==="active"?"suspended":"active";
 
 const confirmation = confirm(
 "Are you sure you want to "+nextStatus+
@@ -795,13 +765,11 @@ throw new Error("Club status update failed.");
 }
 
 alert("Club status successfully changed to "+nextStatus.toUpperCase());
-
 await loadClubs();
 
 }catch(error){
 
 console.error("Status update error:",error);
-
 alert("ERROR: "+(error.message||"Update failed"));
 
 statusBtn.disabled = false;
@@ -813,8 +781,6 @@ status==="active"?"SUSPEND":"ACTIVATE";
 };
 
 actionButtons.appendChild(statusBtn);
-
-/* ARCHIVE BUTTON */
 
 const archiveBtn = document.createElement("button");
 
@@ -852,13 +818,11 @@ throw new Error(data?.error || "Archive failed");
 }
 
 alert("Club archived successfully!");
-
 await loadClubs();
 
 }catch(error){
 
 console.error("Archive error:",error);
-
 alert("ERROR: "+(error.message || "Archive failed"));
 
 archiveBtn.disabled = false;
@@ -917,11 +881,8 @@ return;
 
 const items = data || [];
 
-document.getElementById("totalSubscriptions").textContent =
-items.length;
-
-document.getElementById("subTotal").textContent =
-items.length;
+document.getElementById("totalSubscriptions").textContent = items.length;
+document.getElementById("subTotal").textContent = items.length;
 
 document.getElementById("subActive").textContent =
 items.filter(x=>
@@ -930,9 +891,7 @@ new Date(x.start_date)<=new Date() &&
 new Date(x.end_date)>new Date()
 ).length;
 
-const total = items.reduce(
-(sum,x)=>sum+Number(x.amount||0),0
-);
+const total = items.reduce((sum,x)=>sum+Number(x.amount||0),0);
 
 document.getElementById("subAmount").textContent =
 "₹"+total.toLocaleString("en-IN");
@@ -992,19 +951,12 @@ const msg = document.getElementById("message");
 const payload = {
 
 club_name:document.getElementById("clubName").value.trim(),
-
 owner_name:document.getElementById("ownerName").value.trim(),
-
 owner_phone:document.getElementById("ownerPhone").value.trim(),
-
 owner_email:document.getElementById("ownerEmail").value.trim(),
-
 owner_password:document.getElementById("ownerPassword").value,
-
 plan_name:document.getElementById("planName").value,
-
 amount:Number(document.getElementById("amount").value),
-
 duration_days:Number(document.getElementById("durationDays").value),
 
 start_date:inputToISTISOString(
@@ -1051,10 +1003,10 @@ msg.textContent="Check amount and duration.";
 return;
 }
 
-if(payload.owner_password.length<8){
+if(payload.owner_password.length<8 || payload.owner_password.length>72){
 
 msg.style.color="#f16c6c";
-msg.textContent="Password must contain at least 8 characters.";
+msg.textContent="Password must contain 8 to 72 characters.";
 return;
 }
 
@@ -1064,23 +1016,56 @@ msg.textContent = "";
 
 try{
 
+/* GET CURRENT SUPER ADMIN SESSION */
+
+const {data:sessionData,error:sessionError} =
+await db.auth.getSession();
+
+if(sessionError)throw sessionError;
+
+const session = sessionData?.session;
+
+if(!session?.access_token){
+throw new Error("Session expired. Please login again.");
+}
+
+/* VERIFY SUPER ADMIN BEFORE CREATING CLUB */
+
+const {data:allowed,error:adminCheckError} =
+await db.rpc("is_platform_admin");
+
+if(adminCheckError)throw adminCheckError;
+
+if(allowed !== true){
+throw new Error("Super Admin permission required.");
+}
+
+/* CALL CREATE CLUB EDGE FUNCTION WITH ACCESS TOKEN */
+
 const {data,error} = await db.functions.invoke(
 "create-club",
-{body:payload}
+{
+body:payload,
+headers:{
+Authorization:"Bearer "+session.access_token
+}
+}
 );
 
-if(error)throw error;
+if(error){
+
+console.error("Create club function error:",error);
+throw error;
+}
 
 if(!data?.success){
-throw new Error(data?.error||"Club creation failed.");
+throw new Error(data?.error || "Club creation failed.");
 }
 
 msg.style.color="#27d58c";
-msg.textContent =
-"SUCCESS! Club and Owner Account created.";
+msg.textContent="SUCCESS! Club and Owner Account created.";
 
 document.getElementById("clubForm").reset();
-
 setDateDefaults();
 
 await Promise.all([
@@ -1107,16 +1092,12 @@ btn.textContent = "＋ CREATE CLUB + OWNER ACCOUNT";
 
 /* REFRESH */
 
-document.getElementById("refreshClubs").onclick =
-loadClubs;
-
-document.getElementById("refreshSubs").onclick =
-loadSubscriptions;
+document.getElementById("refreshClubs").onclick = loadClubs;
+document.getElementById("refreshSubs").onclick = loadSubscriptions;
 
 /* LOGOUT */
 
-document.getElementById("logoutBtn").onclick =
-async()=>{
+document.getElementById("logoutBtn").onclick = async()=>{
 
 await db.auth.signOut();
 location.replace("index.html");

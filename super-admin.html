@@ -4,609 +4,434 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Player Auction Platform | Super Admin</title>
+<title>Super Admin Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root{
- --bg:#071a13;--panel:#0d251b;--panel2:#102c20;
- --green:#27d58c;--text:#f1fff7;--muted:#91aa9d;
- --border:#214535;--red:#f16c6c;
-}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.layout{display:flex;min-height:100vh}
-.sidebar{
- width:255px;position:fixed;inset:0 auto 0 0;background:#06150f;
- border-right:1px solid var(--border);padding:20px 15px;
- display:flex;flex-direction:column;z-index:20
-}
-.brand{display:flex;align-items:center;gap:12px;padding:8px 7px 24px;border-bottom:1px solid var(--border)}
-.brand-logo{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#062015;font-size:24px;font-weight:900}
-.brand-name{font-size:14px;font-weight:900}
-.brand-sub{font-size:9px;color:var(--muted);margin-top:5px;letter-spacing:1.3px}
-.nav-heading{color:#658474;font-size:10px;letter-spacing:1.5px;margin:23px 10px 9px}
-.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;border:0;border-radius:9px;background:transparent;color:#b6cbbd;text-align:left;font-size:13px;margin:3px 0}
-.nav-item:hover,.nav-item.active{background:#143d2a;color:var(--green)}
-.nav-item.active{box-shadow:inset 3px 0 var(--green)}
-.sidebar-bottom{margin-top:auto;padding-top:17px;border-top:1px solid var(--border)}
-.main{margin-left:255px;width:calc(100% - 255px);min-width:0}
-.topbar{height:68px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#0a2117;border-bottom:1px solid var(--border)}
-.page-title{font-size:14px;font-weight:bold}
-.online{font-size:10px;color:var(--green);background:#123a29;padding:8px 11px;border-radius:20px}
-.logout{border:1px solid #744040;background:#321b1b;color:#ff9999;border-radius:7px;padding:9px 13px;font-size:11px}
-.content{max-width:1550px;margin:auto;padding:27px 28px}
-.section{display:none}
-.section.active{display:block}
-.welcome{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px;flex-wrap:wrap}
-.welcome h1{font-size:25px;margin:0 0 8px}
-.welcome p{font-size:12px;color:var(--muted);margin:0}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:23px}
-.stat,.panel,.info-card{background:var(--panel);border:1px solid var(--border);border-radius:12px}
-.stat{padding:18px}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:.7px}
-.stat-value{font-size:27px;font-weight:900;margin:15px 0 5px}
-.panel{margin-bottom:20px;overflow:hidden}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.panel-head h3{font-size:14px;margin:0}
-.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
-.panel-body{padding:19px}
-.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.field label{display:block;color:#a9c2b3;font-size:10px;margin-bottom:7px;letter-spacing:.4px}
-.field input,.field select{width:100%;padding:12px;border:1px solid #28533c;background:#071b12;color:white;border-radius:7px;outline:none;font-size:12px}
-.field input:focus,.field select:focus{border-color:var(--green)}
-.field select option{background:#0d251b}
-.form-footer{grid-column:1/-1;margin-top:5px}
-.form-footer p{font-size:10px;color:var(--muted);line-height:1.6}
-.btn{border:0;border-radius:7px;padding:11px 15px;font-size:11px;font-weight:bold}
-.btn-green{background:var(--green);color:#062015}
-.btn-dark{background:#19412e;color:#c7f9dc;border:1px solid #286344}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-#message{font-size:12px;margin-top:12px;line-height:1.5}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6f4;color:#17251d}
+header{background:#123d2b;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h2{margin:0}
+button{border:0;border-radius:7px;padding:11px 16px;cursor:pointer;font-weight:600}
+.logout{background:#e74c3c;color:white}
+.container{max-width:1250px;margin:25px auto;padding:0 16px}
+.card{background:white;border-radius:12px;padding:22px;margin-bottom:22px;box-shadow:0 3px 14px #0000000c}
+h3{margin:0 0 18px;color:#174a32}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+input,select{width:100%;padding:12px;border:1px solid #d4ddd7;border-radius:7px;font-size:14px;background:white}
+label{font-size:13px;font-weight:600;display:block;margin-bottom:6px}
+.field{min-width:0}
+.primary{background:#167447;color:white;margin-top:16px}
+.primary:disabled{opacity:.6;cursor:not-allowed}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:1000px}
-th{text-align:left;padding:13px 14px;background:#102c20;color:#86a796;font-size:9px;letter-spacing:.7px;white-space:nowrap}
-td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertical-align:middle}
-.empty{text-align:center;padding:27px;color:var(--muted)}
-.badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:9px;font-weight:bold}
-.badge.active{background:#164a31;color:#54e8a0}
-.search-box{width:100%;max-width:350px;padding:11px 13px;background:#071b12;color:white;border:1px solid #28533c;border-radius:7px;outline:none;font-size:12px}
-.search-box:focus{border-color:var(--green)}
-.club-name{font-weight:bold;color:var(--green)}
-.club-id{font-size:10px;color:var(--muted);max-width:180px;overflow-wrap:anywhere}
-.owner-name{font-weight:bold}
-.owner-email{color:#9fcab0}
-.info-card{padding:22px}
-.info-card h3{font-size:15px;margin:0 0 10px}
-.info-card p{font-size:12px;color:var(--muted);line-height:1.8}
-.footer{text-align:center;padding:22px;color:#5e7d6a;font-size:9px;letter-spacing:1px}
-@media(max-width:1000px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){
- .sidebar{display:none}.main{margin-left:0;width:100%}
- .topbar{padding:0 13px}.content{padding:20px 13px}
- .stats{grid-template-columns:1fr}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #e8eee9;font-size:13px}
+th{background:#edf5ef;color:#174a32;white-space:nowrap}
+.search{max-width:400px;margin-bottom:15px}
+.status{padding:5px 9px;border-radius:20px;font-size:12px;background:#e4f6e9;color:#167447}
+.status.expired{background:#ffebeb;color:#c0392b}
+.message{padding:12px;border-radius:7px;margin-top:12px;display:none;font-size:14px}
+.error{background:#ffe9e9;color:#a52222}
+.success{background:#e6f7ec;color:#17643b}
+.muted{color:#718078;font-size:13px}
+@media(max-width:650px){
  .form-grid{grid-template-columns:1fr}
- .form-footer{grid-column:auto}
+ header{padding:16px}
+ .card{padding:16px}
 }
 </style>
 </head>
-
 <body>
-<div class="layout">
 
-<aside class="sidebar">
- <div class="brand">
-  <div class="brand-logo">P</div>
-  <div>
-   <div class="brand-name">PLAYER AUCTION</div>
-   <div class="brand-sub">PLATFORM CONTROL</div>
-  </div>
- </div>
-
- <div class="nav-heading">MAIN MENU</div>
- <button class="nav-item active" data-page="dashboard">▦ Dashboard</button>
- <button class="nav-item" data-page="clubs">🏢 Club Management</button>
- <button class="nav-item" data-page="subscriptions">💳 Subscriptions</button>
-
- <div class="nav-heading">AUCTION PLATFORM</div>
- <button class="nav-item" data-page="auctions">🏆 Auction Management</button>
- <button class="nav-item" data-page="players">🏏 Player Database</button>
- <button class="nav-item" data-page="teams">🛡️ Teams Management</button>
-
- <div class="sidebar-bottom">
-  <b style="font-size:12px;padding:8px">Super Admin</b>
-  <div style="font-size:10px;color:var(--muted);padding:8px">Platform Owner</div>
- </div>
-</aside>
-
-<div class="main">
-<header class="topbar">
- <div class="page-title" id="pageTitle">Super Admin Dashboard</div>
- <div style="display:flex;align-items:center;gap:13px">
-  <span class="online">● ADMIN CONNECTED</span>
-  <button class="logout" id="logoutBtn">LOGOUT ↗</button>
- </div>
+<header>
+  <h2>Super Admin Dashboard</h2>
+  <button class="logout" id="logoutBtn">Logout</button>
 </header>
 
-<main class="content">
+<div class="container">
 
-<section class="section active" id="dashboard">
- <div class="welcome">
-  <div>
-   <h1>Super Admin Dashboard</h1>
-   <p>Manage your entire Player Auction Platform.</p>
-  </div>
-  <div id="today" style="font-size:11px;color:var(--muted)"></div>
- </div>
+  <section class="card">
+    <h3>Create New Club</h3>
 
- <div class="stats">
-  <div class="stat"><div class="stat-label">TOTAL CLUBS</div><div class="stat-value" id="totalClubs">—</div></div>
-  <div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="totalSubscriptions">—</div></div>
-  <div class="stat"><div class="stat-label">LIVE AUCTIONS</div><div class="stat-value">—</div></div>
- </div>
+    <form id="clubForm">
+      <div class="form-grid">
 
- <div class="panel">
-  <div class="panel-head">
-   <div><h3>CLUB MANAGEMENT</h3><p>Register and manage cricket clubs.</p></div>
-   <button class="btn btn-green" onclick="showPage('clubs')">CREATE CLUB →</button>
-  </div>
-  <div class="panel-body">
-   <p style="font-size:12px;color:var(--muted)">Use Club Management to create a new club and its owner account.</p>
-  </div>
- </div>
-</section>
+        <div class="field">
+          <label>Club Name</label>
+          <input id="club_name" required placeholder="Enter club name">
+        </div>
 
-<section class="section" id="clubs">
- <div class="welcome">
-  <div><h1>Club Management</h1><p>Manage clubs and their owner accounts.</p></div>
- </div>
+        <div class="field">
+          <label>Owner Name</label>
+          <input id="owner_name" required placeholder="Enter owner name">
+        </div>
 
- <div class="panel">
-  <div class="panel-head">
-   <div><h3>CREATE NEW CLUB</h3><p>Create a club, owner login and subscription.</p></div>
-   <span class="badge active">NEW REGISTRATION</span>
-  </div>
+        <div class="field">
+          <label>Owner Email</label>
+          <input id="owner_email" type="email" required placeholder="Enter email">
+        </div>
 
-  <div class="panel-body">
-   <form id="clubForm" class="form-grid">
+        <div class="field">
+          <label>Owner Mobile</label>
+          <input id="owner_phone" required placeholder="Enter mobile number">
+        </div>
 
-    <div class="field">
-     <label>CLUB NAME *</label>
-     <input id="clubName" required maxlength="100" placeholder="GFC Cricket Club">
+        <div class="field">
+          <label>Owner Password</label>
+          <input id="owner_password" type="password" required minlength="6" placeholder="Minimum 6 characters">
+        </div>
+
+        <div class="field">
+          <label>Plan Name</label>
+          <input id="plan_name" required placeholder="Example: Premium">
+        </div>
+
+        <div class="field">
+          <label>Subscription Amount</label>
+          <input id="amount" type="number" min="0" step="0.01" required placeholder="Amount">
+        </div>
+
+        <div class="field">
+          <label>Duration (Days)</label>
+          <input id="duration_days" type="number" min="1" required placeholder="Example: 365">
+        </div>
+
+        <div class="field">
+          <label>Subscription Start (India Time)</label>
+          <input id="start_date" type="datetime-local" required>
+        </div>
+
+        <div class="field">
+          <label>Subscription End (India Time)</label>
+          <input id="end_date" type="datetime-local" required>
+        </div>
+
+      </div>
+
+      <button class="primary" id="createBtn" type="submit">Create Club</button>
+      <div id="formMessage" class="message"></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>Club Management</h3>
+    <input class="search" id="clubSearch" placeholder="Search club, owner, email, mobile or ID...">
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Club Name</th>
+            <th>Club ID</th>
+            <th>Owner Name</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="clubTable">
+          <tr><td colspan="6">Loading clubs...</td></tr>
+        </tbody>
+      </table>
     </div>
+    <div id="clubMessage" class="message"></div>
+  </section>
 
-    <div class="field">
-     <label>OWNER NAME *</label>
-     <input id="ownerName" required maxlength="100" placeholder="Owner full name">
+  <section class="card">
+    <h3>Subscription Management</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Club ID</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="subscriptionTable">
+          <tr><td colspan="6">Loading subscriptions...</td></tr>
+        </tbody>
+      </table>
     </div>
+    <div id="subscriptionMessage" class="message"></div>
+  </section>
 
-    <div class="field">
-     <label>OWNER PHONE</label>
-     <input id="ownerPhone" type="tel" placeholder="+91...">
-    </div>
-
-    <div class="field">
-     <label>OWNER LOGIN EMAIL *</label>
-     <input id="ownerEmail" type="email" required placeholder="owner@example.com">
-    </div>
-
-    <div class="field">
-     <label>OWNER LOGIN PASSWORD *</label>
-     <input id="ownerPassword" type="password" minlength="8" maxlength="72" required placeholder="Minimum 8 characters">
-    </div>
-
-    <div class="field">
-     <label>SUBSCRIPTION PLAN *</label>
-     <select id="planName" required>
-      <option value="Single Tournament">Single Tournament</option>
-      <option value="Monthly">Monthly</option>
-      <option value="Yearly">Yearly</option>
-      <option value="Custom">Custom</option>
-     </select>
-    </div>
-
-    <div class="field">
-     <label>SUBSCRIPTION AMOUNT (₹) *</label>
-     <input id="amount" type="number" min="0" step="0.01" value="499" required>
-    </div>
-
-    <div class="field">
-     <label>DURATION (DAYS) *</label>
-     <input id="durationDays" type="number" min="1" max="3650" value="30" required>
-    </div>
-
-    <div class="field">
-     <label>SUBSCRIPTION START (IST) *</label>
-     <input id="startDate" type="datetime-local" required>
-    </div>
-
-    <div class="field">
-     <label>SUBSCRIPTION END (IST) *</label>
-     <input id="endDate" type="datetime-local" required>
-    </div>
-
-    <div class="form-footer">
-     <p>Club Owner শুধু নিজের Club-এর Auction পরিচালনা করতে পারবে।</p>
-     <button class="btn btn-green" type="submit" id="createBtn">＋ CREATE CLUB + OWNER ACCOUNT</button>
-     <div id="message"></div>
-    </div>
-   </form>
-  </div>
- </div>
-
- <div class="panel">
-  <div class="panel-head">
-   <div><h3>ALL CLUBS</h3><p>Club and owner information.</p></div>
-   <input id="clubSearch" class="search-box" type="search" placeholder="Search club, ID, owner, phone or email...">
-   <button class="btn btn-dark" id="refreshClubs">↻ REFRESH</button>
-  </div>
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>CLUB NAME</th>
-      <th>CLUB ID</th>
-      <th>OWNER NAME</th>
-      <th>MOBILE</th>
-      <th>EMAIL</th>
-      <th>CREATED</th>
-     </tr>
-    </thead>
-    <tbody id="clubList">
-     <tr><td colspan="6" class="empty">Loading...</td></tr>
-    </tbody>
-   </table>
-  </div>
- </div>
-</section>
-
-<section class="section" id="subscriptions">
- <div class="welcome">
-  <div><h1>Subscription Management</h1><p>View all club subscriptions.</p></div>
- </div>
- <div class="stats">
-  <div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="subTotal">—</div></div>
-  <div class="stat"><div class="stat-label">ACTIVE SUBSCRIPTIONS</div><div class="stat-value" id="subActive">—</div></div>
-  <div class="stat"><div class="stat-label">RECORDED AMOUNT</div><div class="stat-value" id="subAmount">—</div></div>
- </div>
- <div class="panel">
-  <div class="panel-head">
-   <div><h3>ALL SUBSCRIPTIONS</h3><p>Subscription records.</p></div>
-   <button class="btn btn-dark" id="refreshSubs">↻ REFRESH</button>
-  </div>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>CLUB ID</th><th>PLAN</th><th>AMOUNT</th><th>DURATION</th><th>START</th><th>END</th><th>STATUS</th></tr></thead>
-    <tbody id="subscriptionList"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
-   </table>
-  </div>
- </div>
-</section>
-
-<section class="section" id="auctions">
- <div class="welcome"><div><h1>Auction Management</h1><p>Manage platform auctions.</p></div></div>
- <div class="info-card"><h3>Auction Control Center</h3><p>Auction management will be connected in the next development stage.</p></div>
-</section>
-
-<section class="section" id="players">
- <div class="welcome"><div><h1>Player Database</h1><p>Manage player records.</p></div></div>
- <div class="info-card"><h3>Player Management</h3><p>Player database will be connected in the next development stage.</p></div>
-</section>
-
-<section class="section" id="teams">
- <div class="welcome"><div><h1>Teams Management</h1><p>Manage auction teams.</p></div></div>
- <div class="info-card"><h3>Team Management</h3><p>Team management will be connected in the next development stage.</p></div>
-</section>
-
-<div class="footer">PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026</div>
-</main>
-</div>
 </div>
 
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const titles={
- dashboard:"Super Admin Dashboard",
- clubs:"Club Management",
- subscriptions:"Subscription Management",
- auctions:"Auction Management",
- players:"Player Database",
- teams:"Teams Management"
-};
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let allClubs=[];
+let allClubs = [];
 
-function showPage(page){
- document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
- document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
- document.getElementById(page)?.classList.add("active");
- document.querySelector('[data-page="'+page+'"]')?.classList.add("active");
- document.getElementById("pageTitle").textContent=titles[page]||"Dashboard";
+function showMessage(id, message, type) {
+  const el = document.getElementById(id);
+  el.textContent = message;
+  el.className = "message " + type;
+  el.style.display = "block";
 }
 
-document.querySelectorAll(".nav-item").forEach(btn=>{
- btn.addEventListener("click",()=>showPage(btn.dataset.page));
+function hideMessage(id) {
+  const el = document.getElementById(id);
+  el.style.display = "none";
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  return new Date(value).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+async function checkAdmin() {
+  const { data: sessionData, error: sessionError } =
+    await db.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    location.href = "index.html";
+    return false;
+  }
+
+  const { data, error } = await db.rpc("is_platform_admin");
+
+  if (error || data !== true) {
+    alert("Access denied. Super Admin only.");
+    await db.auth.signOut();
+    location.href = "index.html";
+    return false;
+  }
+
+  return true;
+}
+
+/* CLUB LIST */
+async function loadClubs() {
+  const tbody = document.getElementById("clubTable");
+  tbody.innerHTML = '<tr><td colspan="6">Loading clubs...</td></tr>';
+  hideMessage("clubMessage");
+
+  const { data, error } = await db
+    .from("clubs")
+    .select(`
+      id,
+      club_name,
+      owner_user_id,
+      owner_email,
+      created_at,
+      profiles!clubs_owner_profile_fkey (
+        full_name,
+        phone
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    tbody.innerHTML = '<tr><td colspan="6">Could not load clubs.</td></tr>';
+    showMessage("clubMessage", error.message, "error");
+    console.error("Club loading error:", error);
+    return;
+  }
+
+  allClubs = data || [];
+  renderClubs(allClubs);
+}
+
+function renderClubs(clubs) {
+  const tbody = document.getElementById("clubTable");
+
+  if (!clubs.length) {
+    tbody.innerHTML = '<tr><td colspan="6">No clubs found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = clubs.map(club => {
+    const profile = club.profiles || {};
+
+    return `
+      <tr>
+        <td><strong>${escapeHTML(club.club_name)}</strong></td>
+        <td>${escapeHTML(club.id)}</td>
+        <td>${escapeHTML(profile.full_name || "-")}</td>
+        <td>${escapeHTML(profile.phone || "-")}</td>
+        <td>${escapeHTML(club.owner_email || "-")}</td>
+        <td>${escapeHTML(formatDate(club.created_at))}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* CLUB SEARCH */
+document.getElementById("clubSearch").addEventListener("input", function() {
+  const query = this.value.toLowerCase().trim();
+
+  const filtered = allClubs.filter(club => {
+    const profile = club.profiles || {};
+
+    return [
+      club.club_name,
+      club.id,
+      club.owner_user_id,
+      club.owner_email,
+      profile.full_name,
+      profile.phone
+    ].some(value => String(value || "").toLowerCase().includes(query));
+  });
+
+  renderClubs(filtered);
 });
-
-document.getElementById("today").textContent=
- new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
-
-function getISTInputValue(date){
- const parts=new Intl.DateTimeFormat("en-CA",{
-  timeZone:"Asia/Kolkata",
-  year:"numeric",month:"2-digit",day:"2-digit",
-  hour:"2-digit",minute:"2-digit",hourCycle:"h23"
- }).formatToParts(date);
- const p={};
- parts.forEach(x=>p[x.type]=x.value);
- return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
-}
-
-function inputToISTISOString(value){
- if(!value)return null;
- return new Date(value+":00+05:30").toISOString();
-}
-
-function setDateDefaults(){
- const now=new Date();
- document.getElementById("startDate").value=getISTInputValue(now);
- document.getElementById("endDate").value=
-  getISTInputValue(new Date(now.getTime()+30*24*60*60*1000));
-}
-setDateDefaults();
-
-async function checkAdmin(){
- const {data,error}=await db.auth.getSession();
- if(error||!data.session){
-  location.replace("index.html");
-  return false;
- }
- const {data:allowed,error:rpcError}=await db.rpc("is_platform_admin");
- if(rpcError||allowed!==true){
-  await db.auth.signOut();
-  location.replace("index.html");
-  return false;
- }
- return true;
-}
-
-function addCell(row,value,className=""){
- const td=document.createElement("td");
- td.textContent=value??"-";
- if(className)td.className=className;
- row.appendChild(td);
-}
-
-function formatDate(value){
- if(!value)return "-";
- const date=new Date(value);
- if(Number.isNaN(date.getTime()))return value;
- return date.toLocaleString("en-IN",{
-  timeZone:"Asia/Kolkata",
-  day:"2-digit",month:"short",year:"numeric",
-  hour:"2-digit",minute:"2-digit"
- });
-}
-
-function escapeHTML(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
-}
-
-/* LOAD CLUBS WITH OWNER INFORMATION */
-async function loadClubs(){
- const tbody=document.getElementById("clubList");
- tbody.innerHTML='<tr><td colspan="6" class="empty">Loading clubs...</td></tr>';
-
- const {data,error}=await db
-  .from("clubs")
-  .select(`
-   id,
-   club_name,
-   owner_user_id,
-   owner_email,
-   created_at,
-   profiles!clubs_owner_user_id_fkey (
-    full_name,
-    phone
-   )
-  `)
-  .order("created_at",{ascending:false});
-
- if(error){
-  tbody.innerHTML=
-   '<tr><td colspan="6" class="empty">Could not load clubs: '+
-   escapeHTML(error.message)+'</td></tr>';
-  return;
- }
-
- allClubs=data||[];
- document.getElementById("totalClubs").textContent=allClubs.length;
- renderClubs();
-}
-
-function renderClubs(){
- const tbody=document.getElementById("clubList");
- const search=document.getElementById("clubSearch").value.trim().toLowerCase();
-
- const filtered=allClubs.filter(club=>{
-  const profile=Array.isArray(club.profiles)
-   ? club.profiles[0]
-   : club.profiles;
-
-  const values=[
-   club.club_name,
-   club.id,
-   club.owner_user_id,
-   club.owner_email,
-   profile?.full_name,
-   profile?.phone
-  ];
-
-  return values.some(v=>String(v??"").toLowerCase().includes(search));
- });
-
- tbody.innerHTML="";
-
- if(!filtered.length){
-  tbody.innerHTML='<tr><td colspan="6" class="empty">No matching clubs found.</td></tr>';
-  return;
- }
-
- filtered.forEach(club=>{
-  const profile=Array.isArray(club.profiles)
-   ? club.profiles[0]
-   : club.profiles;
-
-  const tr=document.createElement("tr");
-
-  addCell(tr,club.club_name,"club-name");
-  addCell(tr,club.id,"club-id");
-  addCell(tr,profile?.full_name||"-","owner-name");
-  addCell(tr,profile?.phone||"-");
-  addCell(tr,club.owner_email||"-","owner-email");
-  addCell(tr,formatDate(club.created_at));
-
-  tbody.appendChild(tr);
- });
-}
-
-document.getElementById("clubSearch").addEventListener("input",renderClubs);
-
-/* LOAD SUBSCRIPTIONS */
-async function loadSubscriptions(){
- const tbody=document.getElementById("subscriptionList");
- tbody.innerHTML='<tr><td colspan="7" class="empty">Loading subscriptions...</td></tr>';
-
- const {data,error}=await db.from("subscriptions")
-  .select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at")
-  .order("created_at",{ascending:false});
-
- if(error){
-  tbody.innerHTML='<tr><td colspan="7" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';
-  return;
- }
-
- const items=data||[];
- document.getElementById("totalSubscriptions").textContent=items.length;
- document.getElementById("subTotal").textContent=items.length;
- document.getElementById("subActive").textContent=
-  items.filter(x=>x.status==="active"&&new Date(x.end_date)>new Date()).length;
-
- const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);
- document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
-
- tbody.innerHTML="";
-
- if(!items.length){
-  tbody.innerHTML='<tr><td colspan="7" class="empty">No subscriptions found.</td></tr>';
-  return;
- }
-
- items.forEach(sub=>{
-  const tr=document.createElement("tr");
-  addCell(tr,sub.club_id);
-  addCell(tr,sub.plan_name);
-  addCell(tr,"₹"+Number(sub.amount).toLocaleString("en-IN"));
-  addCell(tr,sub.duration_days+" days");
-  addCell(tr,formatDate(sub.start_date));
-  addCell(tr,formatDate(sub.end_date));
-
-  const statusCell=document.createElement("td");
-  const isActive=sub.status==="active"&&new Date(sub.start_date)<=new Date()&&new Date(sub.end_date)>new Date();
-  statusCell.textContent=isActive?"ACTIVE":(new Date(sub.end_date)<=new Date()?"EXPIRED":sub.status.toUpperCase());
-  tr.appendChild(statusCell);
-
-  tbody.appendChild(tr);
- });
-}
 
 /* CREATE CLUB */
-document.getElementById("clubForm").addEventListener("submit",async e=>{
- e.preventDefault();
+function inputToISTISOString(value) {
+  if (!value) return null;
+  return new Date(value + ":00+05:30").toISOString();
+}
 
- const btn=document.getElementById("createBtn");
- const msg=document.getElementById("message");
+document.getElementById("clubForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
 
- const payload={
-  club_name:document.getElementById("clubName").value.trim(),
-  owner_name:document.getElementById("ownerName").value.trim(),
-  owner_phone:document.getElementById("ownerPhone").value.trim(),
-  owner_email:document.getElementById("ownerEmail").value.trim(),
-  owner_password:document.getElementById("ownerPassword").value,
-  plan_name:document.getElementById("planName").value,
-  amount:Number(document.getElementById("amount").value),
-  duration_days:Number(document.getElementById("durationDays").value),
-  start_date:inputToISTISOString(document.getElementById("startDate").value),
-  end_date:inputToISTISOString(document.getElementById("endDate").value)
- };
+  hideMessage("formMessage");
 
- if(!payload.club_name||!payload.owner_name||!payload.owner_email||
-    !payload.owner_password||!payload.start_date||!payload.end_date){
-  msg.style.color="#f16c6c";
-  msg.textContent="Please complete all required fields.";
-  return;
- }
+  const startValue = document.getElementById("start_date").value;
+  const endValue = document.getElementById("end_date").value;
 
- if(payload.end_date<=payload.start_date){
-  msg.style.color="#f16c6c";
-  msg.textContent="End date must be later than start date.";
-  return;
- }
+  const startISO = inputToISTISOString(startValue);
+  const endISO = inputToISTISOString(endValue);
 
- if(!Number.isFinite(payload.amount)||payload.amount<0||
-    !Number.isInteger(payload.duration_days)||
-    payload.duration_days<1||payload.duration_days>3650){
-  msg.style.color="#f16c6c";
-  msg.textContent="Check amount and duration.";
-  return;
- }
+  if (!startISO || !endISO || new Date(endISO) <= new Date(startISO)) {
+    showMessage("formMessage", "End date must be later than start date.", "error");
+    return;
+  }
 
- btn.disabled=true;
- btn.textContent="CREATING CLUB...";
- msg.textContent="";
+  const payload = {
+    club_name: document.getElementById("club_name").value.trim(),
+    owner_name: document.getElementById("owner_name").value.trim(),
+    owner_email: document.getElementById("owner_email").value.trim(),
+    owner_phone: document.getElementById("owner_phone").value.trim(),
+    owner_password: document.getElementById("owner_password").value,
+    plan_name: document.getElementById("plan_name").value.trim(),
+    amount: Number(document.getElementById("amount").value),
+    duration_days: Number(document.getElementById("duration_days").value),
+    start_date: startISO,
+    end_date: endISO
+  };
 
- try{
-  const {data,error}=await db.functions.invoke("create-club",{body:payload});
-  if(error)throw error;
-  if(!data?.success)throw new Error(data?.error||"Club creation failed.");
+  const button = document.getElementById("createBtn");
+  button.disabled = true;
+  button.textContent = "Creating...";
 
-  msg.style.color="#27d58c";
-  msg.textContent="SUCCESS! Club and Owner Account created.";
+  try {
+    const { data, error } = await db.functions.invoke("create-club", {
+      body: payload
+    });
 
-  document.getElementById("clubForm").reset();
-  setDateDefaults();
+    if (error) throw error;
+    if (data && data.error) throw new Error(data.error);
 
-  await Promise.all([loadClubs(),loadSubscriptions()]);
+    showMessage("formMessage", "Club created successfully!", "success");
+    this.reset();
 
- }catch(error){
-  msg.style.color="#f16c6c";
-  msg.textContent="ERROR: "+(error.message||"Something went wrong.");
- }finally{
-  btn.disabled=false;
-  btn.textContent="＋ CREATE CLUB + OWNER ACCOUNT";
- }
+    await loadClubs();
+    await loadSubscriptions();
+
+  } catch (error) {
+    console.error("Create club error:", error);
+    let message = error.message || "Could not create club.";
+
+    if (error.context && typeof error.context.json === "function") {
+      try {
+        const details = await error.context.json();
+        if (details.error) message = details.error;
+        else if (details.message) message = details.message;
+      } catch (_) {}
+    }
+
+    showMessage("formMessage", message, "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Create Club";
+  }
 });
 
-document.getElementById("refreshClubs").onclick=loadClubs;
-document.getElementById("refreshSubs").onclick=loadSubscriptions;
+/* SUBSCRIPTIONS */
+async function loadSubscriptions() {
+  const tbody = document.getElementById("subscriptionTable");
+  tbody.innerHTML = '<tr><td colspan="6">Loading subscriptions...</td></tr>';
+  hideMessage("subscriptionMessage");
 
-document.getElementById("logoutBtn").onclick=async()=>{
- await db.auth.signOut();
- location.replace("index.html");
-};
+  const { data, error } = await db
+    .from("subscriptions")
+    .select("id, club_id, plan_name, amount, start_date, end_date, status")
+    .order("created_at", { ascending: false });
 
-(async()=>{
- const allowed=await checkAdmin();
- if(!allowed)return;
- await Promise.all([loadClubs(),loadSubscriptions()]);
+  if (error) {
+    tbody.innerHTML = '<tr><td colspan="6">Could not load subscriptions.</td></tr>';
+    showMessage("subscriptionMessage", error.message, "error");
+    console.error("Subscription loading error:", error);
+    return;
+  }
+
+  if (!data || !data.length) {
+    tbody.innerHTML = '<tr><td colspan="6">No subscriptions found.</td></tr>';
+    return;
+  }
+
+  const now = Date.now();
+
+  tbody.innerHTML = data.map(sub => {
+    const active = new Date(sub.start_date).getTime() <= now &&
+                   new Date(sub.end_date).getTime() > now &&
+                   sub.status === "active";
+
+    return `
+      <tr>
+        <td>${escapeHTML(sub.club_id)}</td>
+        <td>${escapeHTML(sub.plan_name)}</td>
+        <td>₹${escapeHTML(sub.amount)}</td>
+        <td>${escapeHTML(formatDate(sub.start_date))}</td>
+        <td>${escapeHTML(formatDate(sub.end_date))}</td>
+        <td>
+          <span class="status ${active ? "" : "expired"}">
+            ${active ? "Active" : "Expired / Inactive"}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* LOGOUT */
+document.getElementById("logoutBtn").addEventListener("click", async function() {
+  await db.auth.signOut();
+  location.href = "index.html";
+});
+
+/* INITIALIZE */
+(async function init() {
+  const allowed = await checkAdmin();
+  if (!allowed) return;
+
+  await Promise.all([
+    loadClubs(),
+    loadSubscriptions()
+  ]);
 })();
 </script>
+
 </body>
 </html>

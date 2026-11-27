@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +9,15 @@
 
 <style>
 :root{
---bg:#071a13;
---panel:#0d251b;
---panel2:#102c20;
---green:#27d58c;
---text:#f1fff7;
---muted:#91aa9d;
---border:#214535;
---red:#f16c6c;
+--bg:#071a13;--panel:#0d251b;--panel2:#102c20;
+--green:#27d58c;--text:#f1fff7;--muted:#91aa9d;
+--border:#214535;--red:#f16c6c;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .layout{display:flex;min-height:100vh}
-
 .sidebar{
 width:255px;position:fixed;inset:0 auto 0 0;
 background:#06150f;border-right:1px solid var(--border);
@@ -37,7 +32,6 @@ padding:20px 15px;display:flex;flex-direction:column;z-index:20
 .nav-item:hover,.nav-item.active{background:#143d2a;color:var(--green)}
 .nav-item.active{box-shadow:inset 3px 0 var(--green)}
 .sidebar-bottom{margin-top:auto;padding-top:17px;border-top:1px solid var(--border)}
-
 .main{margin-left:255px;width:calc(100% - 255px);min-width:0}
 .topbar{height:68px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#0a2117;border-bottom:1px solid var(--border)}
 .page-title{font-size:14px;font-weight:bold}
@@ -94,41 +88,15 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 .info-card h3{font-size:15px;margin:0 0 10px}
 .info-card p{font-size:12px;color:var(--muted);line-height:1.8}
 .footer{text-align:center;padding:22px;color:#5e7d6a;font-size:9px;letter-spacing:1px}
-
-/* AUTH DIAGNOSTIC */
-.auth-error{
-display:none;
-margin-bottom:22px;
-padding:20px;
-border:1px solid #8a4545;
-background:#301b1b;
-border-radius:10px;
-color:#ffdede;
-overflow-wrap:anywhere;
-}
+.auth-error{display:none;margin-bottom:22px;padding:20px;border:1px solid #8a4545;background:#301b1b;border-radius:10px;color:#ffdede;overflow-wrap:anywhere}
 .auth-error h3{font-size:16px;margin:0 0 12px;color:#ff9999}
 .auth-error p{font-size:12px;line-height:1.7;margin:7px 0}
 .auth-error a{color:#7cebb0;font-size:12px}
 .auth-error code{color:#ffd28a;white-space:pre-wrap;overflow-wrap:anywhere}
-
-/* PREMIUM CONFIRMATION MODAL */
-.modal-backdrop{
- position:fixed;inset:0;z-index:1000;display:none;align-items:center;
- justify-content:center;padding:18px;background:rgba(1,10,6,.78);
- backdrop-filter:blur(7px);
-}
+.modal-backdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,10,6,.78);backdrop-filter:blur(7px)}
 .modal-backdrop.show{display:flex;animation:modalFade .18s ease}
-.confirm-modal{
- width:min(440px,100%);background:linear-gradient(160deg,#123425,#0b2117);
- border:1px solid #2d6247;border-radius:18px;padding:25px;
- box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;
- animation:modalPop .2s ease;
-}
-.modal-icon{
- width:58px;height:58px;margin:0 auto 15px;border-radius:18px;
- display:grid;place-items:center;font-size:27px;font-weight:900;
- background:#173f2c;color:#57e6a1;border:1px solid #286344;
-}
+.confirm-modal{width:min(440px,100%);background:linear-gradient(160deg,#123425,#0b2117);border:1px solid #2d6247;border-radius:18px;padding:25px;box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;animation:modalPop .2s ease}
+.modal-icon{width:58px;height:58px;margin:0 auto 15px;border-radius:18px;display:grid;place-items:center;font-size:27px;font-weight:900;background:#173f2c;color:#57e6a1;border:1px solid #286344}
 .confirm-modal.danger .modal-icon{background:#482323;color:#ff9a9a;border-color:#824343}
 .confirm-modal.warning .modal-icon{background:#47391c;color:#ffd37a;border-color:#80652d}
 .confirm-modal h3{font-size:19px;margin:0 0 9px}
@@ -142,20 +110,9 @@ overflow-wrap:anywhere;
 @keyframes modalFade{from{opacity:0}to{opacity:1}}
 @keyframes modalPop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:480px){.confirm-modal{padding:22px 18px}.modal-actions{flex-direction:column-reverse}}
-
-/* CUSTOM CLUB EDIT FORM */
-.edit-modal-backdrop{
- position:fixed;inset:0;z-index:1100;display:none;align-items:center;
- justify-content:center;padding:18px;background:rgba(1,10,6,.82);
- backdrop-filter:blur(7px);overflow-y:auto;
-}
+.edit-modal-backdrop{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,10,6,.82);backdrop-filter:blur(7px);overflow-y:auto}
 .edit-modal-backdrop.show{display:flex;animation:modalFade .18s ease}
-.edit-modal{
- width:min(560px,100%);max-height:calc(100vh - 36px);overflow-y:auto;
- background:linear-gradient(160deg,#123425,#0b2117);
- border:1px solid #2d6247;border-radius:18px;padding:24px;
- box-shadow:0 24px 80px rgba(0,0,0,.55);animation:modalPop .2s ease;
-}
+.edit-modal{width:min(560px,100%);max-height:calc(100vh - 36px);overflow-y:auto;background:linear-gradient(160deg,#123425,#0b2117);border:1px solid #2d6247;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.55);animation:modalPop .2s ease}
 .edit-modal-head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
 .edit-modal-icon{width:45px;height:45px;flex:none;border-radius:13px;display:grid;place-items:center;background:#173f2c;color:#57e6a1;border:1px solid #286344;font-size:22px}
 .edit-modal-head h3{font-size:18px;margin:0 0 5px}
@@ -165,17 +122,11 @@ overflow-wrap:anywhere;
 .edit-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
 .edit-form-actions button{min-width:115px}
 @media(max-width:520px){.edit-form-grid{grid-template-columns:1fr}.edit-form-actions{flex-direction:column-reverse}.edit-form-actions button{width:100%}}
-
-@media(max-width:1000px){
-.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+@media(max-width:1000px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){
-.sidebar{display:none}
-.main{margin-left:0;width:100%}
-.topbar{padding:0 13px}
-.content{padding:20px 13px}
-.stats{grid-template-columns:1fr}
-.form-grid{grid-template-columns:1fr}
+.sidebar{display:none}.main{margin-left:0;width:100%}
+.topbar{padding:0 13px}.content{padding:20px 13px}
+.stats{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
 .form-footer{grid-column:auto}
 }
 </style>
@@ -183,26 +134,19 @@ overflow-wrap:anywhere;
 
 <body>
 <div class="layout">
-
 <aside class="sidebar">
 <div class="brand">
 <div class="brand-logo">P</div>
-<div>
-<div class="brand-name">PLAYER AUCTION</div>
-<div class="brand-sub">PLATFORM CONTROL</div>
+<div><div class="brand-name">PLAYER AUCTION</div><div class="brand-sub">PLATFORM CONTROL</div></div>
 </div>
-</div>
-
 <div class="nav-heading">MAIN MENU</div>
 <button class="nav-item active" data-page="dashboard">▦ Dashboard</button>
 <button class="nav-item" data-page="clubs">🏢 Club Management</button>
 <button class="nav-item" data-page="subscriptions">💳 Subscriptions</button>
-
 <div class="nav-heading">AUCTION PLATFORM</div>
 <button class="nav-item" data-page="auctions">🏆 Auction Management</button>
 <button class="nav-item" data-page="players">🏏 Player Database</button>
 <button class="nav-item" data-page="teams">🛡️ Teams Management</button>
-
 <div class="sidebar-bottom">
 <b style="font-size:12px;padding:8px">Super Admin</b>
 <div style="font-size:10px;color:var(--muted);padding:8px">Platform Owner</div>
@@ -210,7 +154,6 @@ overflow-wrap:anywhere;
 </aside>
 
 <div class="main">
-
 <header class="topbar">
 <div class="page-title" id="pageTitle">Super Admin Dashboard</div>
 <div style="display:flex;align-items:center;gap:13px">
@@ -220,7 +163,6 @@ overflow-wrap:anywhere;
 </header>
 
 <main class="content">
-
 <div id="authError" class="auth-error" role="alert">
 <h3 id="authErrorTitle">Authentication problem</h3>
 <p id="authErrorText"></p>
@@ -229,92 +171,38 @@ overflow-wrap:anywhere;
 </div>
 
 <section class="section active" id="dashboard">
-
 <div class="welcome">
-<div>
-<h1>Super Admin Dashboard</h1>
-<p>Manage your entire Player Auction Platform.</p>
-</div>
+<div><h1>Super Admin Dashboard</h1><p>Manage your entire Player Auction Platform.</p></div>
 <div id="today" style="font-size:11px;color:var(--muted)"></div>
 </div>
-
 <div class="stats">
-<div class="stat">
-<div class="stat-label">TOTAL CLUBS</div>
-<div class="stat-value" id="totalClubs">—</div>
+<div class="stat"><div class="stat-label">TOTAL CLUBS</div><div class="stat-value" id="totalClubs">—</div></div>
+<div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="totalSubscriptions">—</div></div>
+<div class="stat"><div class="stat-label">LIVE AUCTIONS</div><div class="stat-value">—</div></div>
 </div>
-<div class="stat">
-<div class="stat-label">TOTAL SUBSCRIPTIONS</div>
-<div class="stat-value" id="totalSubscriptions">—</div>
-</div>
-<div class="stat">
-<div class="stat-label">LIVE AUCTIONS</div>
-<div class="stat-value">—</div>
-</div>
-</div>
-
 <div class="panel">
 <div class="panel-head">
-<div>
-<h3>CLUB MANAGEMENT</h3>
-<p>Register and manage cricket clubs.</p>
-</div>
+<div><h3>CLUB MANAGEMENT</h3><p>Register and manage cricket clubs.</p></div>
 <button class="btn btn-green" onclick="showPage('clubs')">CREATE CLUB →</button>
 </div>
-<div class="panel-body">
-<p style="font-size:12px;color:var(--muted)">
-Use Club Management to create a new club and its owner account.
-</p>
-</div>
+<div class="panel-body"><p style="font-size:12px;color:var(--muted)">Use Club Management to create a new club and its owner account.</p></div>
 </div>
 </section>
 
 <section class="section" id="clubs">
-
-<div class="welcome">
-<div>
-<h1>Club Management</h1>
-<p>Manage clubs and their owner accounts.</p>
-</div>
-</div>
-
+<div class="welcome"><div><h1>Club Management</h1><p>Manage clubs and their owner accounts.</p></div></div>
 <div class="panel">
 <div class="panel-head">
-<div>
-<h3>CREATE NEW CLUB</h3>
-<p>Create a club, owner login and subscription.</p>
-</div>
+<div><h3>CREATE NEW CLUB</h3><p>Create a club, owner login and subscription.</p></div>
 <span class="badge active">NEW REGISTRATION</span>
 </div>
-
 <div class="panel-body">
 <form id="clubForm" class="form-grid">
-
-<div class="field">
-<label>CLUB NAME *</label>
-<input id="clubName" required maxlength="100" placeholder="GFC Cricket Club">
-</div>
-
-<div class="field">
-<label>OWNER NAME *</label>
-<input id="ownerName" required maxlength="100" placeholder="Owner full name">
-</div>
-
-<div class="field">
-<label>OWNER PHONE</label>
-<input id="ownerPhone" type="tel" placeholder="+91...">
-</div>
-
-<div class="field">
-<label>OWNER LOGIN EMAIL *</label>
-<input id="ownerEmail" type="email" required placeholder="owner@example.com">
-</div>
-
-<div class="field">
-<label>OWNER LOGIN PASSWORD *</label>
-<input id="ownerPassword" type="password" minlength="8" maxlength="72" required placeholder="Minimum 8 characters">
-</div>
-
+<div class="field"><label>CLUB NAME *</label><input id="clubName" required maxlength="100" placeholder="GFC Cricket Club"></div>
+<div class="field"><label>OWNER NAME *</label><input id="ownerName" required maxlength="100" placeholder="Owner full name"></div>
+<div class="field"><label>OWNER PHONE</label><input id="ownerPhone" type="tel" placeholder="+91..."></div>
+<div class="field"><label>OWNER LOGIN EMAIL *</label><input id="ownerEmail" type="email" required placeholder="owner@example.com"></div>
+<div class="field"><label>OWNER LOGIN PASSWORD *</label><input id="ownerPassword" type="password" minlength="8" maxlength="72" required placeholder="Minimum 8 characters"></div>
 <div class="field">
 <label>SUBSCRIPTION PLAN *</label>
 <select id="planName" required>
@@ -324,212 +212,148 @@ Use Club Management to create a new club and its owner account.
 <option value="Custom">Custom</option>
 </select>
 </div>
-
-<div class="field">
-<label>SUBSCRIPTION AMOUNT (₹) *</label>
-<input id="amount" type="number" min="0" step="0.01" value="499" required>
-</div>
-
-<div class="field">
-<label>DURATION (DAYS) *</label>
-<input id="durationDays" type="number" min="1" max="3650" value="30" required>
-</div>
-
-<div class="field">
-<label>SUBSCRIPTION START (IST) *</label>
-<input id="startDate" type="datetime-local" required>
-</div>
-
-<div class="field">
-<label>SUBSCRIPTION END (IST) *</label>
-<input id="endDate" type="datetime-local" required>
-</div>
-
+<div class="field"><label>SUBSCRIPTION AMOUNT (₹) *</label><input id="amount" type="number" min="0" step="0.01" value="499" required></div>
+<div class="field"><label>DURATION (DAYS) *</label><input id="durationDays" type="number" min="1" max="3650" value="30" required></div>
+<div class="field"><label>SUBSCRIPTION START (IST) *</label><input id="startDate" type="datetime-local" required></div>
+<div class="field"><label>SUBSCRIPTION END (IST) *</label><input id="endDate" type="datetime-local" required></div>
 <div class="form-footer">
 <p>Club Owner শুধু নিজের Club-এর Auction পরিচালনা করতে পারবে।</p>
-<button class="btn btn-green" type="submit" id="createBtn">
-＋ CREATE CLUB + OWNER ACCOUNT
-</button>
+<button class="btn btn-green" type="submit" id="createBtn">＋ CREATE CLUB + OWNER ACCOUNT</button>
 <div id="message"></div>
 </div>
-
 </form>
 </div>
 </div>
 
 <div class="panel">
 <div class="panel-head">
-<div>
-<h3>ALL CLUBS</h3>
-<p>Club, owner and account status information.</p>
-</div>
+<div><h3>ALL CLUBS</h3><p>Club, owner and account status information.</p></div>
 <input id="clubSearch" class="search-box" type="search" placeholder="Search club, ID, owner, phone or email...">
 <button class="btn btn-dark" id="refreshClubs">↻ REFRESH</button>
 </div>
-
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>CLUB NAME</th>
-<th>CLUB ID</th>
-<th>OWNER NAME</th>
-<th>MOBILE</th>
-<th>EMAIL</th>
-<th>CREATED</th>
-<th>STATUS</th>
-<th>ACTIONS</th>
-</tr>
-</thead>
-<tbody id="clubList">
-<tr><td colspan="8" class="empty">Loading...</td></tr>
-</tbody>
+<thead><tr><th>CLUB NAME</th><th>CLUB ID</th><th>OWNER NAME</th><th>MOBILE</th><th>EMAIL</th><th>CREATED</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+<tbody id="clubList"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
 </table>
 </div>
 </div>
 </section>
 
 <section class="section" id="subscriptions">
-
-<div class="welcome">
-<div>
-<h1>Subscription Management</h1>
-<p>View all club subscriptions.</p>
-</div>
-</div>
-
+<div class="welcome"><div><h1>Subscription Management</h1><p>Edit existing subscriptions or renew a club subscription.</p></div></div>
 <div class="stats">
-<div class="stat">
-<div class="stat-label">TOTAL SUBSCRIPTIONS</div>
-<div class="stat-value" id="subTotal">—</div>
+<div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="subTotal">—</div></div>
+<div class="stat"><div class="stat-label">ACTIVE SUBSCRIPTIONS</div><div class="stat-value" id="subActive">—</div></div>
+<div class="stat"><div class="stat-label">RECORDED AMOUNT</div><div class="stat-value" id="subAmount">—</div></div>
 </div>
-<div class="stat">
-<div class="stat-label">ACTIVE SUBSCRIPTIONS</div>
-<div class="stat-value" id="subActive">—</div>
-</div>
-<div class="stat">
-<div class="stat-label">RECORDED AMOUNT</div>
-<div class="stat-value" id="subAmount">—</div>
-</div>
-</div>
-
 <div class="panel">
 <div class="panel-head">
-<div>
-<h3>ALL SUBSCRIPTIONS</h3>
-<p>Subscription records.</p>
-</div>
+<div><h3>ALL SUBSCRIPTIONS</h3><p>Edit or renew individual subscription records.</p></div>
 <button class="btn btn-dark" id="refreshSubs">↻ REFRESH</button>
 </div>
-
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>CLUB ID</th>
-<th>PLAN</th>
-<th>AMOUNT</th>
-<th>DURATION</th>
-<th>START</th>
-<th>END</th>
-<th>STATUS</th>
-</tr>
-</thead>
-<tbody id="subscriptionList">
-<tr><td colspan="7" class="empty">Loading...</td></tr>
-</tbody>
+<thead><tr><th>CLUB ID</th><th>PLAN</th><th>AMOUNT</th><th>DURATION</th><th>START</th><th>END</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+<tbody id="subscriptionList"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
 </table>
 </div>
 </div>
 </section>
 
 <section class="section" id="auctions">
-<div class="welcome">
-<div>
-<h1>Auction Management</h1>
-<p>Manage platform auctions.</p>
-</div>
-</div>
-<div class="info-card">
-<h3>Auction Control Center</h3>
-<p>Auction management will be connected in the next development stage.</p>
-</div>
+<div class="welcome"><div><h1>Auction Management</h1><p>Manage platform auctions.</p></div></div>
+<div class="info-card"><h3>Auction Control Center</h3><p>Auction management will be connected in the next development stage.</p></div>
 </section>
-
 <section class="section" id="players">
-<div class="welcome">
-<div>
-<h1>Player Database</h1>
-<p>Manage player records.</p>
-</div>
-</div>
-<div class="info-card">
-<h3>Player Management</h3>
-<p>Player database will be connected in the next development stage.</p>
-</div>
+<div class="welcome"><div><h1>Player Database</h1><p>Manage player records.</p></div></div>
+<div class="info-card"><h3>Player Management</h3><p>Player database will be connected in the next development stage.</p></div>
 </section>
-
 <section class="section" id="teams">
-<div class="welcome">
-<div>
-<h1>Teams Management</h1>
-<p>Manage auction teams.</p>
-</div>
-</div>
-<div class="info-card">
-<h3>Team Management</h3>
-<p>Team management will be connected in the next development stage.</p>
-</div>
+<div class="welcome"><div><h1>Teams Management</h1><p>Manage auction teams.</p></div></div>
+<div class="info-card"><h3>Team Management</h3><p>Team management will be connected in the next development stage.</p></div>
 </section>
 
 <div class="modal-backdrop" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
- <div class="confirm-modal" id="modalCard">
-  <div class="modal-icon" id="modalIcon">?</div>
-  <h3 id="modalTitle">Please confirm</h3>
-  <p id="modalMessage"></p>
-  <div class="modal-actions" id="modalActions">
-   <button type="button" class="modal-cancel" id="modalCancel">CANCEL</button>
-   <button type="button" class="modal-confirm" id="modalConfirm">CONFIRM</button>
-  </div>
- </div>
+<div class="confirm-modal" id="modalCard">
+<div class="modal-icon" id="modalIcon">?</div>
+<h3 id="modalTitle">Please confirm</h3>
+<p id="modalMessage"></p>
+<div class="modal-actions" id="modalActions">
+<button type="button" class="modal-cancel" id="modalCancel">CANCEL</button>
+<button type="button" class="modal-confirm" id="modalConfirm">CONFIRM</button>
+</div>
+</div>
 </div>
 
 <div class="edit-modal-backdrop" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
- <div class="edit-modal">
-  <div class="edit-modal-head">
-   <div class="edit-modal-icon">✎</div>
-   <div>
-    <h3 id="editModalTitle">Edit Club Details</h3>
-    <p>Update club and owner information</p>
-   </div>
-  </div>
-  <form id="editClubForm">
-   <div class="edit-form-grid">
-    <div class="field">
-     <label for="editClubName">CLUB NAME *</label>
-     <input id="editClubName" required maxlength="100" placeholder="Club name">
-    </div>
-    <div class="field">
-     <label for="editOwnerName">OWNER NAME *</label>
-     <input id="editOwnerName" required maxlength="100" placeholder="Owner name">
-    </div>
-    <div class="field">
-     <label for="editOwnerPhone">OWNER PHONE</label>
-     <input id="editOwnerPhone" type="tel" maxlength="30" placeholder="Owner phone">
-    </div>
-   </div>
-   <div class="edit-form-actions">
-    <button type="button" class="btn btn-dark" id="editCancelBtn">CANCEL</button>
-    <button type="submit" class="btn btn-green" id="editSaveBtn">SAVE CHANGES</button>
-   </div>
-  </form>
- </div>
+<div class="edit-modal">
+<div class="edit-modal-head">
+<div class="edit-modal-icon">✎</div>
+<div><h3 id="editModalTitle">Edit Club Details</h3><p>Update club and owner information</p></div>
+</div>
+<form id="editClubForm">
+<div class="edit-form-grid">
+<div class="field"><label for="editClubName">CLUB NAME *</label><input id="editClubName" required maxlength="100" placeholder="Club name"></div>
+<div class="field"><label for="editOwnerName">OWNER NAME *</label><input id="editOwnerName" required maxlength="100" placeholder="Owner name"></div>
+<div class="field"><label for="editOwnerPhone">OWNER PHONE</label><input id="editOwnerPhone" type="tel" maxlength="30" placeholder="Owner phone"></div>
+</div>
+<div class="edit-form-actions">
+<button type="button" class="btn btn-dark" id="editCancelBtn">CANCEL</button>
+<button type="submit" class="btn btn-green" id="editSaveBtn">SAVE CHANGES</button>
+</div>
+</form>
+</div>
 </div>
 
-<div class="footer">
-PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026
+<!-- SUBSCRIPTION EDIT / RENEW MODAL -->
+<div class="edit-modal-backdrop" id="subscriptionEditModal" role="dialog" aria-modal="true" aria-labelledby="subscriptionModalTitle">
+<div class="edit-modal">
+<div class="edit-modal-head">
+<div class="edit-modal-icon" id="subscriptionModalIcon">💳</div>
+<div>
+<h3 id="subscriptionModalTitle">Edit Subscription</h3>
+<p id="subscriptionModalSubtitle">Update subscription details</p>
+</div>
+</div>
+<form id="subscriptionForm">
+<div class="edit-form-grid">
+<div class="field">
+<label for="subPlanInput">PLAN NAME *</label>
+<select id="subPlanInput" required>
+<option value="Single Tournament">Single Tournament</option>
+<option value="Monthly">Monthly</option>
+<option value="Yearly">Yearly</option>
+<option value="Custom">Custom</option>
+</select>
+</div>
+<div class="field">
+<label for="subAmountInput">AMOUNT (₹) *</label>
+<input id="subAmountInput" type="number" min="0" step="0.01" required>
+</div>
+<div class="field">
+<label for="subDurationInput">DURATION (DAYS) *</label>
+<input id="subDurationInput" type="number" min="1" max="3650" required>
+</div>
+<div class="field">
+<label for="subStartInput">START DATE (IST) *</label>
+<input id="subStartInput" type="datetime-local" required>
+</div>
+<div class="field">
+<label for="subEndInput">END DATE (IST) *</label>
+<input id="subEndInput" type="datetime-local" required>
+</div>
+</div>
+<p id="subscriptionFormHint" style="font-size:10px;color:var(--muted);line-height:1.6;margin-top:14px"></p>
+<div class="edit-form-actions">
+<button type="button" class="btn btn-dark" id="subscriptionCancelBtn">CANCEL</button>
+<button type="submit" class="btn btn-green" id="subscriptionSaveBtn">SAVE CHANGES</button>
+</div>
+</form>
+</div>
 </div>
 
+<div class="footer">PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026</div>
 </main>
 </div>
 </div>
@@ -539,115 +363,166 @@ const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
 const AUTH_STORAGE_KEY = "player-auction-platform-auth";
 
-const db = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY,
-{
-  auth:{
-    persistSession:true,
-    autoRefreshToken:true,
-    detectSessionInUrl:true,
-    storage:window.localStorage,
-    storageKey:AUTH_STORAGE_KEY
-  }
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+auth:{
+persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,
+storage:window.localStorage,storageKey:AUTH_STORAGE_KEY
 }
-);
+});
 
-const titles = {
-dashboard:"Super Admin Dashboard",
-clubs:"Club Management",
-subscriptions:"Subscription Management",
-auctions:"Auction Management",
-players:"Player Database",
-teams:"Teams Management"
+const titles={
+dashboard:"Super Admin Dashboard",clubs:"Club Management",
+subscriptions:"Subscription Management",auctions:"Auction Management",
+players:"Player Database",teams:"Teams Management"
 };
 
-let allClubs = [];
-let modalResolver = null;
+let allClubs=[];
+let modalResolver=null;
+let subscriptionModalResolver=null;
+let subscriptionModalMode="edit";
+let selectedSubscription=null;
 
 function closeActionModal(result=false){
- const modal=document.getElementById("actionModal");
- modal.classList.remove("show");
- document.body.style.overflow="";
- if(modalResolver){
-  const resolve=modalResolver;
-  modalResolver=null;
-  resolve(result);
- }
+const modal=document.getElementById("actionModal");
+modal.classList.remove("show");
+document.body.style.overflow="";
+if(modalResolver){const resolve=modalResolver;modalResolver=null;resolve(result);}
 }
 
-function openActionModal({title,message,confirmText="CONFIRM",cancelText="CANCEL",tone="normal",icon="?" ,showCancel=true}){
- return new Promise(resolve=>{
-  const backdrop=document.getElementById("actionModal");
-  const card=document.getElementById("modalCard");
-  document.getElementById("modalTitle").textContent=title;
-  document.getElementById("modalMessage").textContent=message;
-  document.getElementById("modalIcon").textContent=icon;
-  document.getElementById("modalConfirm").textContent=confirmText;
-  document.getElementById("modalCancel").textContent=cancelText;
-  document.getElementById("modalCancel").style.display=showCancel?"block":"none";
-  card.className="confirm-modal "+tone;
-  modalResolver=resolve;
-  backdrop.classList.add("show");
-  document.body.style.overflow="hidden";
- });
+function openActionModal({title,message,confirmText="CONFIRM",cancelText="CANCEL",tone="normal",icon="?",showCancel=true}){
+return new Promise(resolve=>{
+const backdrop=document.getElementById("actionModal");
+const card=document.getElementById("modalCard");
+document.getElementById("modalTitle").textContent=title;
+document.getElementById("modalMessage").textContent=message;
+document.getElementById("modalIcon").textContent=icon;
+document.getElementById("modalConfirm").textContent=confirmText;
+document.getElementById("modalCancel").textContent=cancelText;
+document.getElementById("modalCancel").style.display=showCancel?"block":"none";
+card.className="confirm-modal "+tone;
+modalResolver=resolve;
+backdrop.classList.add("show");
+document.body.style.overflow="hidden";
+});
 }
 
 function showConfirm(title,message,options={}){
- return openActionModal({title,message,...options,showCancel:true});
+return openActionModal({title,message,...options,showCancel:true});
 }
 
 function showNotice(title,message,tone="normal"){
- return openActionModal({
-  title,message,confirmText:"GOT IT",tone,
-  icon:tone==="danger"?"!":tone==="warning"?"⚠":"✓",
-  showCancel:false
- });
+return openActionModal({
+title,message,confirmText:"GOT IT",tone,
+icon:tone==="danger"?"!":tone==="warning"?"⚠":"✓",
+showCancel:false
+});
 }
 
-/* CUSTOM EDIT MODAL */
-
+/* CLUB EDIT MODAL */
 let editModalResolver=null;
 
 function closeEditModal(result=null){
- const modal=document.getElementById("editModal");
- modal.classList.remove("show");
- document.body.style.overflow="";
- if(editModalResolver){
-  const resolve=editModalResolver;
-  editModalResolver=null;
-  resolve(result);
- }
+document.getElementById("editModal").classList.remove("show");
+document.body.style.overflow="";
+if(editModalResolver){const resolve=editModalResolver;editModalResolver=null;resolve(result);}
 }
 
 function openEditModal(club,profile){
- document.getElementById("editClubName").value=club.club_name||"";
- document.getElementById("editOwnerName").value=profile?.full_name||"";
- document.getElementById("editOwnerPhone").value=profile?.phone||"";
- document.getElementById("editModal").classList.add("show");
- document.body.style.overflow="hidden";
- document.getElementById("editClubName").focus();
- return new Promise(resolve=>{editModalResolver=resolve;});
+document.getElementById("editClubName").value=club.club_name||"";
+document.getElementById("editOwnerName").value=profile?.full_name||"";
+document.getElementById("editOwnerPhone").value=profile?.phone||"";
+document.getElementById("editModal").classList.add("show");
+document.body.style.overflow="hidden";
+document.getElementById("editClubName").focus();
+return new Promise(resolve=>{editModalResolver=resolve;});
 }
 
 document.getElementById("editCancelBtn").addEventListener("click",()=>closeEditModal(null));
-
 document.getElementById("editModal").addEventListener("click",e=>{
- if(e.target.id==="editModal")closeEditModal(null);
+if(e.target.id==="editModal")closeEditModal(null);
+});
+
+/* SUBSCRIPTION EDIT / RENEW MODAL */
+
+function closeSubscriptionModal(result=null){
+document.getElementById("subscriptionEditModal").classList.remove("show");
+document.body.style.overflow="";
+if(subscriptionModalResolver){
+const resolve=subscriptionModalResolver;
+subscriptionModalResolver=null;
+resolve(result);
+}
+}
+
+function openSubscriptionModal(sub,mode){
+subscriptionModalMode=mode;
+selectedSubscription=sub;
+
+const isRenew=mode==="renew";
+const now=new Date();
+let startDate;
+let duration=Number(sub.duration_days)||30;
+
+if(isRenew){
+const oldEnd=new Date(sub.end_date);
+startDate=oldEnd>now?oldEnd:now;
+}else{
+startDate=new Date(sub.start_date);
+}
+
+let endDate;
+if(isRenew){
+endDate=new Date(startDate.getTime()+duration*24*60*60*1000);
+}else{
+endDate=new Date(sub.end_date);
+}
+
+document.getElementById("subscriptionModalTitle").textContent=
+isRenew?"Renew Subscription":"Edit Subscription";
+
+document.getElementById("subscriptionModalSubtitle").textContent=
+isRenew?"Create a new subscription record. Previous history will be retained.":"Update this subscription record.";
+
+document.getElementById("subscriptionModalIcon").textContent=isRenew?"↻":"✎";
+document.getElementById("subscriptionPlanInput");
+document.getElementById("subPlanInput").value=sub.plan_name||"Custom";
+document.getElementById("subAmountInput").value=Number(sub.amount||0);
+document.getElementById("subDurationInput").value=duration;
+document.getElementById("subStartInput").value=getISTInputValue(startDate);
+document.getElementById("subEndInput").value=getISTInputValue(endDate);
+
+document.getElementById("subscriptionFormHint").textContent=isRenew
+?"Renewal creates a NEW record. The previous subscription record will not be changed. Start date is automatically set after the previous end date, or from today if it has expired."
+:"Changes will update this existing subscription record.";
+
+document.getElementById("subscriptionSaveBtn").textContent=
+isRenew?"CREATE RENEWAL":"SAVE CHANGES";
+
+document.getElementById("subscriptionEditModal").classList.add("show");
+document.body.style.overflow="hidden";
+
+return new Promise(resolve=>{subscriptionModalResolver=resolve;});
+}
+
+document.getElementById("subscriptionCancelBtn").addEventListener("click",()=>closeSubscriptionModal(null));
+
+document.getElementById("subscriptionEditModal").addEventListener("click",e=>{
+if(e.target.id==="subscriptionEditModal")closeSubscriptionModal(null);
 });
 
 document.getElementById("modalCancel").addEventListener("click",()=>closeActionModal(false));
 document.getElementById("modalConfirm").addEventListener("click",()=>closeActionModal(true));
 
 document.getElementById("actionModal").addEventListener("click",e=>{
- if(e.target.id==="actionModal")closeActionModal(false);
+if(e.target.id==="actionModal")closeActionModal(false);
 });
 
 document.addEventListener("keydown",e=>{
- if(e.key==="Escape"){
-  if(document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
-  if(document.getElementById("editModal").classList.contains("show"))closeEditModal(null);
- }
+if(e.key==="Escape"){
+if(document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
+if(document.getElementById("editModal").classList.contains("show"))closeEditModal(null);
+if(document.getElementById("subscriptionEditModal").classList.contains("show"))closeSubscriptionModal(null);
+}
 });
 
 const authErrorBox=document.getElementById("authError");
@@ -655,7 +530,6 @@ const authErrorTitle=document.getElementById("authErrorTitle");
 const authErrorText=document.getElementById("authErrorText");
 const authErrorDetail=document.getElementById("authErrorDetail");
 const loginLink=document.getElementById("loginLink");
-
 loginLink.href=new URL("index.html",window.location.href).href;
 
 function showAuthError(title,message,detail=""){
@@ -676,39 +550,26 @@ authErrorDetail.textContent="";
 function showPage(page){
 document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
 document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
-
 document.getElementById(page)?.classList.add("active");
 document.querySelector('[data-page="'+page+'"]')?.classList.add("active");
-
-document.getElementById("pageTitle").textContent =
-titles[page] || "Dashboard";
+document.getElementById("pageTitle").textContent=titles[page]||"Dashboard";
 }
 
 document.querySelectorAll(".nav-item").forEach(btn=>{
 btn.addEventListener("click",()=>showPage(btn.dataset.page));
 });
 
-document.getElementById("today").textContent =
-new Date().toLocaleDateString("en-IN",{
-day:"numeric",
-month:"long",
-year:"numeric"
+document.getElementById("today").textContent=new Date().toLocaleDateString("en-IN",{
+day:"numeric",month:"long",year:"numeric"
 });
 
 function getISTInputValue(date){
-const parts = new Intl.DateTimeFormat("en-CA",{
-timeZone:"Asia/Kolkata",
-year:"numeric",
-month:"2-digit",
-day:"2-digit",
-hour:"2-digit",
-minute:"2-digit",
-hourCycle:"h23"
+const parts=new Intl.DateTimeFormat("en-CA",{
+timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",
+day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"
 }).formatToParts(date);
-
-const p = {};
+const p={};
 parts.forEach(x=>p[x.type]=x.value);
-
 return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
 }
 
@@ -718,223 +579,117 @@ return new Date(value+":00+05:30").toISOString();
 }
 
 function setDateDefaults(){
-const now = new Date();
-
-document.getElementById("startDate").value =
-getISTInputValue(now);
-
-document.getElementById("endDate").value =
-getISTInputValue(
-new Date(now.getTime()+30*24*60*60*1000)
-);
+const now=new Date();
+document.getElementById("startDate").value=getISTInputValue(now);
+document.getElementById("endDate").value=getISTInputValue(new Date(now.getTime()+30*24*60*60*1000));
 }
-
 setDateDefaults();
 
 async function checkAdmin(){
-
 try{
-
-const {data,error} = await db.auth.getSession();
-
+const {data,error}=await db.auth.getSession();
 if(error){
-showAuthError(
-"SESSION ERROR",
-"Supabase could not read the login session.",
-error.message
-);
+showAuthError("SESSION ERROR","Supabase could not read the login session.",error.message);
 return false;
 }
-
 if(!data.session){
-showAuthError(
-"NO ACTIVE SESSION",
-"Dashboard did not find a saved login session in this browser.",
-"Storage key: "+AUTH_STORAGE_KEY
-);
+showAuthError("NO ACTIVE SESSION","Dashboard did not find a saved login session in this browser.","Storage key: "+AUTH_STORAGE_KEY);
 return false;
 }
-
-const {data:allowed,error:rpcError} =
-await db.rpc("is_platform_admin");
-
+const {data:allowed,error:rpcError}=await db.rpc("is_platform_admin");
 if(rpcError){
-showAuthError(
-"ADMIN PERMISSION CHECK FAILED",
-"Your login session exists, but the admin permission function returned an error.",
-rpcError.message
-);
+showAuthError("ADMIN PERMISSION CHECK FAILED","Your login session exists, but the admin permission function returned an error.",rpcError.message);
 return false;
 }
-
-if(allowed !== true){
-showAuthError(
-"SUPER ADMIN ACCESS DENIED",
-"Your account is logged in, but is_platform_admin() did not return true.",
-"Returned value: "+JSON.stringify(allowed)
-);
+if(allowed!==true){
+showAuthError("SUPER ADMIN ACCESS DENIED","Your account is logged in, but is_platform_admin() did not return true.","Returned value: "+JSON.stringify(allowed));
 return false;
 }
-
 hideAuthError();
 return true;
-
 }catch(error){
-
-showAuthError(
-"AUTHENTICATION ERROR",
-"An unexpected error occurred while checking your account.",
-error.message||String(error)
-);
+showAuthError("AUTHENTICATION ERROR","An unexpected error occurred while checking your account.",error.message||String(error));
 return false;
-
 }
 }
 
 function addCell(row,value,className=""){
-const td = document.createElement("td");
-td.textContent = value ?? "-";
-
-if(className)td.className = className;
-
+const td=document.createElement("td");
+td.textContent=value??"-";
+if(className)td.className=className;
 row.appendChild(td);
 }
 
 function formatDate(value){
 if(!value)return "-";
-
-const date = new Date(value);
-
+const date=new Date(value);
 if(Number.isNaN(date.getTime()))return value;
-
 return date.toLocaleString("en-IN",{
-timeZone:"Asia/Kolkata",
-day:"2-digit",
-month:"short",
-year:"numeric",
-hour:"2-digit",
-minute:"2-digit"
+timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric",
+hour:"2-digit",minute:"2-digit"
 });
 }
 
 function escapeHTML(value){
 return String(value??"").replace(/[&<>"']/g,c=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
 }[c]));
 }
 
-/* CUSTOM EDIT FORM SUBMIT */
-
+/* CLUB EDIT FORM */
 document.getElementById("editClubForm").addEventListener("submit",e=>{
- e.preventDefault();
-
- const club_name=document.getElementById("editClubName").value.trim();
- const owner_name=document.getElementById("editOwnerName").value.trim();
- const owner_phone=document.getElementById("editOwnerPhone").value.trim();
-
- if(!club_name||!owner_name){
-  showNotice("Missing Information","Club Name and Owner Name are required.","warning");
-  return;
- }
-
- closeEditModal({club_name,owner_name,owner_phone});
+e.preventDefault();
+const club_name=document.getElementById("editClubName").value.trim();
+const owner_name=document.getElementById("editOwnerName").value.trim();
+const owner_phone=document.getElementById("editOwnerPhone").value.trim();
+if(!club_name||!owner_name){
+showNotice("Missing Information","Club Name and Owner Name are required.","warning");
+return;
+}
+closeEditModal({club_name,owner_name,owner_phone});
 });
 
 /* LOAD CLUBS */
-
 async function loadClubs(){
+const tbody=document.getElementById("clubList");
+tbody.innerHTML='<tr><td colspan="8" class="empty">Loading clubs...</td></tr>';
 
-const tbody = document.getElementById("clubList");
-
-tbody.innerHTML =
-'<tr><td colspan="8" class="empty">Loading clubs...</td></tr>';
-
-const {data,error} = await db
-.from("clubs")
-.select(`
-id,
-club_name,
-owner_user_id,
-owner_email,
-created_at,
-status,
-profiles!clubs_owner_profile_fkey (
-full_name,
-phone
-)
-`)
-.order("created_at",{ascending:false});
+const {data,error}=await db.from("clubs").select(`
+id,club_name,owner_user_id,owner_email,created_at,status,
+profiles!clubs_owner_profile_fkey(full_name,phone)
+`).order("created_at",{ascending:false});
 
 if(error){
-
-tbody.innerHTML =
-'<tr><td colspan="8" class="empty">Could not load clubs: '+
-escapeHTML(error.message)+'</td></tr>';
-
+tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load clubs: '+escapeHTML(error.message)+'</td></tr>';
 console.error("Club loading error:",error);
 return;
 }
 
-allClubs = data || [];
-
-document.getElementById("totalClubs").textContent =
-allClubs.length;
-
+allClubs=data||[];
+document.getElementById("totalClubs").textContent=allClubs.length;
 renderClubs();
 }
 
 /* RENDER CLUBS */
-
 function renderClubs(){
+const tbody=document.getElementById("clubList");
+const search=document.getElementById("clubSearch").value.trim().toLowerCase();
 
-const tbody = document.getElementById("clubList");
-
-const search = document.getElementById("clubSearch")
-.value.trim().toLowerCase();
-
-const filtered = allClubs.filter(club=>{
-
-const profile = Array.isArray(club.profiles)
-? club.profiles[0]
-: club.profiles;
-
-const values = [
-club.club_name,
-club.id,
-club.owner_user_id,
-club.owner_email,
-club.status,
-profile?.full_name,
-profile?.phone
-];
-
-return values.some(v=>
-String(v??"").toLowerCase().includes(search)
-);
+const filtered=allClubs.filter(club=>{
+const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
+const values=[club.club_name,club.id,club.owner_user_id,club.owner_email,club.status,profile?.full_name,profile?.phone];
+return values.some(v=>String(v??"").toLowerCase().includes(search));
 });
 
-tbody.innerHTML = "";
-
+tbody.innerHTML="";
 if(!filtered.length){
-
-tbody.innerHTML =
-'<tr><td colspan="8" class="empty">No matching clubs found.</td></tr>';
-
+tbody.innerHTML='<tr><td colspan="8" class="empty">No matching clubs found.</td></tr>';
 return;
 }
 
 filtered.forEach(club=>{
-
-const profile = Array.isArray(club.profiles)
-? club.profiles[0]
-: club.profiles;
-
-const tr = document.createElement("tr");
-
+const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
+const tr=document.createElement("tr");
 addCell(tr,club.club_name,"club-name");
 addCell(tr,club.id,"club-id");
 addCell(tr,profile?.full_name||"-","owner-name");
@@ -942,310 +697,216 @@ addCell(tr,profile?.phone||"-");
 addCell(tr,club.owner_email||"-","owner-email");
 addCell(tr,formatDate(club.created_at));
 
-const status = club.status || "active";
-
-const statusCell = document.createElement("td");
-const statusBadge = document.createElement("span");
-
-statusBadge.className = "badge " + status;
-statusBadge.textContent = status.toUpperCase();
-
+const status=club.status||"active";
+const statusCell=document.createElement("td");
+const statusBadge=document.createElement("span");
+statusBadge.className="badge "+status;
+statusBadge.textContent=status.toUpperCase();
 statusCell.appendChild(statusBadge);
 tr.appendChild(statusCell);
 
-const actionCell = document.createElement("td");
-const actionButtons = document.createElement("div");
+const actionCell=document.createElement("td");
+const actionButtons=document.createElement("div");
+actionButtons.className="action-buttons";
 
-actionButtons.className = "action-buttons";
+if(status!=="archived"){
+const editBtn=document.createElement("button");
+editBtn.className="btn btn-dark";
+editBtn.textContent="EDIT";
 
-if(status !== "archived"){
-
-const editBtn = document.createElement("button");
-
-editBtn.className = "btn btn-dark";
-editBtn.textContent = "EDIT";
-
-editBtn.onclick = async()=>{
-
-const edited = await openEditModal(club,profile);
+editBtn.onclick=async()=>{
+const edited=await openEditModal(club,profile);
 if(!edited)return;
-
-if(!edited.club_name || !edited.owner_name){
+if(!edited.club_name||!edited.owner_name){
 await showNotice("Missing Information","Club Name and Owner Name are required.","warning");
 return;
 }
-
-editBtn.disabled = true;
-editBtn.textContent = "SAVING...";
-
+editBtn.disabled=true;
+editBtn.textContent="SAVING...";
 try{
-
-const {data,error} = await db.functions.invoke(
-"manage-club",
-{
-body:{
-action:"update",
-club_id:club.id,
-club_name:edited.club_name,
-owner_name:edited.owner_name,
-owner_phone:edited.owner_phone
-}
-}
-);
-
+const {data,error}=await db.functions.invoke("manage-club",{
+body:{action:"update",club_id:club.id,club_name:edited.club_name,owner_name:edited.owner_name,owner_phone:edited.owner_phone}
+});
 if(error)throw error;
-
-if(!data?.success){
-throw new Error(data?.error || "Update failed");
-}
-
+if(!data?.success)throw new Error(data?.error||"Update failed");
 await showNotice("Club Updated","Club details updated successfully.","normal");
 await loadClubs();
-
 }catch(error){
-
 console.error("Edit club error:",error);
-await showNotice("Update Failed",error.message || "Update failed","danger");
-
+await showNotice("Update Failed",error.message||"Update failed","danger");
 }finally{
-editBtn.disabled = false;
-editBtn.textContent = "EDIT";
+editBtn.disabled=false;
+editBtn.textContent="EDIT";
 }
-
 };
-
 actionButtons.appendChild(editBtn);
 
-const statusBtn = document.createElement("button");
+const statusBtn=document.createElement("button");
+statusBtn.className="btn "+(status==="active"?"btn-red":"btn-green");
+statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";
 
-statusBtn.className =
-"btn " + (status==="active"?"btn-red":"btn-green");
-
-statusBtn.textContent =
-status==="active"?"SUSPEND":"ACTIVATE";
-
-statusBtn.onclick = async()=>{
-
-const nextStatus = status==="active"?"suspended":"active";
-
-const confirmation = await showConfirm(
-(nextStatus==="active"?"Activate Club":"Suspend Club"),
+statusBtn.onclick=async()=>{
+const nextStatus=status==="active"?"suspended":"active";
+const confirmation=await showConfirm(
+nextStatus==="active"?"Activate Club":"Suspend Club",
 "Are you sure you want to "+nextStatus+" this club?\n\nClub: "+club.club_name,
 {confirmText:nextStatus==="active"?"ACTIVATE":"SUSPEND",tone:nextStatus==="active"?"normal":"danger",icon:nextStatus==="active"?"✓":"!"}
 );
-
 if(!confirmation)return;
-
-statusBtn.disabled = true;
-statusBtn.textContent = "UPDATING...";
-
+statusBtn.disabled=true;
+statusBtn.textContent="UPDATING...";
 try{
-
-const {data,error} = await db.rpc(
-"admin_update_club_status",
-{
-p_club_id:club.id,
-p_status:nextStatus
-}
-);
-
+const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:nextStatus});
 if(error)throw error;
-
-if(data !== true){
-throw new Error("Club status update failed.");
-}
-
+if(data!==true)throw new Error("Club status update failed.");
 await showNotice("Status Updated","Club status successfully changed to "+nextStatus.toUpperCase()+".","normal");
 await loadClubs();
-
 }catch(error){
-
 console.error("Status update error:",error);
 await showNotice("Status Update Failed",error.message||"Update failed","danger");
-
-statusBtn.disabled = false;
-statusBtn.textContent =
-status==="active"?"SUSPEND":"ACTIVATE";
-
+statusBtn.disabled=false;
+statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";
 }
-
 };
-
 actionButtons.appendChild(statusBtn);
 
-const archiveBtn = document.createElement("button");
-
-archiveBtn.className = "btn btn-red";
-archiveBtn.textContent = "ARCHIVE";
-
-archiveBtn.onclick = async()=>{
-
-const confirmation = await showConfirm(
+const archiveBtn=document.createElement("button");
+archiveBtn.className="btn btn-red";
+archiveBtn.textContent="ARCHIVE";
+archiveBtn.onclick=async()=>{
+const confirmation=await showConfirm(
 "Archive Club?",
 "Club: "+club.club_name+"\n\nThis will mark the club as archived. Historical records will be retained.",
 {confirmText:"ARCHIVE CLUB",tone:"danger",icon:"!"}
 );
-
 if(!confirmation)return;
-
-archiveBtn.disabled = true;
-archiveBtn.textContent = "ARCHIVING...";
-
+archiveBtn.disabled=true;
+archiveBtn.textContent="ARCHIVING...";
 try{
-
-const {data,error} = await db.functions.invoke(
-"manage-club",
-{
-body:{
-action:"archive",
-club_id:club.id
-}
-}
-);
-
+const {data,error}=await db.functions.invoke("manage-club",{body:{action:"archive",club_id:club.id}});
 if(error)throw error;
-
-if(!data?.success){
-throw new Error(data?.error || "Archive failed");
-}
-
+if(!data?.success)throw new Error(data?.error||"Archive failed");
 await showNotice("Club Archived","The club has been archived successfully.","normal");
 await loadClubs();
-
 }catch(error){
-
 console.error("Archive error:",error);
-await showNotice("Archive Failed",error.message || "Archive failed","danger");
-
-archiveBtn.disabled = false;
-archiveBtn.textContent = "ARCHIVE";
-
+await showNotice("Archive Failed",error.message||"Archive failed","danger");
+archiveBtn.disabled=false;
+archiveBtn.textContent="ARCHIVE";
 }
-
 };
-
 actionButtons.appendChild(archiveBtn);
 
 }else{
-
-const archivedText = document.createElement("span");
-archivedText.style.color = "#91aa9d";
-archivedText.textContent = "ARCHIVED";
+const archivedText=document.createElement("span");
+archivedText.style.color="#91aa9d";
+archivedText.textContent="ARCHIVED";
 actionButtons.appendChild(archivedText);
 
 const restoreBtn=document.createElement("button");
 restoreBtn.className="btn btn-green";
 restoreBtn.textContent="RESTORE / ACTIVATE";
-
 restoreBtn.onclick=async()=>{
-
 const confirmation=await showConfirm(
-"Restore Club?",
-"Restore "+club.club_name+" and set its status to ACTIVE?",
+"Restore Club?","Restore "+club.club_name+" and set its status to ACTIVE?",
 {confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"}
 );
-
 if(!confirmation)return;
-
 restoreBtn.disabled=true;
 restoreBtn.textContent="RESTORING...";
-
 try{
-
-const {data,error}=await db.rpc("admin_update_club_status",{
-p_club_id:club.id,
-p_status:"active"
-});
-
+const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:"active"});
 if(error)throw error;
-
 if(data!==true)throw new Error("Club restore failed.");
-
 await showNotice("Club Restored",club.club_name+" is now ACTIVE.","normal");
 await loadClubs();
-
 }catch(error){
-
 console.error("Restore club error:",error);
 await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");
-
 restoreBtn.disabled=false;
 restoreBtn.textContent="RESTORE / ACTIVATE";
-
 }
-
 };
-
 actionButtons.appendChild(restoreBtn);
-
 }
 
 actionCell.appendChild(actionButtons);
 tr.appendChild(actionCell);
-
 tbody.appendChild(tr);
-
 });
 }
 
-document.getElementById("clubSearch")
-.addEventListener("input",renderClubs);
+document.getElementById("clubSearch").addEventListener("input",renderClubs);
+
+/* SUBSCRIPTION FORM SUBMIT */
+
+document.getElementById("subscriptionForm").addEventListener("submit",e=>{
+e.preventDefault();
+
+const plan_name=document.getElementById("subPlanInput").value;
+const amount=Number(document.getElementById("subAmountInput").value);
+const duration_days=Number(document.getElementById("subDurationInput").value);
+const start_date=inputToISTISOString(document.getElementById("subStartInput").value);
+const end_date=inputToISTISOString(document.getElementById("subEndInput").value);
+
+if(!plan_name||!start_date||!end_date){
+showNotice("Missing Information","Please complete all required fields.","warning");
+return;
+}
+if(!Number.isFinite(amount)||amount<0){
+showNotice("Invalid Amount","Amount must be zero or greater.","warning");
+return;
+}
+if(!Number.isInteger(duration_days)||duration_days<1||duration_days>3650){
+showNotice("Invalid Duration","Duration must be between 1 and 3650 days.","warning");
+return;
+}
+if(new Date(end_date)<=new Date(start_date)){
+showNotice("Invalid Dates","End date must be later than start date.","warning");
+return;
+}
+
+closeSubscriptionModal({plan_name,amount,duration_days,start_date,end_date});
+});
 
 /* LOAD SUBSCRIPTIONS */
 
 async function loadSubscriptions(){
+const tbody=document.getElementById("subscriptionList");
+tbody.innerHTML='<tr><td colspan="8" class="empty">Loading subscriptions...</td></tr>';
 
-const tbody = document.getElementById("subscriptionList");
-
-tbody.innerHTML =
-'<tr><td colspan="7" class="empty">Loading subscriptions...</td></tr>';
-
-const {data,error} = await db
-.from("subscriptions")
+const {data,error}=await db.from("subscriptions")
 .select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at")
 .order("created_at",{ascending:false});
 
 if(error){
-
-tbody.innerHTML =
-'<tr><td colspan="7" class="empty">Could not load subscriptions: '+
-escapeHTML(error.message)+'</td></tr>';
-
+tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';
 console.error("Subscription loading error:",error);
 return;
 }
 
-const items = data || [];
+const items=data||[];
+const now=new Date();
 
-document.getElementById("totalSubscriptions").textContent = items.length;
-document.getElementById("subTotal").textContent = items.length;
+document.getElementById("totalSubscriptions").textContent=items.length;
+document.getElementById("subTotal").textContent=items.length;
 
-document.getElementById("subActive").textContent =
-items.filter(x=>
-x.status==="active" &&
-new Date(x.start_date)<=new Date() &&
-new Date(x.end_date)>new Date()
+document.getElementById("subActive").textContent=items.filter(x=>
+x.status==="active"&&new Date(x.start_date)<=now&&new Date(x.end_date)>now
 ).length;
 
-const total = items.reduce((sum,x)=>sum+Number(x.amount||0),0);
+const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);
+document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
 
-document.getElementById("subAmount").textContent =
-"₹"+total.toLocaleString("en-IN");
-
-tbody.innerHTML = "";
+tbody.innerHTML="";
 
 if(!items.length){
-
-tbody.innerHTML =
-'<tr><td colspan="7" class="empty">No subscriptions found.</td></tr>';
-
+tbody.innerHTML='<tr><td colspan="8" class="empty">No subscriptions found.</td></tr>';
 return;
 }
 
 items.forEach(sub=>{
-
-const tr = document.createElement("tr");
-
+const tr=document.createElement("tr");
 addCell(tr,sub.club_id);
 addCell(tr,sub.plan_name);
 addCell(tr,"₹"+Number(sub.amount).toLocaleString("en-IN"));
@@ -1253,39 +914,128 @@ addCell(tr,sub.duration_days+" days");
 addCell(tr,formatDate(sub.start_date));
 addCell(tr,formatDate(sub.end_date));
 
-const statusCell = document.createElement("td");
+const isActive=sub.status==="active"&&new Date(sub.start_date)<=now&&new Date(sub.end_date)>now;
+const isExpired=new Date(sub.end_date)<=now;
 
-const isActive =
-sub.status==="active" &&
-new Date(sub.start_date)<=new Date() &&
-new Date(sub.end_date)>new Date();
+let displayStatus=isActive?"ACTIVE":(isExpired?"EXPIRED":String(sub.status||"INACTIVE").toUpperCase());
 
-let displayStatus = isActive
-? "ACTIVE"
-: (new Date(sub.end_date)<=new Date()
-? "EXPIRED"
-: String(sub.status||"INACTIVE").toUpperCase());
-
-statusCell.textContent = displayStatus;
+const statusCell=document.createElement("td");
+const statusBadge=document.createElement("span");
+statusBadge.className="badge "+(isActive?"active":isExpired?"expired":"suspended");
+statusBadge.textContent=displayStatus;
+statusCell.appendChild(statusBadge);
 tr.appendChild(statusCell);
 
-tbody.appendChild(tr);
+/* ACTION BUTTONS */
+const actionCell=document.createElement("td");
+const actions=document.createElement("div");
+actions.className="action-buttons";
 
+const editBtn=document.createElement("button");
+editBtn.className="btn btn-dark";
+editBtn.textContent="EDIT";
+
+editBtn.onclick=async()=>{
+const edited=await openSubscriptionModal(sub,"edit");
+if(!edited)return;
+
+editBtn.disabled=true;
+editBtn.textContent="SAVING...";
+
+try{
+const {data,error}=await db.from("subscriptions")
+.update({
+plan_name:edited.plan_name,
+amount:edited.amount,
+duration_days:edited.duration_days,
+start_date:edited.start_date,
+end_date:edited.end_date
+})
+.eq("id",sub.id)
+.select("id");
+
+if(error)throw error;
+if(!data||data.length===0)throw new Error("Subscription was not updated. Check admin permission.");
+
+await showNotice("Subscription Updated","Subscription details have been updated successfully.","normal");
+await loadSubscriptions();
+
+}catch(error){
+console.error("Subscription edit error:",error);
+await showNotice("Edit Failed",error.message||"Could not update subscription.","danger");
+}finally{
+editBtn.disabled=false;
+editBtn.textContent="EDIT";
+}
+};
+
+const renewBtn=document.createElement("button");
+renewBtn.className="btn btn-green";
+renewBtn.textContent="RENEW";
+
+renewBtn.onclick=async()=>{
+const renewed=await openSubscriptionModal(sub,"renew");
+if(!renewed)return;
+
+const confirmation=await showConfirm(
+"Confirm Subscription Renewal",
+"Create a new subscription record for this club?\n\nPlan: "+renewed.plan_name+
+"\nAmount: ₹"+renewed.amount+
+"\nDuration: "+renewed.duration_days+" days"+
+"\n\nThe previous subscription record will be preserved.",
+{confirmText:"CREATE RENEWAL",tone:"normal",icon:"↻"}
+);
+
+if(!confirmation)return;
+
+renewBtn.disabled=true;
+renewBtn.textContent="RENEWING...";
+
+try{
+const {data,error}=await db.from("subscriptions")
+.insert({
+club_id:sub.club_id,
+plan_name:renewed.plan_name,
+amount:renewed.amount,
+duration_days:renewed.duration_days,
+start_date:renewed.start_date,
+end_date:renewed.end_date,
+status:"active"
+})
+.select("id");
+
+if(error)throw error;
+if(!data||data.length===0)throw new Error("Renewal record was not created. Check admin permission.");
+
+await showNotice("Subscription Renewed","A new subscription record has been created. Previous history has been retained.","normal");
+await loadSubscriptions();
+
+}catch(error){
+console.error("Subscription renewal error:",error);
+await showNotice("Renewal Failed",error.message||"Could not renew subscription.","danger");
+}finally{
+renewBtn.disabled=false;
+renewBtn.textContent="RENEW";
+}
+};
+
+actions.appendChild(editBtn);
+actions.appendChild(renewBtn);
+actionCell.appendChild(actions);
+tr.appendChild(actionCell);
+tbody.appendChild(tr);
 });
 }
 
 /* CREATE CLUB */
 
-document.getElementById("clubForm")
-.addEventListener("submit",async e=>{
-
+document.getElementById("clubForm").addEventListener("submit",async e=>{
 e.preventDefault();
 
-const btn = document.getElementById("createBtn");
-const msg = document.getElementById("message");
+const btn=document.getElementById("createBtn");
+const msg=document.getElementById("message");
 
-const payload = {
-
+const payload={
 club_name:document.getElementById("clubName").value.trim(),
 owner_name:document.getElementById("ownerName").value.trim(),
 owner_phone:document.getElementById("ownerPhone").value.trim(),
@@ -1294,173 +1044,97 @@ owner_password:document.getElementById("ownerPassword").value,
 plan_name:document.getElementById("planName").value,
 amount:Number(document.getElementById("amount").value),
 duration_days:Number(document.getElementById("durationDays").value),
-
-start_date:inputToISTISOString(
-document.getElementById("startDate").value
-),
-
-end_date:inputToISTISOString(
-document.getElementById("endDate").value
-)
-
+start_date:inputToISTISOString(document.getElementById("startDate").value),
+end_date:inputToISTISOString(document.getElementById("endDate").value)
 };
 
-if(
-!payload.club_name ||
-!payload.owner_name ||
-!payload.owner_email ||
-!payload.owner_password ||
-!payload.start_date ||
-!payload.end_date
-){
-
+if(!payload.club_name||!payload.owner_name||!payload.owner_email||!payload.owner_password||!payload.start_date||!payload.end_date){
 msg.style.color="#f16c6c";
 msg.textContent="Please complete all required fields.";
 return;
 }
-
 if(payload.end_date<=payload.start_date){
-
 msg.style.color="#f16c6c";
 msg.textContent="End date must be later than start date.";
 return;
 }
-
-if(
-!Number.isFinite(payload.amount) ||
-payload.amount<0 ||
-!Number.isInteger(payload.duration_days) ||
-payload.duration_days<1 ||
-payload.duration_days>3650
-){
-
+if(!Number.isFinite(payload.amount)||payload.amount<0||!Number.isInteger(payload.duration_days)||payload.duration_days<1||payload.duration_days>3650){
 msg.style.color="#f16c6c";
 msg.textContent="Check amount and duration.";
 return;
 }
-
-if(payload.owner_password.length<8 || payload.owner_password.length>72){
-
+if(payload.owner_password.length<8||payload.owner_password.length>72){
 msg.style.color="#f16c6c";
 msg.textContent="Password must contain 8 to 72 characters.";
 return;
 }
 
-btn.disabled = true;
-btn.textContent = "CREATING CLUB...";
-msg.textContent = "";
+btn.disabled=true;
+btn.textContent="CREATING CLUB...";
+msg.textContent="";
 
 try{
-
-const {data:sessionData,error:sessionError} =
-await db.auth.getSession();
-
+const {data:sessionData,error:sessionError}=await db.auth.getSession();
 if(sessionError)throw sessionError;
+const session=sessionData?.session;
+if(!session?.access_token)throw new Error("No active session. Please login again.");
 
-const session = sessionData?.session;
-
-if(!session?.access_token){
-throw new Error("No active session. Please login again.");
-}
-
-const {data:allowed,error:adminCheckError} =
-await db.rpc("is_platform_admin");
-
+const {data:allowed,error:adminCheckError}=await db.rpc("is_platform_admin");
 if(adminCheckError)throw adminCheckError;
+if(allowed!==true)throw new Error("Super Admin permission required.");
 
-if(allowed !== true){
-throw new Error("Super Admin permission required.");
-}
-
-const {data,error} = await db.functions.invoke(
-"create-club",
-{
+const {data,error}=await db.functions.invoke("create-club",{
 body:payload,
-headers:{
-Authorization:"Bearer "+session.access_token
-}
-}
-);
+headers:{Authorization:"Bearer "+session.access_token}
+});
 
 if(error){
 console.error("Create club function error:",error);
 throw error;
 }
-
-if(!data?.success){
-throw new Error(data?.error || "Club creation failed.");
-}
+if(!data?.success)throw new Error(data?.error||"Club creation failed.");
 
 msg.style.color="#27d58c";
 msg.textContent="SUCCESS! Club and Owner Account created.";
-
 document.getElementById("clubForm").reset();
 setDateDefaults();
 
-await Promise.all([
-loadClubs(),
-loadSubscriptions()
-]);
+await Promise.all([loadClubs(),loadSubscriptions()]);
 
 }catch(error){
-
 console.error("Create club error:",error);
-
 msg.style.color="#f16c6c";
-msg.textContent =
-"ERROR: "+(error.message||"Something went wrong.");
-
+msg.textContent="ERROR: "+(error.message||"Something went wrong.");
 }finally{
-
-btn.disabled = false;
-btn.textContent = "＋ CREATE CLUB + OWNER ACCOUNT";
-
+btn.disabled=false;
+btn.textContent="＋ CREATE CLUB + OWNER ACCOUNT";
 }
-
 });
 
 /* REFRESH */
-
-document.getElementById("refreshClubs").onclick = loadClubs;
-document.getElementById("refreshSubs").onclick = loadSubscriptions;
+document.getElementById("refreshClubs").onclick=loadClubs;
+document.getElementById("refreshSubs").onclick=loadSubscriptions;
 
 /* LOGOUT */
-
-document.getElementById("logoutBtn").onclick = async()=>{
-
+document.getElementById("logoutBtn").onclick=async()=>{
 const {error}=await db.auth.signOut();
-
 if(error){
 await showNotice("Logout Failed",error.message,"danger");
 return;
 }
-
 location.replace(new URL("index.html",window.location.href).href);
-
 };
 
 /* INITIALIZATION */
-
 (async()=>{
-
-const allowed = await checkAdmin();
-
+const allowed=await checkAdmin();
 if(!allowed)return;
-
 try{
-await Promise.all([
-loadClubs(),
-loadSubscriptions()
-]);
+await Promise.all([loadClubs(),loadSubscriptions()]);
 }catch(error){
 console.error("Dashboard loading error:",error);
-showAuthError(
-"DASHBOARD LOADING ERROR",
-"Authentication passed, but dashboard data could not be loaded.",
-error.message||String(error)
-);
+showAuthError("DASHBOARD LOADING ERROR","Authentication passed, but dashboard data could not be loaded.",error.message||String(error));
 }
-
 })();
 </script>
 </body>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,6 +171,7 @@ body{
 }
 #fatal{color:#ffaaaa;display:none}
 .mobile-menu{display:none}
+
 @media(max-width:800px){
  .sidebar{width:205px}
  .content{padding:20px}
@@ -196,6 +196,104 @@ body{
  .welcome h1{font-size:20px}
  .grid{grid-template-columns:1fr}
  .details-grid{grid-template-columns:1fr}
+}
+
+/* AUCTION MANAGEMENT STYLES */
+.auction-toolbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ flex-wrap:wrap;
+ margin-bottom:16px
+}
+.primary-btn,.secondary-btn{
+ border:0;
+ border-radius:8px;
+ padding:11px 15px;
+ font-size:11px;
+ font-weight:700;
+ cursor:pointer
+}
+.primary-btn{
+ background:var(--green);
+ color:#062015
+}
+.secondary-btn{
+ background:#173d2b;
+ color:#bdf5d7;
+ border:1px solid var(--border)
+}
+.auction-form{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:14px
+}
+.auction-form .field{
+ display:flex;
+ flex-direction:column;
+ gap:7px
+}
+.auction-form label{
+ font-size:10px;
+ color:var(--muted)
+}
+.auction-form input,.auction-form select{
+ width:100%;
+ background:#071a13;
+ color:var(--text);
+ border:1px solid var(--border);
+ border-radius:8px;
+ padding:12px;
+ font-size:12px;
+ outline:none
+}
+.auction-form input:focus,.auction-form select:focus{
+ border-color:var(--green)
+}
+.auction-form .full{grid-column:1/-1}
+.auction-message{
+ font-size:11px;
+ line-height:1.6;
+ margin-top:12px;
+ white-space:pre-wrap
+}
+.auction-message.error{color:#ffaaaa}
+.auction-message.success{color:#7af0b5}
+.auction-table-wrap{overflow-x:auto}
+.auction-table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:620px
+}
+.auction-table th,.auction-table td{
+ padding:12px 10px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+ font-size:11px
+}
+.auction-table th{
+ color:var(--muted);
+ font-weight:600
+}
+.auction-empty{
+ padding:24px;
+ text-align:center;
+ color:var(--muted);
+ font-size:12px
+}
+.auction-status{
+ display:inline-block;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#173d2b;
+ color:#7af0b5;
+ font-size:9px;
+ text-transform:uppercase
+}
+@media(max-width:600px){
+ .auction-form{grid-template-columns:1fr}
+ .auction-form .full{grid-column:auto}
 }
 </style>
 </head>
@@ -245,6 +343,7 @@ body{
 
   <div class="content">
 
+   <!-- DASHBOARD -->
    <section class="page active" id="page-dashboard">
 
     <div class="welcome">
@@ -253,6 +352,7 @@ body{
     </div>
 
     <div class="grid">
+
      <div class="card">
       <div class="card-label">YOUR CLUB</div>
       <div class="card-value" id="clubNameCard">—</div>
@@ -267,35 +367,45 @@ body{
 
      <div class="card">
       <div class="card-label">SUBSCRIPTION STATUS</div>
-      <div class="card-value"><span class="status" id="statusCard">Checking</span></div>
+      <div class="card-value">
+       <span class="status" id="statusCard">Checking</span>
+      </div>
       <div class="card-note" id="expiryCard">Checking expiry...</div>
      </div>
+
     </div>
 
     <div class="card">
      <h3 class="section-title">Club Information</h3>
+
      <div class="details-grid">
+
       <div class="detail">
        <div class="detail-label">CLUB NAME</div>
        <div class="detail-value" id="detailClubName">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">CLUB ID</div>
        <div class="detail-value" id="detailClubId">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">OWNER NAME</div>
        <div class="detail-value" id="detailOwner">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">OWNER EMAIL</div>
        <div class="detail-value" id="detailEmail">—</div>
       </div>
+
      </div>
     </div>
 
    </section>
 
+   <!-- PLAYERS -->
    <section class="page" id="page-players">
     <div class="placeholder">
      <h3>Player Management</h3>
@@ -303,6 +413,7 @@ body{
     </div>
    </section>
 
+   <!-- TEAMS -->
    <section class="page" id="page-teams">
     <div class="placeholder">
      <h3>Teams Management</h3>
@@ -310,39 +421,154 @@ body{
     </div>
    </section>
 
+   <!-- AUCTION MANAGEMENT -->
    <section class="page" id="page-auction">
-    <div class="placeholder">
-     <h3>Auction Management</h3>
-     <p>Auction module will be connected here.</p>
+
+    <div class="welcome">
+     <h1>Auction Management</h1>
+     <p>Create and manage auctions for your club.</p>
     </div>
+
+    <div class="card" style="margin-bottom:18px">
+
+     <h3 class="section-title">Create New Auction</h3>
+
+     <form id="auctionForm" class="auction-form">
+
+      <div class="field full">
+       <label for="auctionName">AUCTION NAME</label>
+       <input
+        id="auctionName"
+        type="text"
+        maxlength="100"
+        placeholder="Example: GFC Premier League Auction 2026"
+        required
+       >
+      </div>
+
+      <div class="field">
+       <label for="auctionMode">AUCTION MODE</label>
+       <select id="auctionMode" required>
+        <option value="live">Live Auction</option>
+        <option value="offline">Offline Auction</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label for="biddingMode">BIDDING MODE</label>
+       <select id="biddingMode" required>
+        <option value="open">Open Bidding</option>
+        <option value="sealed">Sealed Bidding</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label for="auctionCurrency">CURRENCY</label>
+       <select id="auctionCurrency">
+        <option value="INR">INR (₹)</option>
+       </select>
+      </div>
+
+      <div class="field">
+       <label>INITIAL STATUS</label>
+       <input type="text" value="Draft" disabled>
+      </div>
+
+      <div class="field full">
+       <button
+        class="primary-btn"
+        id="createAuctionBtn"
+        type="submit"
+       >＋ CREATE AUCTION</button>
+
+       <div
+        id="auctionFormMessage"
+        class="auction-message"
+        role="status"
+       ></div>
+      </div>
+
+     </form>
+    </div>
+
+    <!-- AUCTION LIST -->
+    <div class="card">
+
+     <div class="auction-toolbar">
+      <h3 class="section-title" style="margin:0">Your Auctions</h3>
+      <button
+       type="button"
+       class="secondary-btn"
+       id="refreshAuctionsBtn"
+      >↻ REFRESH</button>
+     </div>
+
+     <div id="auctionListMessage" class="auction-message"></div>
+
+     <div class="auction-table-wrap">
+      <table class="auction-table">
+
+       <thead>
+        <tr>
+         <th>AUCTION NAME</th>
+         <th>AUCTION MODE</th>
+         <th>BIDDING MODE</th>
+         <th>STATUS</th>
+         <th>CREATED</th>
+        </tr>
+       </thead>
+
+       <tbody id="auctionTableBody">
+        <tr>
+         <td colspan="5" class="auction-empty">
+          Loading auctions...
+         </td>
+        </tr>
+       </tbody>
+
+      </table>
+     </div>
+
+    </div>
+
    </section>
 
+   <!-- SUBSCRIPTION -->
    <section class="page" id="page-subscription">
+
     <div class="card">
      <h3 class="section-title">Subscription Details</h3>
+
      <div class="details-grid">
+
       <div class="detail">
        <div class="detail-label">PLAN NAME</div>
        <div class="detail-value" id="subPlan">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">AMOUNT</div>
        <div class="detail-value" id="subAmount">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">START DATE</div>
        <div class="detail-value" id="subStart">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">END DATE</div>
        <div class="detail-value" id="subEnd">—</div>
       </div>
+
       <div class="detail">
        <div class="detail-label">STATUS</div>
        <div class="detail-value" id="subStatus">—</div>
       </div>
+
      </div>
     </div>
+
    </section>
 
   </div>
@@ -350,6 +576,8 @@ body{
 </div>
 
 <script>
+
+// SUPABASE CONFIGURATION
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 
 const SUPABASE_KEY =
@@ -362,7 +590,10 @@ const db = window.supabase.createClient(
 
 let currentProfile = null;
 
+
+// SHOW ERROR
 function showFatal(text){
+
  document.getElementById("loading").style.display="none";
  document.getElementById("app").style.display="none";
 
@@ -371,7 +602,10 @@ function showFatal(text){
  box.style.display="block";
 }
 
+
+// FORMAT DATE
 function formatDate(value){
+
  if(!value) return "—";
 
  return new Date(value).toLocaleString("en-IN",{
@@ -383,8 +617,11 @@ function formatDate(value){
   minute:"2-digit",
   hour12:true
  });
+
 }
 
+
+// LOAD DASHBOARD
 async function loadDashboard(){
 
  try{
@@ -402,6 +639,7 @@ async function loadDashboard(){
    return;
   }
 
+
   // 2. Verify Club Owner profile
   const {data:profile,error:profileError} = await db
    .from("profiles")
@@ -417,6 +655,7 @@ async function loadDashboard(){
 
   currentProfile=profile;
 
+
   // 3. Load only the owner's own club
   const {data:club,error:clubError} = await db
    .from("clubs")
@@ -430,6 +669,7 @@ async function loadDashboard(){
   if(!club){
    throw new Error("Your club could not be found.");
   }
+
 
   // 4. Verify active subscription
   const now=new Date().toISOString();
@@ -451,6 +691,7 @@ async function loadDashboard(){
    throw new Error("Your subscription has expired or is not active. Please contact the platform administrator.");
   }
 
+
   // 5. Display dashboard information
   const name=profile.full_name || "Club Owner";
 
@@ -463,14 +704,17 @@ async function loadDashboard(){
   document.getElementById("detailClubName").textContent=club.club_name;
   document.getElementById("detailClubId").textContent=club.id;
   document.getElementById("detailOwner").textContent=name;
+
   document.getElementById("detailEmail").textContent=
    club.owner_email || session.user.email || "—";
 
   document.getElementById("statusCard").textContent="ACTIVE";
+
   document.getElementById("expiryCard").textContent=
    "Expires: "+formatDate(subscription.end_date);
 
   document.getElementById("subPlan").textContent=subscription.plan_name;
+
   document.getElementById("subAmount").textContent=
    "₹"+Number(subscription.amount).toLocaleString("en-IN");
 
@@ -499,10 +743,13 @@ async function loadDashboard(){
   setTimeout(()=>{
    window.location.replace("owner-login.html");
   },4000);
+
  }
+
 }
 
-// Sidebar navigation
+
+// SIDEBAR NAVIGATION
 document.querySelectorAll(".nav-btn").forEach(button=>{
 
  button.addEventListener("click",()=>{
@@ -527,6 +774,10 @@ document.querySelectorAll(".nav-btn").forEach(button=>{
 
   document.getElementById("page-"+page).classList.add("active");
 
+  if(page==="auction"){
+   loadAuctions();
+  }
+
   const titles={
    dashboard:"Dashboard",
    players:"Players Management",
@@ -536,31 +787,265 @@ document.querySelectorAll(".nav-btn").forEach(button=>{
   };
 
   document.getElementById("topTitle").textContent=titles[page];
+
  });
 
 });
 
-// Logout
+
+// LOGOUT
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
 
  const button=document.getElementById("logoutBtn");
+
  button.disabled=true;
  button.textContent="LOGGING OUT...";
 
  const {error}=await db.auth.signOut();
 
  if(error){
+
   alert("Logout failed. Please try again.");
+
   button.disabled=false;
   button.textContent="↪ LOGOUT";
+
   return;
  }
 
  window.location.replace("owner-login.html");
+
 });
 
-// Start
+
+// =====================================
+// AUCTION MANAGEMENT
+// =====================================
+
+
+// ESCAPE TEXT
+function escapeAuctionText(value){
+
+ return String(value ?? "").replace(/[&<>"']/g,char=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[char]));
+
+}
+
+
+// DISPLAY MODE
+function prettyAuctionMode(value){
+
+ const labels={
+  live:"Live Auction",
+  offline:"Offline Auction",
+  open:"Open Bidding",
+  sealed:"Sealed Bidding"
+ };
+
+ return labels[value] || String(value || "—").replaceAll("_"," ");
+
+}
+
+
+// SHOW AUCTION MESSAGE
+function showAuctionMessage(id,message,type=""){
+
+ const el=document.getElementById(id);
+
+ if(!el) return;
+
+ el.textContent=message;
+
+ el.className="auction-message"+(type ? " "+type : "");
+
+}
+
+
+// LOAD AUCTIONS
+async function loadAuctions(){
+
+ const body=document.getElementById("auctionTableBody");
+
+ if(!body || !currentProfile?.club_id) return;
+
+ body.innerHTML=
+ '<tr><td colspan="5" class="auction-empty">Loading auctions...</td></tr>';
+
+ showAuctionMessage("auctionListMessage","");
+
+
+ const {data,error}=await db
+  .from("auctions")
+  .select("id,club_id,auction_name,auction_mode,bidding_mode,status,created_at")
+  .eq("club_id",currentProfile.club_id)
+  .order("created_at",{ascending:false});
+
+
+ if(error){
+
+  body.innerHTML=
+  '<tr><td colspan="5" class="auction-empty">Could not load auctions.</td></tr>';
+
+  showAuctionMessage(
+   "auctionListMessage",
+   "Auction load failed: "+error.message,
+   "error"
+  );
+
+  console.error("Load auctions error:",error);
+
+  return;
+ }
+
+
+ if(!data || data.length===0){
+
+  body.innerHTML=
+  '<tr><td colspan="5" class="auction-empty">No auctions created yet. Create your first auction above.</td></tr>';
+
+  return;
+ }
+
+
+ body.innerHTML=data.map(a=>{
+
+  const created=a.created_at
+   ? new Date(a.created_at).toLocaleDateString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
+     })
+   : "—";
+
+  return `<tr>
+
+   <td><strong>${escapeAuctionText(a.auction_name)}</strong></td>
+
+   <td>${escapeAuctionText(prettyAuctionMode(a.auction_mode))}</td>
+
+   <td>${escapeAuctionText(prettyAuctionMode(a.bidding_mode))}</td>
+
+   <td>
+    <span class="auction-status">
+     ${escapeAuctionText(a.status || "draft")}
+    </span>
+   </td>
+
+   <td>${created}</td>
+
+  </tr>`;
+
+ }).join("");
+
+}
+
+
+// CREATE AUCTION
+document.getElementById("auctionForm").addEventListener("submit",async event=>{
+
+ event.preventDefault();
+
+ const button=document.getElementById("createAuctionBtn");
+
+ const name=document.getElementById("auctionName").value.trim();
+
+
+ if(!currentProfile?.club_id){
+
+  showAuctionMessage(
+   "auctionFormMessage",
+   "Your club information is missing. Reload the dashboard.",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(!name){
+
+  showAuctionMessage(
+   "auctionFormMessage",
+   "Please enter an auction name.",
+   "error"
+  );
+
+  return;
+ }
+
+
+ button.disabled=true;
+ button.textContent="CREATING...";
+
+ showAuctionMessage("auctionFormMessage","");
+
+
+ const {error}=await db
+  .from("auctions")
+  .insert([{
+
+   club_id:currentProfile.club_id,
+
+   auction_name:name,
+
+   auction_mode:document.getElementById("auctionMode").value,
+
+   bidding_mode:document.getElementById("biddingMode").value,
+
+   status:"draft",
+
+   currency:document.getElementById("auctionCurrency").value
+
+  }]);
+
+
+ button.disabled=false;
+ button.textContent="＋ CREATE AUCTION";
+
+
+ if(error){
+
+  console.error("Create auction error:",error);
+
+  showAuctionMessage(
+   "auctionFormMessage",
+   "Auction creation failed: "+error.message,
+   "error"
+  );
+
+  return;
+ }
+
+
+ document.getElementById("auctionForm").reset();
+
+ showAuctionMessage(
+  "auctionFormMessage",
+  "Auction created successfully as Draft.",
+  "success"
+ );
+
+ await loadAuctions();
+
+});
+
+
+// REFRESH AUCTION LIST
+document.getElementById("refreshAuctionsBtn").addEventListener(
+ "click",
+ loadAuctions
+);
+
+
+// START DASHBOARD
 loadDashboard();
+
 </script>
 
 </body>

@@ -10,81 +10,57 @@
 :root{--bg:#071a13;--panel:#0d251b;--panel2:#102c20;--green:#27d58c;--text:#f1fff7;--muted:#91aa9d;--border:#214535;--red:#f16c6c}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
+button,input,select{font:inherit}button{cursor:pointer}
 .layout{display:flex;min-height:100vh}
 .sidebar{width:255px;position:fixed;inset:0 auto 0 0;background:#06150f;border-right:1px solid var(--border);padding:20px 15px;display:flex;flex-direction:column;z-index:20}
 .brand{display:flex;align-items:center;gap:12px;padding:8px 7px 24px;border-bottom:1px solid var(--border)}
 .brand-logo{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#062015;font-size:24px;font-weight:900}
-.brand-name{font-size:14px;font-weight:900}
-.brand-sub{font-size:9px;color:var(--muted);margin-top:5px;letter-spacing:1.3px}
+.brand-name{font-size:14px;font-weight:900}.brand-sub{font-size:9px;color:var(--muted);margin-top:5px;letter-spacing:1.3px}
 .nav-heading{color:#658474;font-size:10px;letter-spacing:1.5px;margin:23px 10px 9px}
 .nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;border:0;border-radius:9px;background:transparent;color:#b6cbbd;text-align:left;font-size:13px;margin:3px 0}
-.nav-item:hover,.nav-item.active{background:#143d2a;color:var(--green)}
-.nav-item.active{box-shadow:inset 3px 0 var(--green)}
+.nav-item:hover,.nav-item.active{background:#143d2a;color:var(--green)}.nav-item.active{box-shadow:inset 3px 0 var(--green)}
 .sidebar-bottom{margin-top:auto;padding-top:17px;border-top:1px solid var(--border)}
 .main{margin-left:255px;width:calc(100% - 255px);min-width:0}
 .topbar{height:68px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#0a2117;border-bottom:1px solid var(--border)}
-.page-title{font-size:14px;font-weight:bold}
-.online{font-size:10px;color:var(--green);background:#123a29;padding:8px 11px;border-radius:20px}
+.page-title{font-size:14px;font-weight:bold}.online{font-size:10px;color:var(--green);background:#123a29;padding:8px 11px;border-radius:20px}
 .logout{border:1px solid #744040;background:#321b1b;color:#ff9999;border-radius:7px;padding:9px 13px;font-size:11px}
-.content{max-width:1550px;margin:auto;padding:27px 28px}
-.section{display:none}
-.section.active{display:block}
+.content{max-width:1550px;margin:auto;padding:27px 28px}.section{display:none}.section.active{display:block}
 .welcome{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px;flex-wrap:wrap}
-.welcome h1{font-size:25px;margin:0 0 8px}
-.welcome p{font-size:12px;color:var(--muted);margin:0}
+.welcome h1{font-size:25px;margin:0 0 8px}.welcome p{font-size:12px;color:var(--muted);margin:0}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:23px}
 .stat,.panel,.info-card{background:var(--panel);border:1px solid var(--border);border-radius:12px}
-.stat{padding:18px}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:.7px}
+.stat{padding:18px}.stat-label{font-size:10px;color:var(--muted);letter-spacing:.7px}
 .stat-value{font-size:27px;font-weight:900;margin:15px 0 5px}
-.panel{margin-bottom:20px;overflow:hidden}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.panel-head h3{font-size:14px;margin:0}
-.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
-.panel-body{padding:19px}
+.panel{margin-bottom:20px;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.panel-head h3{font-size:14px;margin:0}.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}.panel-body{padding:19px}
 .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .field label{display:block;color:#a9c2b3;font-size:10px;margin-bottom:7px;letter-spacing:.4px}
 .field input,.field select{width:100%;padding:12px;border:1px solid #28533c;background:#071b12;color:white;border-radius:7px;outline:none;font-size:12px}
-.field input:focus,.field select:focus{border-color:var(--green)}
-.field select option{background:#0d251b}
-.form-footer{grid-column:1/-1;margin-top:5px}
-.form-footer p{font-size:10px;color:var(--muted);line-height:1.6}
+.field input:focus,.field select:focus{border-color:var(--green)}.field select option{background:#0d251b}
+.form-footer{grid-column:1/-1;margin-top:5px}.form-footer p{font-size:10px;color:var(--muted);line-height:1.6}
 .btn{border:0;border-radius:7px;padding:11px 15px;font-size:11px;font-weight:bold}
-.btn-green{background:var(--green);color:#062015}
-.btn-dark{background:#19412e;color:#c7f9dc;border:1px solid #286344}
-.btn-red{background:#4a2020;color:#ffaaaa;border:1px solid #743737}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.action-buttons{display:flex;gap:6px;flex-wrap:wrap}
-.action-buttons .btn{padding:8px 10px;font-size:10px}
+.btn-green{background:var(--green);color:#062015}.btn-dark{background:#19412e;color:#c7f9dc;border:1px solid #286344}
+.btn-red{background:#4a2020;color:#ffaaaa;border:1px solid #743737}.btn:disabled{opacity:.55;cursor:not-allowed}
+.action-buttons{display:flex;gap:6px;flex-wrap:wrap}.action-buttons .btn{padding:8px 10px;font-size:10px}
 #message{font-size:12px;margin-top:12px;line-height:1.5}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:1250px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:1100px}
 th{text-align:left;padding:13px 14px;background:#102c20;color:#86a796;font-size:9px;letter-spacing:.7px;white-space:nowrap}
 td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertical-align:middle}
 .empty{text-align:center;padding:27px;color:var(--muted)}
 .badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:9px;font-weight:bold}
-.badge.active{background:#164a31;color:#54e8a0}
-.badge.suspended{background:#4a2020;color:#ff9999}
-.badge.archived{background:#30333a;color:#c5cbd5}
-.badge.expired{background:#473b1b;color:#ffcf70}
+.badge.active{background:#164a31;color:#54e8a0}.badge.suspended{background:#4a2020;color:#ff9999}
+.badge.archived{background:#30333a;color:#c5cbd5}.badge.expired{background:#473b1b;color:#ffcf70}
+.badge.soon{background:#49351b;color:#ffd17a}
 .search-box{width:100%;max-width:350px;padding:11px 13px;background:#071b12;color:white;border:1px solid #28533c;border-radius:7px;outline:none;font-size:12px}
-.search-box:focus{border-color:var(--green)}
-.club-name{font-weight:bold;color:var(--green)}
+.search-box:focus{border-color:var(--green)}.club-name{font-weight:bold;color:var(--green)}
 .club-id{font-size:10px;color:var(--muted);max-width:180px;overflow-wrap:anywhere}
-.owner-name{font-weight:bold}
-.owner-email{color:#9fcab0;overflow-wrap:anywhere}
-.owner-phone{white-space:nowrap}
-.info-card{padding:22px}
-.info-card h3{font-size:15px;margin:0 0 10px}
+.owner-name{font-weight:bold}.owner-email{color:#9fcab0}
+.info-card{padding:22px}.info-card h3{font-size:15px;margin:0 0 10px}
 .info-card p{font-size:12px;color:var(--muted);line-height:1.8}
 .footer{text-align:center;padding:22px;color:#5e7d6a;font-size:9px;letter-spacing:1px}
 .auth-error{display:none;margin-bottom:22px;padding:20px;border:1px solid #8a4545;background:#301b1b;border-radius:10px;color:#ffdede;overflow-wrap:anywhere}
-.auth-error h3{font-size:16px;margin:0 0 12px;color:#ff9999}
-.auth-error p{font-size:12px;line-height:1.7;margin:7px 0}
-.auth-error a{color:#7cebb0;font-size:12px}
-.auth-error code{color:#ffd28a;white-space:pre-wrap;overflow-wrap:anywhere}
+.auth-error h3{font-size:16px;margin:0 0 12px;color:#ff9999}.auth-error p{font-size:12px;line-height:1.7;margin:7px 0}
+.auth-error a{color:#7cebb0;font-size:12px}.auth-error code{color:#ffd28a;white-space:pre-wrap;overflow-wrap:anywhere}
 .modal-backdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,10,6,.78);backdrop-filter:blur(7px)}
 .modal-backdrop.show{display:flex;animation:modalFade .18s ease}
 .confirm-modal{width:min(440px,100%);background:linear-gradient(160deg,#123425,#0b2117);border:1px solid #2d6247;border-radius:18px;padding:25px;box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;animation:modalPop .2s ease}
@@ -107,12 +83,18 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 .edit-modal{width:min(560px,100%);max-height:calc(100vh - 36px);overflow-y:auto;background:linear-gradient(160deg,#123425,#0b2117);border:1px solid #2d6247;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.55);animation:modalPop .2s ease}
 .edit-modal-head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
 .edit-modal-icon{width:45px;height:45px;flex:none;border-radius:13px;display:grid;place-items:center;background:#173f2c;color:#57e6a1;border:1px solid #286344;font-size:22px}
-.edit-modal-head h3{font-size:18px;margin:0 0 5px}
-.edit-modal-head p{font-size:11px;color:#9eb9a9;margin:0}
+.edit-modal-head h3{font-size:18px;margin:0 0 5px}.edit-modal-head p{font-size:11px;color:#9eb9a9;margin:0}
 .edit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .edit-form-grid .field input{background:#071b12}
 .edit-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
 .edit-form-actions button{min-width:115px}
+.alert-card{border:1px solid var(--border);border-radius:10px;padding:15px;background:#102c20;margin-bottom:10px}
+.alert-card.expired-alert{border-left:4px solid #f16c6c}
+.alert-card.soon-alert{border-left:4px solid #e8b955}
+.alert-title{font-weight:bold;font-size:12px;margin-bottom:7px}
+.alert-detail{font-size:11px;color:#b5cbbd;line-height:1.8}
+.alert-empty{padding:22px;text-align:center;color:#54e8a0;font-size:12px;background:#102c20;border-radius:10px}
+.alert-count{font-size:10px;padding:5px 9px;border-radius:20px;background:#49351b;color:#ffd17a}
 @media(max-width:520px){.edit-form-grid{grid-template-columns:1fr}.edit-form-actions{flex-direction:column-reverse}.edit-form-actions button{width:100%}}
 @media(max-width:1000px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.sidebar{display:none}.main{margin-left:0;width:100%}.topbar{padding:0 13px}.content{padding:20px 13px}.stats{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-footer{grid-column:auto}}
@@ -133,7 +115,10 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 <div class="sidebar-bottom"><b style="font-size:12px;padding:8px">Super Admin</b><div style="font-size:10px;color:var(--muted);padding:8px">Platform Owner</div></div>
 </aside>
 <div class="main">
-<header class="topbar"><div class="page-title" id="pageTitle">Super Admin Dashboard</div><div style="display:flex;align-items:center;gap:13px"><span class="online">● ADMIN CONNECTED</span><button class="logout" id="logoutBtn">LOGOUT ↗</button></div></header>
+<header class="topbar">
+<div class="page-title" id="pageTitle">Super Admin Dashboard</div>
+<div style="display:flex;align-items:center;gap:13px"><span class="online">● ADMIN CONNECTED</span><button class="logout" id="logoutBtn">LOGOUT ↗</button></div>
+</header>
 <main class="content">
 <div id="authError" class="auth-error" role="alert"><h3 id="authErrorTitle">Authentication problem</h3><p id="authErrorText"></p><p id="authErrorDetail"></p><p><a id="loginLink" href="index.html">Open Login Page</a></p></div>
 
@@ -144,7 +129,20 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 <div class="stat"><div class="stat-label">TOTAL SUBSCRIPTIONS</div><div class="stat-value" id="totalSubscriptions">—</div></div>
 <div class="stat"><div class="stat-label">LIVE AUCTIONS</div><div class="stat-value">—</div></div>
 </div>
-<div class="panel"><div class="panel-head"><div><h3>CLUB MANAGEMENT</h3><p>Register and manage cricket clubs.</p></div><button class="btn btn-green" onclick="showPage('clubs')">CREATE CLUB →</button></div><div class="panel-body"><p style="font-size:12px;color:var(--muted)">Use Club Management to create a new club and its owner account.</p></div></div>
+
+<!-- NEW SUBSCRIPTION ALERT PANEL -->
+<div class="panel">
+<div class="panel-head">
+<div><h3>🔔 SUBSCRIPTION EXPIRY ALERTS</h3><p>Expired subscriptions and subscriptions ending within 7 days.</p></div>
+<span class="alert-count" id="expiryAlertCount">Checking...</span>
+</div>
+<div class="panel-body" id="expiryAlertList"><div class="empty">Loading subscription alerts...</div></div>
+</div>
+
+<div class="panel">
+<div class="panel-head"><div><h3>CLUB MANAGEMENT</h3><p>Register and manage cricket clubs.</p></div><button class="btn btn-green" onclick="showPage('clubs')">CREATE CLUB →</button></div>
+<div class="panel-body"><p style="font-size:12px;color:var(--muted)">Use Club Management to create a new club and its owner account.</p></div>
+</div>
 </section>
 
 <section class="section" id="clubs">
@@ -181,16 +179,10 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 <div class="stat"><div class="stat-label">RECORDED AMOUNT</div><div class="stat-value" id="subAmount">—</div></div>
 </div>
 <div class="panel">
-<div class="panel-head"><div><h3>ALL SUBSCRIPTIONS</h3><p>Club name, owner contact and subscription details.</p></div><button class="btn btn-dark" id="refreshSubs">↻ REFRESH</button></div>
-<div class="table-wrap">
-<table>
-<thead><tr><th>CLUB NAME</th><th>CLUB ID</th><th>OWNER EMAIL</th><th>PHONE NUMBER</th><th>PLAN</th><th>AMOUNT</th><th>DURATION</th><th>START</th><th>END</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
-<tbody id="subscriptionList"><tr><td colspan="11" class="empty">Loading...</td></tr></tbody>
-</table>
-</div>
+<div class="panel-head"><div><h3>ALL SUBSCRIPTIONS</h3><p>Edit or renew individual subscription records.</p></div><button class="btn btn-dark" id="refreshSubs">↻ REFRESH</button></div>
+<div class="table-wrap"><table><thead><tr><th>CLUB ID</th><th>PLAN</th><th>AMOUNT</th><th>DURATION</th><th>START</th><th>END</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="subscriptionList"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody></table></div>
 </div>
 </section>
-
 <section class="section" id="auctions"><div class="welcome"><div><h1>Auction Management</h1><p>Manage platform auctions.</p></div></div><div class="info-card"><h3>Auction Control Center</h3><p>Auction management will be connected in the next development stage.</p></div></section>
 <section class="section" id="players"><div class="welcome"><div><h1>Player Database</h1><p>Manage player records.</p></div></div><div class="info-card"><h3>Player Management</h3><p>Player database will be connected in the next development stage.</p></div></section>
 <section class="section" id="teams"><div class="welcome"><div><h1>Teams Management</h1><p>Manage auction teams.</p></div></div><div class="info-card"><h3>Team Management</h3><p>Team management will be connected in the next development stage.</p></div></section>
@@ -229,7 +221,6 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 </form>
 </div>
 </div>
-
 <div class="footer">PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026</div>
 </main>
 </div>
@@ -240,75 +231,25 @@ const SUPABASE_URL="https://jxanxkhjpadvmxjhupit.supabase.co";
 const SUPABASE_KEY="sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
 const AUTH_STORAGE_KEY="player-auction-platform-auth";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:AUTH_STORAGE_KEY}});
-
 const titles={dashboard:"Super Admin Dashboard",clubs:"Club Management",subscriptions:"Subscription Management",auctions:"Auction Management",players:"Player Database",teams:"Teams Management"};
-let allClubs=[];
-let modalResolver=null;
-let subscriptionModalResolver=null;
-let subscriptionModalMode="edit";
-let selectedSubscription=null;
+let allClubs=[],modalResolver=null,subscriptionModalResolver=null,subscriptionModalMode="edit",selectedSubscription=null;
 
-function closeActionModal(result=false){
-document.getElementById("actionModal").classList.remove("show");
-document.body.style.overflow="";
-if(modalResolver){const resolve=modalResolver;modalResolver=null;resolve(result);}
-}
-function openActionModal({title,message,confirmText="CONFIRM",cancelText="CANCEL",tone="normal",icon="?",showCancel=true}){
-return new Promise(resolve=>{
-const backdrop=document.getElementById("actionModal");
-const card=document.getElementById("modalCard");
-document.getElementById("modalTitle").textContent=title;
-document.getElementById("modalMessage").textContent=message;
-document.getElementById("modalIcon").textContent=icon;
-document.getElementById("modalConfirm").textContent=confirmText;
-document.getElementById("modalCancel").textContent=cancelText;
-document.getElementById("modalCancel").style.display=showCancel?"block":"none";
-card.className="confirm-modal "+tone;
-modalResolver=resolve;
-backdrop.classList.add("show");
-document.body.style.overflow="hidden";
-});
-}
+function closeActionModal(result=false){const modal=document.getElementById("actionModal");modal.classList.remove("show");document.body.style.overflow="";if(modalResolver){const resolve=modalResolver;modalResolver=null;resolve(result);}}
+function openActionModal({title,message,confirmText="CONFIRM",cancelText="CANCEL",tone="normal",icon="?",showCancel=true}){return new Promise(resolve=>{const backdrop=document.getElementById("actionModal"),card=document.getElementById("modalCard");document.getElementById("modalTitle").textContent=title;document.getElementById("modalMessage").textContent=message;document.getElementById("modalIcon").textContent=icon;document.getElementById("modalConfirm").textContent=confirmText;document.getElementById("modalCancel").textContent=cancelText;document.getElementById("modalCancel").style.display=showCancel?"block":"none";card.className="confirm-modal "+tone;modalResolver=resolve;backdrop.classList.add("show");document.body.style.overflow="hidden";});}
 function showConfirm(title,message,options={}){return openActionModal({title,message,...options,showCancel:true});}
-function showNotice(title,message,tone="normal"){
-return openActionModal({title,message,confirmText:"GOT IT",tone,icon:tone==="danger"?"!":tone==="warning"?"⚠":"✓",showCancel:false});
-}
+function showNotice(title,message,tone="normal"){return openActionModal({title,message,confirmText:"GOT IT",tone,icon:tone==="danger"?"!":tone==="warning"?"⚠":"✓",showCancel:false});}
 
 let editModalResolver=null;
-function closeEditModal(result=null){
-document.getElementById("editModal").classList.remove("show");
-document.body.style.overflow="";
-if(editModalResolver){const resolve=editModalResolver;editModalResolver=null;resolve(result);}
-}
-function openEditModal(club,profile){
-document.getElementById("editClubName").value=club.club_name||"";
-document.getElementById("editOwnerName").value=profile?.full_name||"";
-document.getElementById("editOwnerPhone").value=profile?.phone||"";
-document.getElementById("editModal").classList.add("show");
-document.body.style.overflow="hidden";
-document.getElementById("editClubName").focus();
-return new Promise(resolve=>{editModalResolver=resolve;});
-}
+function closeEditModal(result=null){document.getElementById("editModal").classList.remove("show");document.body.style.overflow="";if(editModalResolver){const resolve=editModalResolver;editModalResolver=null;resolve(result);}}
+function openEditModal(club,profile){document.getElementById("editClubName").value=club.club_name||"";document.getElementById("editOwnerName").value=profile?.full_name||"";document.getElementById("editOwnerPhone").value=profile?.phone||"";document.getElementById("editModal").classList.add("show");document.body.style.overflow="hidden";document.getElementById("editClubName").focus();return new Promise(resolve=>{editModalResolver=resolve;});}
 document.getElementById("editCancelBtn").addEventListener("click",()=>closeEditModal(null));
 document.getElementById("editModal").addEventListener("click",e=>{if(e.target.id==="editModal")closeEditModal(null);});
 
-function closeSubscriptionModal(result=null){
-document.getElementById("subscriptionEditModal").classList.remove("show");
-document.body.style.overflow="";
-if(subscriptionModalResolver){const resolve=subscriptionModalResolver;subscriptionModalResolver=null;resolve(result);}
-}
+function closeSubscriptionModal(result=null){document.getElementById("subscriptionEditModal").classList.remove("show");document.body.style.overflow="";if(subscriptionModalResolver){const resolve=subscriptionModalResolver;subscriptionModalResolver=null;resolve(result);}}
 function openSubscriptionModal(sub,mode){
-subscriptionModalMode=mode;
-selectedSubscription=sub;
-const isRenew=mode==="renew";
-const now=new Date();
-let startDate;
-let duration=Number(sub.duration_days)||30;
-if(isRenew){const oldEnd=new Date(sub.end_date);startDate=oldEnd>now?oldEnd:now;}
-else{startDate=new Date(sub.start_date);}
-let endDate;
-if(isRenew){endDate=new Date(startDate.getTime()+duration*24*60*60*1000);}
-else{endDate=new Date(sub.end_date);}
+subscriptionModalMode=mode;selectedSubscription=sub;const isRenew=mode==="renew",now=new Date(),duration=Number(sub.duration_days)||30;
+let startDate=isRenew?(new Date(sub.end_date)>now?new Date(sub.end_date):now):new Date(sub.start_date);
+let endDate=isRenew?new Date(startDate.getTime()+duration*86400000):new Date(sub.end_date);
 document.getElementById("subscriptionModalTitle").textContent=isRenew?"Renew Subscription":"Edit Subscription";
 document.getElementById("subscriptionModalSubtitle").textContent=isRenew?"Create a new subscription record. Previous history will be retained.":"Update this subscription record.";
 document.getElementById("subscriptionModalIcon").textContent=isRenew?"↻":"✎";
@@ -319,8 +260,7 @@ document.getElementById("subStartInput").value=getISTInputValue(startDate);
 document.getElementById("subEndInput").value=getISTInputValue(endDate);
 document.getElementById("subscriptionFormHint").textContent=isRenew?"Renewal creates a NEW record. The previous subscription record will not be changed. Start date is automatically set after the previous end date, or from today if it has expired.":"Changes will update this existing subscription record.";
 document.getElementById("subscriptionSaveBtn").textContent=isRenew?"CREATE RENEWAL":"SAVE CHANGES";
-document.getElementById("subscriptionEditModal").classList.add("show");
-document.body.style.overflow="hidden";
+document.getElementById("subscriptionEditModal").classList.add("show");document.body.style.overflow="hidden";
 return new Promise(resolve=>{subscriptionModalResolver=resolve;});
 }
 document.getElementById("subscriptionCancelBtn").addEventListener("click",()=>closeSubscriptionModal(null));
@@ -328,215 +268,68 @@ document.getElementById("subscriptionEditModal").addEventListener("click",e=>{if
 document.getElementById("modalCancel").addEventListener("click",()=>closeActionModal(false));
 document.getElementById("modalConfirm").addEventListener("click",()=>closeActionModal(true));
 document.getElementById("actionModal").addEventListener("click",e=>{if(e.target.id==="actionModal")closeActionModal(false);});
-document.addEventListener("keydown",e=>{
-if(e.key==="Escape"){
-if(document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
-if(document.getElementById("editModal").classList.contains("show"))closeEditModal(null);
-if(document.getElementById("subscriptionEditModal").classList.contains("show"))closeSubscriptionModal(null);
-}
-});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);if(document.getElementById("editModal").classList.contains("show"))closeEditModal(null);if(document.getElementById("subscriptionEditModal").classList.contains("show"))closeSubscriptionModal(null);}});
 
-const authErrorBox=document.getElementById("authError");
-const authErrorTitle=document.getElementById("authErrorTitle");
-const authErrorText=document.getElementById("authErrorText");
-const authErrorDetail=document.getElementById("authErrorDetail");
-const loginLink=document.getElementById("loginLink");
+const authErrorBox=document.getElementById("authError"),authErrorTitle=document.getElementById("authErrorTitle"),authErrorText=document.getElementById("authErrorText"),authErrorDetail=document.getElementById("authErrorDetail"),loginLink=document.getElementById("loginLink");
 loginLink.href=new URL("index.html",window.location.href).href;
-function showAuthError(title,message,detail=""){
-authErrorBox.style.display="block";
-authErrorTitle.textContent=title;
-authErrorText.textContent=message;
-authErrorDetail.textContent=detail;
-console.error("Dashboard authentication diagnostic:",title,message,detail);
-}
+function showAuthError(title,message,detail=""){authErrorBox.style.display="block";authErrorTitle.textContent=title;authErrorText.textContent=message;authErrorDetail.textContent=detail;console.error("Dashboard authentication diagnostic:",title,message,detail);}
 function hideAuthError(){authErrorBox.style.display="none";authErrorTitle.textContent="";authErrorText.textContent="";authErrorDetail.textContent="";}
-function showPage(page){
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
-document.getElementById(page)?.classList.add("active");
-document.querySelector('[data-page="'+page+'"]')?.classList.add("active");
-document.getElementById("pageTitle").textContent=titles[page]||"Dashboard";
-}
+function showPage(page){document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.getElementById(page)?.classList.add("active");document.querySelector('[data-page="'+page+'"]')?.classList.add("active");document.getElementById("pageTitle").textContent=titles[page]||"Dashboard";}
 document.querySelectorAll(".nav-item").forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.page)));
 document.getElementById("today").textContent=new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
 
-function getISTInputValue(date){
-const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(date);
-const p={};parts.forEach(x=>p[x.type]=x.value);
-return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
-}
+function getISTInputValue(date){const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(date);const p={};parts.forEach(x=>p[x.type]=x.value);return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;}
 function inputToISTISOString(value){if(!value)return null;return new Date(value+":00+05:30").toISOString();}
-function setDateDefaults(){
-const now=new Date();
-document.getElementById("startDate").value=getISTInputValue(now);
-document.getElementById("endDate").value=getISTInputValue(new Date(now.getTime()+30*24*60*60*1000));
-}
+function setDateDefaults(){const now=new Date();document.getElementById("startDate").value=getISTInputValue(now);document.getElementById("endDate").value=getISTInputValue(new Date(now.getTime()+30*86400000));}
 setDateDefaults();
 
-async function checkAdmin(){
-try{
-const {data,error}=await db.auth.getSession();
-if(error){showAuthError("SESSION ERROR","Supabase could not read the login session.",error.message);return false;}
-if(!data.session){showAuthError("NO ACTIVE SESSION","Dashboard did not find a saved login session in this browser.","Storage key: "+AUTH_STORAGE_KEY);return false;}
-const {data:allowed,error:rpcError}=await db.rpc("is_platform_admin");
-if(rpcError){showAuthError("ADMIN PERMISSION CHECK FAILED","Your login session exists, but the admin permission function returned an error.",rpcError.message);return false;}
-if(allowed!==true){showAuthError("SUPER ADMIN ACCESS DENIED","Your account is logged in, but is_platform_admin() did not return true.","Returned value: "+JSON.stringify(allowed));return false;}
-hideAuthError();return true;
-}catch(error){showAuthError("AUTHENTICATION ERROR","An unexpected error occurred while checking your account.",error.message||String(error));return false;}
-}
+async function checkAdmin(){try{const {data,error}=await db.auth.getSession();if(error){showAuthError("SESSION ERROR","Supabase could not read the login session.",error.message);return false;}if(!data.session){showAuthError("NO ACTIVE SESSION","Dashboard did not find a saved login session in this browser.","Storage key: "+AUTH_STORAGE_KEY);return false;}const {data:allowed,error:rpcError}=await db.rpc("is_platform_admin");if(rpcError){showAuthError("ADMIN PERMISSION CHECK FAILED","Your login session exists, but the admin permission function returned an error.",rpcError.message);return false;}if(allowed!==true){showAuthError("SUPER ADMIN ACCESS DENIED","Your account is logged in, but is_platform_admin() did not return true.","Returned value: "+JSON.stringify(allowed));return false;}hideAuthError();return true;}catch(error){showAuthError("AUTHENTICATION ERROR","An unexpected error occurred while checking your account.",error.message||String(error));return false;}}
+function addCell(row,value,className=""){const td=document.createElement("td");td.textContent=value??"-";if(className)td.className=className;row.appendChild(td);}
+function formatDate(value){if(!value)return "-";const date=new Date(value);if(Number.isNaN(date.getTime()))return value;return date.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});}
+function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
-function addCell(row,value,className=""){
-const td=document.createElement("td");
-td.textContent=value??"-";
-if(className)td.className=className;
-row.appendChild(td);
-}
-function formatDate(value){
-if(!value)return "-";
-const date=new Date(value);
-if(Number.isNaN(date.getTime()))return value;
-return date.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
-}
-function escapeHTML(value){
-return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-document.getElementById("editClubForm").addEventListener("submit",e=>{
-e.preventDefault();
-const club_name=document.getElementById("editClubName").value.trim();
-const owner_name=document.getElementById("editOwnerName").value.trim();
-const owner_phone=document.getElementById("editOwnerPhone").value.trim();
-if(!club_name||!owner_name){showNotice("Missing Information","Club Name and Owner Name are required.","warning");return;}
-closeEditModal({club_name,owner_name,owner_phone});
-});
+document.getElementById("editClubForm").addEventListener("submit",e=>{e.preventDefault();const club_name=document.getElementById("editClubName").value.trim(),owner_name=document.getElementById("editOwnerName").value.trim(),owner_phone=document.getElementById("editOwnerPhone").value.trim();if(!club_name||!owner_name){showNotice("Missing Information","Club Name and Owner Name are required.","warning");return;}closeEditModal({club_name,owner_name,owner_phone});});
 
 async function loadClubs(){
-const tbody=document.getElementById("clubList");
-tbody.innerHTML='<tr><td colspan="8" class="empty">Loading clubs...</td></tr>';
+const tbody=document.getElementById("clubList");tbody.innerHTML='<tr><td colspan="8" class="empty">Loading clubs...</td></tr>';
 const {data,error}=await db.from("clubs").select(`id,club_name,owner_user_id,owner_email,created_at,status,profiles!clubs_owner_profile_fkey(full_name,phone)`).order("created_at",{ascending:false});
 if(error){tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load clubs: '+escapeHTML(error.message)+'</td></tr>';console.error("Club loading error:",error);return;}
-allClubs=data||[];
-document.getElementById("totalClubs").textContent=allClubs.length;
-renderClubs();
+allClubs=data||[];document.getElementById("totalClubs").textContent=allClubs.length;renderClubs();
 }
-
 function renderClubs(){
-const tbody=document.getElementById("clubList");
-const search=document.getElementById("clubSearch").value.trim().toLowerCase();
-const filtered=allClubs.filter(club=>{
-const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
-const values=[club.club_name,club.id,club.owner_user_id,club.owner_email,club.status,profile?.full_name,profile?.phone];
-return values.some(v=>String(v??"").toLowerCase().includes(search));
-});
-tbody.innerHTML="";
-if(!filtered.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No matching clubs found.</td></tr>';return;}
+const tbody=document.getElementById("clubList"),search=document.getElementById("clubSearch").value.trim().toLowerCase();
+const filtered=allClubs.filter(club=>{const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;return [club.club_name,club.id,club.owner_user_id,club.owner_email,club.status,profile?.full_name,profile?.phone].some(v=>String(v??"").toLowerCase().includes(search));});
+tbody.innerHTML="";if(!filtered.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No matching clubs found.</td></tr>';return;}
 filtered.forEach(club=>{
-const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
-const tr=document.createElement("tr");
-addCell(tr,club.club_name,"club-name");
-addCell(tr,club.id,"club-id");
-addCell(tr,profile?.full_name||"-","owner-name");
-addCell(tr,profile?.phone||"-");
-addCell(tr,club.owner_email||"-","owner-email");
-addCell(tr,formatDate(club.created_at));
-const status=club.status||"active";
-const statusCell=document.createElement("td");
-const statusBadge=document.createElement("span");
-statusBadge.className="badge "+status;
-statusBadge.textContent=status.toUpperCase();
-statusCell.appendChild(statusBadge);
-tr.appendChild(statusCell);
-const actionCell=document.createElement("td");
-const actionButtons=document.createElement("div");
-actionButtons.className="action-buttons";
+const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles,tr=document.createElement("tr");
+addCell(tr,club.club_name,"club-name");addCell(tr,club.id,"club-id");addCell(tr,profile?.full_name||"-","owner-name");addCell(tr,profile?.phone||"-");addCell(tr,club.owner_email||"-","owner-email");addCell(tr,formatDate(club.created_at));
+const status=club.status||"active",statusCell=document.createElement("td"),statusBadge=document.createElement("span");statusBadge.className="badge "+status;statusBadge.textContent=status.toUpperCase();statusCell.appendChild(statusBadge);tr.appendChild(statusCell);
+const actionCell=document.createElement("td"),actionButtons=document.createElement("div");actionButtons.className="action-buttons";
 if(status!=="archived"){
-const editBtn=document.createElement("button");
-editBtn.className="btn btn-dark";
-editBtn.textContent="EDIT";
-editBtn.onclick=async()=>{
-const edited=await openEditModal(club,profile);
-if(!edited)return;
-if(!edited.club_name||!edited.owner_name){await showNotice("Missing Information","Club Name and Owner Name are required.","warning");return;}
-editBtn.disabled=true;editBtn.textContent="SAVING...";
-try{
-const {data,error}=await db.functions.invoke("manage-club",{body:{action:"update",club_id:club.id,club_name:edited.club_name,owner_name:edited.owner_name,owner_phone:edited.owner_phone}});
-if(error)throw error;
-if(!data?.success)throw new Error(data?.error||"Update failed");
-await showNotice("Club Updated","Club details updated successfully.","normal");
-await loadClubs();
-}catch(error){console.error("Edit club error:",error);await showNotice("Update Failed",error.message||"Update failed","danger");}
-finally{editBtn.disabled=false;editBtn.textContent="EDIT";}
-};
+const editBtn=document.createElement("button");editBtn.className="btn btn-dark";editBtn.textContent="EDIT";
+editBtn.onclick=async()=>{const edited=await openEditModal(club,profile);if(!edited)return;if(!edited.club_name||!edited.owner_name){await showNotice("Missing Information","Club Name and Owner Name are required.","warning");return;}editBtn.disabled=true;editBtn.textContent="SAVING...";try{const {data,error}=await db.functions.invoke("manage-club",{body:{action:"update",club_id:club.id,club_name:edited.club_name,owner_name:edited.owner_name,owner_phone:edited.owner_phone}});if(error)throw error;if(!data?.success)throw new Error(data?.error||"Update failed");await showNotice("Club Updated","Club details updated successfully.");await loadClubs();}catch(error){console.error("Edit club error:",error);await showNotice("Update Failed",error.message||"Update failed","danger");}finally{editBtn.disabled=false;editBtn.textContent="EDIT";}};
 actionButtons.appendChild(editBtn);
-
-const statusBtn=document.createElement("button");
-statusBtn.className="btn "+(status==="active"?"btn-red":"btn-green");
-statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";
-statusBtn.onclick=async()=>{
-const nextStatus=status==="active"?"suspended":"active";
-const confirmation=await showConfirm(nextStatus==="active"?"Activate Club":"Suspend Club","Are you sure you want to "+nextStatus+" this club?\n\nClub: "+club.club_name,{confirmText:nextStatus==="active"?"ACTIVATE":"SUSPEND",tone:nextStatus==="active"?"normal":"danger",icon:nextStatus==="active"?"✓":"!"});
-if(!confirmation)return;
-statusBtn.disabled=true;statusBtn.textContent="UPDATING...";
-try{
-const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:nextStatus});
-if(error)throw error;
-if(data!==true)throw new Error("Club status update failed.");
-await showNotice("Status Updated","Club status successfully changed to "+nextStatus.toUpperCase()+".","normal");
-await loadClubs();
-}catch(error){console.error("Status update error:",error);await showNotice("Status Update Failed",error.message||"Update failed","danger");statusBtn.disabled=false;statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";}
-};
+const statusBtn=document.createElement("button");statusBtn.className="btn "+(status==="active"?"btn-red":"btn-green");statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";
+statusBtn.onclick=async()=>{const nextStatus=status==="active"?"suspended":"active",confirmation=await showConfirm(nextStatus==="active"?"Activate Club":"Suspend Club","Are you sure you want to "+nextStatus+" this club?\n\nClub: "+club.club_name,{confirmText:nextStatus==="active"?"ACTIVATE":"SUSPEND",tone:nextStatus==="active"?"normal":"danger",icon:nextStatus==="active"?"✓":"!"});if(!confirmation)return;statusBtn.disabled=true;statusBtn.textContent="UPDATING...";try{const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:nextStatus});if(error)throw error;if(data!==true)throw new Error("Club status update failed.");await showNotice("Status Updated","Club status successfully changed to "+nextStatus.toUpperCase()+".");await loadClubs();}catch(error){console.error("Status update error:",error);await showNotice("Status Update Failed",error.message||"Update failed","danger");statusBtn.disabled=false;statusBtn.textContent=status==="active"?"SUSPEND":"ACTIVATE";}};
 actionButtons.appendChild(statusBtn);
-
-const archiveBtn=document.createElement("button");
-archiveBtn.className="btn btn-red";archiveBtn.textContent="ARCHIVE";
-archiveBtn.onclick=async()=>{
-const confirmation=await showConfirm("Archive Club?","Club: "+club.club_name+"\n\nThis will mark the club as archived. Historical records will be retained.",{confirmText:"ARCHIVE CLUB",tone:"danger",icon:"!"});
-if(!confirmation)return;
-archiveBtn.disabled=true;archiveBtn.textContent="ARCHIVING...";
-try{
-const {data,error}=await db.functions.invoke("manage-club",{body:{action:"archive",club_id:club.id}});
-if(error)throw error;
-if(!data?.success)throw new Error(data?.error||"Archive failed");
-await showNotice("Club Archived","The club has been archived successfully.","normal");
-await loadClubs();
-}catch(error){console.error("Archive error:",error);await showNotice("Archive Failed",error.message||"Archive failed","danger");archiveBtn.disabled=false;archiveBtn.textContent="ARCHIVE";}
-};
+const archiveBtn=document.createElement("button");archiveBtn.className="btn btn-red";archiveBtn.textContent="ARCHIVE";
+archiveBtn.onclick=async()=>{const confirmation=await showConfirm("Archive Club?","Club: "+club.club_name+"\n\nThis will mark the club as archived. Historical records will be retained.",{confirmText:"ARCHIVE CLUB",tone:"danger",icon:"!"});if(!confirmation)return;archiveBtn.disabled=true;archiveBtn.textContent="ARCHIVING...";try{const {data,error}=await db.functions.invoke("manage-club",{body:{action:"archive",club_id:club.id}});if(error)throw error;if(!data?.success)throw new Error(data?.error||"Archive failed");await showNotice("Club Archived","The club has been archived successfully.");await loadClubs();}catch(error){console.error("Archive error:",error);await showNotice("Archive Failed",error.message||"Archive failed","danger");archiveBtn.disabled=false;archiveBtn.textContent="ARCHIVE";}};
 actionButtons.appendChild(archiveBtn);
 }else{
-const archivedText=document.createElement("span");
-archivedText.style.color="#91aa9d";archivedText.textContent="ARCHIVED";
-actionButtons.appendChild(archivedText);
-const restoreBtn=document.createElement("button");
-restoreBtn.className="btn btn-green";restoreBtn.textContent="RESTORE / ACTIVATE";
-restoreBtn.onclick=async()=>{
-const confirmation=await showConfirm("Restore Club?","Restore "+club.club_name+" and set its status to ACTIVE?",{confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"});
-if(!confirmation)return;
-restoreBtn.disabled=true;restoreBtn.textContent="RESTORING...";
-try{
-const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:"active"});
-if(error)throw error;
-if(data!==true)throw new Error("Club restore failed.");
-await showNotice("Club Restored",club.club_name+" is now ACTIVE.","normal");
-await loadClubs();
-}catch(error){console.error("Restore club error:",error);await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");restoreBtn.disabled=false;restoreBtn.textContent="RESTORE / ACTIVATE";}
-};
+const archivedText=document.createElement("span");archivedText.style.color="#91aa9d";archivedText.textContent="ARCHIVED";actionButtons.appendChild(archivedText);
+const restoreBtn=document.createElement("button");restoreBtn.className="btn btn-green";restoreBtn.textContent="RESTORE / ACTIVATE";
+restoreBtn.onclick=async()=>{const confirmation=await showConfirm("Restore Club?","Restore "+club.club_name+" and set its status to ACTIVE?",{confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"});if(!confirmation)return;restoreBtn.disabled=true;restoreBtn.textContent="RESTORING...";try{const {data,error}=await db.rpc("admin_update_club_status",{p_club_id:club.id,p_status:"active"});if(error)throw error;if(data!==true)throw new Error("Club restore failed.");await showNotice("Club Restored",club.club_name+" is now ACTIVE.");await loadClubs();}catch(error){console.error("Restore club error:",error);await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");restoreBtn.disabled=false;restoreBtn.textContent="RESTORE / ACTIVATE";}};
 actionButtons.appendChild(restoreBtn);
 }
-actionCell.appendChild(actionButtons);
-tr.appendChild(actionCell);
-tbody.appendChild(tr);
+actionCell.appendChild(actionButtons);tr.appendChild(actionCell);tbody.appendChild(tr);
 });
 }
 document.getElementById("clubSearch").addEventListener("input",renderClubs);
 
-/* SUBSCRIPTION FORM SUBMIT */
+/* SUBSCRIPTION FORM */
 document.getElementById("subscriptionForm").addEventListener("submit",e=>{
 e.preventDefault();
-const plan_name=document.getElementById("subPlanInput").value;
-const amount=Number(document.getElementById("subAmountInput").value);
-const duration_days=Number(document.getElementById("subDurationInput").value);
-const start_date=inputToISTISOString(document.getElementById("subStartInput").value);
-const end_date=inputToISTISOString(document.getElementById("subEndInput").value);
+const plan_name=document.getElementById("subPlanInput").value,amount=Number(document.getElementById("subAmountInput").value),duration_days=Number(document.getElementById("subDurationInput").value),start_date=inputToISTISOString(document.getElementById("subStartInput").value),end_date=inputToISTISOString(document.getElementById("subEndInput").value);
 if(!plan_name||!start_date||!end_date){showNotice("Missing Information","Please complete all required fields.","warning");return;}
 if(!Number.isFinite(amount)||amount<0){showNotice("Invalid Amount","Amount must be zero or greater.","warning");return;}
 if(!Number.isInteger(duration_days)||duration_days<1||duration_days>3650){showNotice("Invalid Duration","Duration must be between 1 and 3650 days.","warning");return;}
@@ -544,189 +337,100 @@ if(new Date(end_date)<=new Date(start_date)){showNotice("Invalid Dates","End dat
 closeSubscriptionModal({plan_name,amount,duration_days,start_date,end_date});
 });
 
-/* LOAD SUBSCRIPTIONS WITH CLUB AND OWNER DETAILS */
-async function loadSubscriptions(){
-const tbody=document.getElementById("subscriptionList");
-tbody.innerHTML='<tr><td colspan="11" class="empty">Loading subscriptions...</td></tr>';
-
-const {data,error}=await db.from("subscriptions")
-.select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at")
-.order("created_at",{ascending:false});
-
-if(error){
-tbody.innerHTML='<tr><td colspan="11" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';
-console.error("Subscription loading error:",error);
+/* NEW: SUBSCRIPTION EXPIRY ALERT RENDERER */
+function renderExpiryAlerts(items){
+const container=document.getElementById("expiryAlertList"),count=document.getElementById("expiryAlertCount"),now=new Date(),soonLimit=new Date(now.getTime()+7*86400000);
+const expired=[],expiring=[];
+items.forEach(sub=>{
+if(!sub.end_date)return;
+const end=new Date(sub.end_date);
+if(Number.isNaN(end.getTime()))return;
+if(end<=now)expired.push(sub);
+else if(end<=soonLimit)expiring.push(sub);
+});
+count.textContent=(expired.length+expiring.length)+" ALERT"+(expired.length+expiring.length===1?"":"S");
+container.innerHTML="";
+if(!expired.length&&!expiring.length){
+container.innerHTML='<div class="alert-empty">✓ All clear! No expired or upcoming subscription expiries within 7 days.</div>';
 return;
 }
-
-const items=data||[];
-const clubIds=[...new Set(items.map(x=>x.club_id).filter(Boolean))];
-let clubMap={};
-
-if(clubIds.length){
-const {data:clubData,error:clubError}=await db.from("clubs")
-.select("id,club_name,owner_email,profiles!clubs_owner_profile_fkey(full_name,phone)")
-.in("id",clubIds);
-
-if(clubError){
-console.error("Subscription club details loading error:",clubError);
-}else{
-(clubData||[]).forEach(club=>{
-const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
-clubMap[club.id]={
-club_name:club.club_name||"-",
-owner_email:club.owner_email||"-",
-phone:profile?.phone||"-"
-};
+if(expired.length){
+const heading=document.createElement("div");heading.className="alert-title";heading.style.color="#ff9999";heading.textContent="EXPIRED SUBSCRIPTIONS ("+expired.length+")";container.appendChild(heading);
+expired.forEach(sub=>{
+const card=document.createElement("div");card.className="alert-card expired-alert";
+const title=document.createElement("div");title.className="alert-title";title.textContent="Expired Subscription";
+const detail=document.createElement("div");detail.className="alert-detail";
+detail.textContent="Club ID: "+sub.club_id+" | Plan: "+sub.plan_name+" | Expired: "+formatDate(sub.end_date);
+card.append(title,detail);container.appendChild(card);
+});
+}
+if(expiring.length){
+const heading=document.createElement("div");heading.className="alert-title";heading.style.color="#ffd17a";heading.style.marginTop=expired.length?"20px":"0";heading.textContent="EXPIRING WITHIN 7 DAYS ("+expiring.length+")";container.appendChild(heading);
+expiring.forEach(sub=>{
+const card=document.createElement("div");card.className="alert-card soon-alert";
+const title=document.createElement("div");title.className="alert-title";title.textContent="Subscription Expiring Soon";
+const detail=document.createElement("div");detail.className="alert-detail";
+const days=Math.max(0,Math.ceil((new Date(sub.end_date)-now)/86400000));
+detail.textContent="Club ID: "+sub.club_id+" | Plan: "+sub.plan_name+" | Expires: "+formatDate(sub.end_date)+" | Remaining: "+days+" day(s)";
+card.append(title,detail);container.appendChild(card);
 });
 }
 }
 
-const now=new Date();
-document.getElementById("totalSubscriptions").textContent=items.length;
-document.getElementById("subTotal").textContent=items.length;
+/* LOAD SUBSCRIPTIONS */
+async function loadSubscriptions(){
+const tbody=document.getElementById("subscriptionList");tbody.innerHTML='<tr><td colspan="8" class="empty">Loading subscriptions...</td></tr>';
+const {data,error}=await db.from("subscriptions").select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at").order("created_at",{ascending:false});
+if(error){tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';document.getElementById("expiryAlertList").textContent="Could not load subscription alerts.";console.error("Subscription loading error:",error);return;}
+const items=data||[],now=new Date();
+document.getElementById("totalSubscriptions").textContent=items.length;document.getElementById("subTotal").textContent=items.length;
 document.getElementById("subActive").textContent=items.filter(x=>x.status==="active"&&new Date(x.start_date)<=now&&new Date(x.end_date)>now).length;
-const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);
-document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
-
+const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
+renderExpiryAlerts(items);
 tbody.innerHTML="";
-if(!items.length){tbody.innerHTML='<tr><td colspan="11" class="empty">No subscriptions found.</td></tr>';return;}
-
+if(!items.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No subscriptions found.</td></tr>';return;}
 items.forEach(sub=>{
-const tr=document.createElement("tr");
-const club=clubMap[sub.club_id]||{club_name:"Club not found",owner_email:"-",phone:"-"};
-
-addCell(tr,club.club_name,"club-name");
-addCell(tr,sub.club_id,"club-id");
-addCell(tr,club.owner_email,"owner-email");
-addCell(tr,club.phone,"owner-phone");
-addCell(tr,sub.plan_name);
-addCell(tr,"₹"+Number(sub.amount).toLocaleString("en-IN"));
-addCell(tr,sub.duration_days+" days");
-addCell(tr,formatDate(sub.start_date));
-addCell(tr,formatDate(sub.end_date));
-
-const isActive=sub.status==="active"&&new Date(sub.start_date)<=now&&new Date(sub.end_date)>now;
-const isExpired=new Date(sub.end_date)<=now;
-let displayStatus=isActive?"ACTIVE":(isExpired?"EXPIRED":String(sub.status||"INACTIVE").toUpperCase());
-const statusCell=document.createElement("td");
-const statusBadge=document.createElement("span");
-statusBadge.className="badge "+(isActive?"active":isExpired?"expired":"suspended");
-statusBadge.textContent=displayStatus;
-statusCell.appendChild(statusBadge);
-tr.appendChild(statusCell);
-
-/* ACTION BUTTONS */
-const actionCell=document.createElement("td");
-const actions=document.createElement("div");
-actions.className="action-buttons";
-
-const editBtn=document.createElement("button");
-editBtn.className="btn btn-dark";
-editBtn.textContent="EDIT";
-editBtn.onclick=async()=>{
-const edited=await openSubscriptionModal(sub,"edit");
-if(!edited)return;
-editBtn.disabled=true;editBtn.textContent="SAVING...";
-try{
-const {data,error}=await db.from("subscriptions").update({
-plan_name:edited.plan_name,amount:edited.amount,duration_days:edited.duration_days,
-start_date:edited.start_date,end_date:edited.end_date
-}).eq("id",sub.id).select("id");
-if(error)throw error;
-if(!data||data.length===0)throw new Error("Subscription was not updated. Check admin permission.");
-await showNotice("Subscription Updated","Subscription details have been updated successfully.","normal");
-await loadSubscriptions();
-}catch(error){console.error("Subscription edit error:",error);await showNotice("Edit Failed",error.message||"Could not update subscription.","danger");}
-finally{editBtn.disabled=false;editBtn.textContent="EDIT";}
-};
-
-const renewBtn=document.createElement("button");
-renewBtn.className="btn btn-green";
-renewBtn.textContent="RENEW";
-renewBtn.onclick=async()=>{
-const renewed=await openSubscriptionModal(sub,"renew");
-if(!renewed)return;
-const confirmation=await showConfirm("Confirm Subscription Renewal","Create a new subscription record for this club?\n\nPlan: "+renewed.plan_name+"\nAmount: ₹"+renewed.amount+"\nDuration: "+renewed.duration_days+" days\n\nThe previous subscription record will be preserved.",{confirmText:"CREATE RENEWAL",tone:"normal",icon:"↻"});
-if(!confirmation)return;
-renewBtn.disabled=true;renewBtn.textContent="RENEWING...";
-try{
-const {data,error}=await db.from("subscriptions").insert({
-club_id:sub.club_id,plan_name:renewed.plan_name,amount:renewed.amount,
-duration_days:renewed.duration_days,start_date:renewed.start_date,
-end_date:renewed.end_date,status:"active"
-}).select("id");
-if(error)throw error;
-if(!data||data.length===0)throw new Error("Renewal record was not created. Check admin permission.");
-await showNotice("Subscription Renewed","A new subscription record has been created. Previous history has been retained.","normal");
-await loadSubscriptions();
-}catch(error){console.error("Subscription renewal error:",error);await showNotice("Renewal Failed",error.message||"Could not renew subscription.","danger");}
-finally{renewBtn.disabled=false;renewBtn.textContent="RENEW";}
-};
-
-actions.appendChild(editBtn);
-actions.appendChild(renewBtn);
-actionCell.appendChild(actions);
-tr.appendChild(actionCell);
-tbody.appendChild(tr);
+const tr=document.createElement("tr");addCell(tr,sub.club_id);addCell(tr,sub.plan_name);addCell(tr,"₹"+Number(sub.amount).toLocaleString("en-IN"));addCell(tr,sub.duration_days+" days");addCell(tr,formatDate(sub.start_date));addCell(tr,formatDate(sub.end_date));
+const isActive=sub.status==="active"&&new Date(sub.start_date)<=now&&new Date(sub.end_date)>now,isExpired=new Date(sub.end_date)<=now;
+const displayStatus=isActive?"ACTIVE":(isExpired?"EXPIRED":String(sub.status||"INACTIVE").toUpperCase());
+const statusCell=document.createElement("td"),statusBadge=document.createElement("span");statusBadge.className="badge "+(isActive?"active":isExpired?"expired":"suspended");statusBadge.textContent=displayStatus;statusCell.appendChild(statusBadge);tr.appendChild(statusCell);
+const actionCell=document.createElement("td"),actions=document.createElement("div");actions.className="action-buttons";
+const editBtn=document.createElement("button");editBtn.className="btn btn-dark";editBtn.textContent="EDIT";
+editBtn.onclick=async()=>{const edited=await openSubscriptionModal(sub,"edit");if(!edited)return;editBtn.disabled=true;editBtn.textContent="SAVING...";try{const {data,error}=await db.from("subscriptions").update({plan_name:edited.plan_name,amount:edited.amount,duration_days:edited.duration_days,start_date:edited.start_date,end_date:edited.end_date}).eq("id",sub.id).select("id");if(error)throw error;if(!data||data.length===0)throw new Error("Subscription was not updated. Check admin permission.");await showNotice("Subscription Updated","Subscription details have been updated successfully.");await loadSubscriptions();}catch(error){console.error("Subscription edit error:",error);await showNotice("Edit Failed",error.message||"Could not update subscription.","danger");}finally{editBtn.disabled=false;editBtn.textContent="EDIT";}};
+const renewBtn=document.createElement("button");renewBtn.className="btn btn-green";renewBtn.textContent="RENEW";
+renewBtn.onclick=async()=>{const renewed=await openSubscriptionModal(sub,"renew");if(!renewed)return;const confirmation=await showConfirm("Confirm Subscription Renewal","Create a new subscription record for this club?\n\nPlan: "+renewed.plan_name+"\nAmount: ₹"+renewed.amount+"\nDuration: "+renewed.duration_days+" days\n\nThe previous subscription record will be preserved.",{confirmText:"CREATE RENEWAL",tone:"normal",icon:"↻"});if(!confirmation)return;renewBtn.disabled=true;renewBtn.textContent="RENEWING...";try{const {data,error}=await db.from("subscriptions").insert({club_id:sub.club_id,plan_name:renewed.plan_name,amount:renewed.amount,duration_days:renewed.duration_days,start_date:renewed.start_date,end_date:renewed.end_date,status:"active"}).select("id");if(error)throw error;if(!data||data.length===0)throw new Error("Renewal record was not created. Check admin permission.");await showNotice("Subscription Renewed","A new subscription record has been created. Previous history has been retained.");await loadSubscriptions();}catch(error){console.error("Subscription renewal error:",error);await showNotice("Renewal Failed",error.message||"Could not renew subscription.","danger");}finally{renewBtn.disabled=false;renewBtn.textContent="RENEW";}};
+actions.append(editBtn,renewBtn);actionCell.appendChild(actions);tr.appendChild(actionCell);tbody.appendChild(tr);
 });
 }
 
 /* CREATE CLUB */
 document.getElementById("clubForm").addEventListener("submit",async e=>{
-e.preventDefault();
-const btn=document.getElementById("createBtn");
-const msg=document.getElementById("message");
-const payload={
-club_name:document.getElementById("clubName").value.trim(),
-owner_name:document.getElementById("ownerName").value.trim(),
-owner_phone:document.getElementById("ownerPhone").value.trim(),
-owner_email:document.getElementById("ownerEmail").value.trim(),
-owner_password:document.getElementById("ownerPassword").value,
-plan_name:document.getElementById("planName").value,
-amount:Number(document.getElementById("amount").value),
-duration_days:Number(document.getElementById("durationDays").value),
-start_date:inputToISTISOString(document.getElementById("startDate").value),
-end_date:inputToISTISOString(document.getElementById("endDate").value)
-};
+e.preventDefault();const btn=document.getElementById("createBtn"),msg=document.getElementById("message");
+const payload={club_name:document.getElementById("clubName").value.trim(),owner_name:document.getElementById("ownerName").value.trim(),owner_phone:document.getElementById("ownerPhone").value.trim(),owner_email:document.getElementById("ownerEmail").value.trim(),owner_password:document.getElementById("ownerPassword").value,plan_name:document.getElementById("planName").value,amount:Number(document.getElementById("amount").value),duration_days:Number(document.getElementById("durationDays").value),start_date:inputToISTISOString(document.getElementById("startDate").value),end_date:inputToISTISOString(document.getElementById("endDate").value)};
 if(!payload.club_name||!payload.owner_name||!payload.owner_email||!payload.owner_password||!payload.start_date||!payload.end_date){msg.style.color="#f16c6c";msg.textContent="Please complete all required fields.";return;}
 if(payload.end_date<=payload.start_date){msg.style.color="#f16c6c";msg.textContent="End date must be later than start date.";return;}
 if(!Number.isFinite(payload.amount)||payload.amount<0||!Number.isInteger(payload.duration_days)||payload.duration_days<1||payload.duration_days>3650){msg.style.color="#f16c6c";msg.textContent="Check amount and duration.";return;}
 if(payload.owner_password.length<8||payload.owner_password.length>72){msg.style.color="#f16c6c";msg.textContent="Password must contain 8 to 72 characters.";return;}
 btn.disabled=true;btn.textContent="CREATING CLUB...";msg.textContent="";
 try{
-const {data:sessionData,error:sessionError}=await db.auth.getSession();
-if(sessionError)throw sessionError;
-const session=sessionData?.session;
-if(!session?.access_token)throw new Error("No active session. Please login again.");
-const {data:allowed,error:adminCheckError}=await db.rpc("is_platform_admin");
-if(adminCheckError)throw adminCheckError;
-if(allowed!==true)throw new Error("Super Admin permission required.");
+const {data:sessionData,error:sessionError}=await db.auth.getSession();if(sessionError)throw sessionError;const session=sessionData?.session;if(!session?.access_token)throw new Error("No active session. Please login again.");
+const {data:allowed,error:adminCheckError}=await db.rpc("is_platform_admin");if(adminCheckError)throw adminCheckError;if(allowed!==true)throw new Error("Super Admin permission required.");
 const {data,error}=await db.functions.invoke("create-club",{body:payload,headers:{Authorization:"Bearer "+session.access_token}});
-if(error){console.error("Create club function error:",error);throw error;}
-if(!data?.success)throw new Error(data?.error||"Club creation failed.");
-msg.style.color="#27d58c";msg.textContent="SUCCESS! Club and Owner Account created.";
-document.getElementById("clubForm").reset();
-setDateDefaults();
-await Promise.all([loadClubs(),loadSubscriptions()]);
+if(error){console.error("Create club function error:",error);throw error;}if(!data?.success)throw new Error(data?.error||"Club creation failed.");
+msg.style.color="#27d58c";msg.textContent="SUCCESS! Club and Owner Account created.";document.getElementById("clubForm").reset();setDateDefaults();await Promise.all([loadClubs(),loadSubscriptions()]);
 }catch(error){console.error("Create club error:",error);msg.style.color="#f16c6c";msg.textContent="ERROR: "+(error.message||"Something went wrong.");}
 finally{btn.disabled=false;btn.textContent="＋ CREATE CLUB + OWNER ACCOUNT";}
 });
 
+/* REFRESH */
 document.getElementById("refreshClubs").onclick=loadClubs;
 document.getElementById("refreshSubs").onclick=loadSubscriptions;
-document.getElementById("logoutBtn").onclick=async()=>{
-const {error}=await db.auth.signOut();
-if(error){await showNotice("Logout Failed",error.message,"danger");return;}
-location.replace(new URL("index.html",window.location.href).href);
-};
 
-(async()=>{
-const allowed=await checkAdmin();
-if(!allowed)return;
-try{await Promise.all([loadClubs(),loadSubscriptions()]);}
-catch(error){console.error("Dashboard loading error:",error);showAuthError("DASHBOARD LOADING ERROR","Authentication passed, but dashboard data could not be loaded.",error.message||String(error));}
-})();
+/* LOGOUT */
+document.getElementById("logoutBtn").onclick=async()=>{const {error}=await db.auth.signOut();if(error){await showNotice("Logout Failed",error.message,"danger");return;}location.replace(new URL("index.html",window.location.href).href);};
+
+/* INITIALIZATION */
+(async()=>{const allowed=await checkAdmin();if(!allowed)return;try{await Promise.all([loadClubs(),loadSubscriptions()]);}catch(error){console.error("Dashboard loading error:",error);showAuthError("DASHBOARD LOADING ERROR","Authentication passed, but dashboard data could not be loaded.",error.message||String(error));}})();
 </script>
 </body>
 </html>

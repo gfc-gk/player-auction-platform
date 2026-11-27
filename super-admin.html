@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,7 +129,6 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 <div class="stat"><div class="stat-label">LIVE AUCTIONS</div><div class="stat-value">—</div></div>
 </div>
 
-<!-- NEW SUBSCRIPTION ALERT PANEL -->
 <div class="panel">
 <div class="panel-head">
 <div><h3>🔔 SUBSCRIPTION EXPIRY ALERTS</h3><p>Expired subscriptions and subscriptions ending within 7 days.</p></div>
@@ -180,9 +178,22 @@ td{padding:14px;border-top:1px solid #1c3a2a;font-size:11px;color:#dcebe2;vertic
 </div>
 <div class="panel">
 <div class="panel-head"><div><h3>ALL SUBSCRIPTIONS</h3><p>Edit or renew individual subscription records.</p></div><button class="btn btn-dark" id="refreshSubs">↻ REFRESH</button></div>
-<div class="table-wrap"><table><thead><tr><th>CLUB ID</th><th>PLAN</th><th>AMOUNT</th><th>DURATION</th><th>START</th><th>END</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="subscriptionList"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr>
+<th>CLUB NAME</th>
+<th>CLUB ID</th>
+<th>OWNER EMAIL</th>
+<th>OWNER PHONE</th>
+<th>PLAN</th>
+<th>AMOUNT</th>
+<th>DURATION</th>
+<th>START</th>
+<th>END</th>
+<th>STATUS</th>
+<th>ACTIONS</th>
+</tr></thead><tbody id="subscriptionList"><tr><td colspan="11" class="empty">Loading...</td></tr></tbody></table></div>
 </div>
 </section>
+
 <section class="section" id="auctions"><div class="welcome"><div><h1>Auction Management</h1><p>Manage platform auctions.</p></div></div><div class="info-card"><h3>Auction Control Center</h3><p>Auction management will be connected in the next development stage.</p></div></section>
 <section class="section" id="players"><div class="welcome"><div><h1>Player Database</h1><p>Manage player records.</p></div></div><div class="info-card"><h3>Player Management</h3><p>Player database will be connected in the next development stage.</p></div></section>
 <section class="section" id="teams"><div class="welcome"><div><h1>Teams Management</h1><p>Manage auction teams.</p></div></div><div class="info-card"><h3>Team Management</h3><p>Team management will be connected in the next development stage.</p></div></section>
@@ -337,7 +348,7 @@ if(new Date(end_date)<=new Date(start_date)){showNotice("Invalid Dates","End dat
 closeSubscriptionModal({plan_name,amount,duration_days,start_date,end_date});
 });
 
-/* NEW: SUBSCRIPTION EXPIRY ALERT RENDERER */
+/* SUBSCRIPTION EXPIRY ALERT RENDERER */
 function renderExpiryAlerts(items){
 const container=document.getElementById("expiryAlertList"),count=document.getElementById("expiryAlertCount"),now=new Date(),soonLimit=new Date(now.getTime()+7*86400000);
 const expired=[],expiring=[];
@@ -377,29 +388,191 @@ card.append(title,detail);container.appendChild(card);
 }
 }
 
-/* LOAD SUBSCRIPTIONS */
+/* LOAD SUBSCRIPTIONS WITH CLUB AND OWNER DETAILS */
 async function loadSubscriptions(){
-const tbody=document.getElementById("subscriptionList");tbody.innerHTML='<tr><td colspan="8" class="empty">Loading subscriptions...</td></tr>';
-const {data,error}=await db.from("subscriptions").select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at").order("created_at",{ascending:false});
-if(error){tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';document.getElementById("expiryAlertList").textContent="Could not load subscription alerts.";console.error("Subscription loading error:",error);return;}
-const items=data||[],now=new Date();
-document.getElementById("totalSubscriptions").textContent=items.length;document.getElementById("subTotal").textContent=items.length;
-document.getElementById("subActive").textContent=items.filter(x=>x.status==="active"&&new Date(x.start_date)<=now&&new Date(x.end_date)>now).length;
-const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
+const tbody=document.getElementById("subscriptionList");
+tbody.innerHTML='<tr><td colspan="11" class="empty">Loading subscriptions...</td></tr>';
+
+const {data,error}=await db.from("subscriptions")
+.select("id,club_id,plan_name,amount,duration_days,start_date,end_date,status,created_at")
+.order("created_at",{ascending:false});
+
+if(error){
+tbody.innerHTML='<tr><td colspan="11" class="empty">Could not load subscriptions: '+escapeHTML(error.message)+'</td></tr>';
+document.getElementById("expiryAlertList").textContent="Could not load subscription alerts.";
+console.error("Subscription loading error:",error);
+return;
+}
+
+const items=data||[];
+const now=new Date();
+
+document.getElementById("totalSubscriptions").textContent=items.length;
+document.getElementById("subTotal").textContent=items.length;
+
+document.getElementById("subActive").textContent=items.filter(x=>
+x.status==="active"&&new Date(x.start_date)<=now&&new Date(x.end_date)>now
+).length;
+
+const total=items.reduce((sum,x)=>sum+Number(x.amount||0),0);
+document.getElementById("subAmount").textContent="₹"+total.toLocaleString("en-IN");
+
 renderExpiryAlerts(items);
+
+/* Fetch club names, owner emails and owner phone numbers */
+const clubIds=[...new Set(items.map(sub=>sub.club_id).filter(Boolean))];
+const clubMap={};
+
+if(clubIds.length){
+const {data:clubData,error:clubError}=await db.from("clubs")
+.select("id,club_name,owner_email,profiles!clubs_owner_profile_fkey(full_name,phone)")
+.in("id",clubIds);
+
+if(clubError){
+console.error("Subscription club details loading error:",clubError);
+}else{
+(clubData||[]).forEach(club=>{
+const profile=Array.isArray(club.profiles)?club.profiles[0]:club.profiles;
+
+clubMap[club.id]={
+club_name:club.club_name||"-",
+owner_email:club.owner_email||"-",
+owner_phone:profile?.phone||"-"
+};
+});
+}
+}
+
 tbody.innerHTML="";
-if(!items.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No subscriptions found.</td></tr>';return;}
+
+if(!items.length){
+tbody.innerHTML='<tr><td colspan="11" class="empty">No subscriptions found.</td></tr>';
+return;
+}
+
 items.forEach(sub=>{
-const tr=document.createElement("tr");addCell(tr,sub.club_id);addCell(tr,sub.plan_name);addCell(tr,"₹"+Number(sub.amount).toLocaleString("en-IN"));addCell(tr,sub.duration_days+" days");addCell(tr,formatDate(sub.start_date));addCell(tr,formatDate(sub.end_date));
-const isActive=sub.status==="active"&&new Date(sub.start_date)<=now&&new Date(sub.end_date)>now,isExpired=new Date(sub.end_date)<=now;
+const tr=document.createElement("tr");
+const clubInfo=clubMap[sub.club_id]||{};
+
+addCell(tr,clubInfo.club_name||"-","club-name");
+addCell(tr,sub.club_id,"club-id");
+addCell(tr,clubInfo.owner_email||"-","owner-email");
+addCell(tr,clubInfo.owner_phone||"-");
+addCell(tr,sub.plan_name);
+addCell(tr,"₹"+Number(sub.amount||0).toLocaleString("en-IN"));
+addCell(tr,sub.duration_days+" days");
+addCell(tr,formatDate(sub.start_date));
+addCell(tr,formatDate(sub.end_date));
+
+const isActive=sub.status==="active"&&new Date(sub.start_date)<=now&&new Date(sub.end_date)>now;
+const isExpired=new Date(sub.end_date)<=now;
+
 const displayStatus=isActive?"ACTIVE":(isExpired?"EXPIRED":String(sub.status||"INACTIVE").toUpperCase());
-const statusCell=document.createElement("td"),statusBadge=document.createElement("span");statusBadge.className="badge "+(isActive?"active":isExpired?"expired":"suspended");statusBadge.textContent=displayStatus;statusCell.appendChild(statusBadge);tr.appendChild(statusCell);
-const actionCell=document.createElement("td"),actions=document.createElement("div");actions.className="action-buttons";
-const editBtn=document.createElement("button");editBtn.className="btn btn-dark";editBtn.textContent="EDIT";
-editBtn.onclick=async()=>{const edited=await openSubscriptionModal(sub,"edit");if(!edited)return;editBtn.disabled=true;editBtn.textContent="SAVING...";try{const {data,error}=await db.from("subscriptions").update({plan_name:edited.plan_name,amount:edited.amount,duration_days:edited.duration_days,start_date:edited.start_date,end_date:edited.end_date}).eq("id",sub.id).select("id");if(error)throw error;if(!data||data.length===0)throw new Error("Subscription was not updated. Check admin permission.");await showNotice("Subscription Updated","Subscription details have been updated successfully.");await loadSubscriptions();}catch(error){console.error("Subscription edit error:",error);await showNotice("Edit Failed",error.message||"Could not update subscription.","danger");}finally{editBtn.disabled=false;editBtn.textContent="EDIT";}};
-const renewBtn=document.createElement("button");renewBtn.className="btn btn-green";renewBtn.textContent="RENEW";
-renewBtn.onclick=async()=>{const renewed=await openSubscriptionModal(sub,"renew");if(!renewed)return;const confirmation=await showConfirm("Confirm Subscription Renewal","Create a new subscription record for this club?\n\nPlan: "+renewed.plan_name+"\nAmount: ₹"+renewed.amount+"\nDuration: "+renewed.duration_days+" days\n\nThe previous subscription record will be preserved.",{confirmText:"CREATE RENEWAL",tone:"normal",icon:"↻"});if(!confirmation)return;renewBtn.disabled=true;renewBtn.textContent="RENEWING...";try{const {data,error}=await db.from("subscriptions").insert({club_id:sub.club_id,plan_name:renewed.plan_name,amount:renewed.amount,duration_days:renewed.duration_days,start_date:renewed.start_date,end_date:renewed.end_date,status:"active"}).select("id");if(error)throw error;if(!data||data.length===0)throw new Error("Renewal record was not created. Check admin permission.");await showNotice("Subscription Renewed","A new subscription record has been created. Previous history has been retained.");await loadSubscriptions();}catch(error){console.error("Subscription renewal error:",error);await showNotice("Renewal Failed",error.message||"Could not renew subscription.","danger");}finally{renewBtn.disabled=false;renewBtn.textContent="RENEW";}};
-actions.append(editBtn,renewBtn);actionCell.appendChild(actions);tr.appendChild(actionCell);tbody.appendChild(tr);
+
+const statusCell=document.createElement("td");
+const statusBadge=document.createElement("span");
+statusBadge.className="badge "+(isActive?"active":isExpired?"expired":"suspended");
+statusBadge.textContent=displayStatus;
+statusCell.appendChild(statusBadge);
+tr.appendChild(statusCell);
+
+/* ACTION BUTTONS */
+const actionCell=document.createElement("td");
+const actions=document.createElement("div");
+actions.className="action-buttons";
+
+const editBtn=document.createElement("button");
+editBtn.className="btn btn-dark";
+editBtn.textContent="EDIT";
+
+editBtn.onclick=async()=>{
+const edited=await openSubscriptionModal(sub,"edit");
+if(!edited)return;
+
+editBtn.disabled=true;
+editBtn.textContent="SAVING...";
+
+try{
+const {data,error}=await db.from("subscriptions")
+.update({
+plan_name:edited.plan_name,
+amount:edited.amount,
+duration_days:edited.duration_days,
+start_date:edited.start_date,
+end_date:edited.end_date
+})
+.eq("id",sub.id)
+.select("id");
+
+if(error)throw error;
+if(!data||data.length===0)throw new Error("Subscription was not updated. Check admin permission.");
+
+await showNotice("Subscription Updated","Subscription details have been updated successfully.");
+await loadSubscriptions();
+
+}catch(error){
+console.error("Subscription edit error:",error);
+await showNotice("Edit Failed",error.message||"Could not update subscription.","danger");
+}finally{
+editBtn.disabled=false;
+editBtn.textContent="EDIT";
+}
+};
+
+const renewBtn=document.createElement("button");
+renewBtn.className="btn btn-green";
+renewBtn.textContent="RENEW";
+
+renewBtn.onclick=async()=>{
+const renewed=await openSubscriptionModal(sub,"renew");
+if(!renewed)return;
+
+const confirmation=await showConfirm(
+"Confirm Subscription Renewal",
+"Create a new subscription record for this club?\n\nPlan: "+renewed.plan_name+
+"\nAmount: ₹"+renewed.amount+
+"\nDuration: "+renewed.duration_days+" days"+
+"\n\nThe previous subscription record will be preserved.",
+{confirmText:"CREATE RENEWAL",tone:"normal",icon:"↻"}
+);
+
+if(!confirmation)return;
+
+renewBtn.disabled=true;
+renewBtn.textContent="RENEWING...";
+
+try{
+const {data,error}=await db.from("subscriptions")
+.insert({
+club_id:sub.club_id,
+plan_name:renewed.plan_name,
+amount:renewed.amount,
+duration_days:renewed.duration_days,
+start_date:renewed.start_date,
+end_date:renewed.end_date,
+status:"active"
+})
+.select("id");
+
+if(error)throw error;
+if(!data||data.length===0)throw new Error("Renewal record was not created. Check admin permission.");
+
+await showNotice("Subscription Renewed","A new subscription record has been created. Previous history has been retained.");
+await loadSubscriptions();
+
+}catch(error){
+console.error("Subscription renewal error:",error);
+await showNotice("Renewal Failed",error.message||"Could not renew subscription.","danger");
+}finally{
+renewBtn.disabled=false;
+renewBtn.textContent="RENEW";
+}
+};
+
+actions.append(editBtn,renewBtn);
+actionCell.appendChild(actions);
+tr.appendChild(actionCell);
+tbody.appendChild(tr);
 });
 }
 

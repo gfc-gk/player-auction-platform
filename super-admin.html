@@ -111,6 +111,38 @@ overflow-wrap:anywhere;
 .auth-error a{color:#7cebb0;font-size:12px}
 .auth-error code{color:#ffd28a;white-space:pre-wrap;overflow-wrap:anywhere}
 
+/* PREMIUM CONFIRMATION MODAL */
+.modal-backdrop{
+ position:fixed;inset:0;z-index:1000;display:none;align-items:center;
+ justify-content:center;padding:18px;background:rgba(1,10,6,.78);
+ backdrop-filter:blur(7px);
+}
+.modal-backdrop.show{display:flex;animation:modalFade .18s ease}
+.confirm-modal{
+ width:min(440px,100%);background:linear-gradient(160deg,#123425,#0b2117);
+ border:1px solid #2d6247;border-radius:18px;padding:25px;
+ box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;
+ animation:modalPop .2s ease;
+}
+.modal-icon{
+ width:58px;height:58px;margin:0 auto 15px;border-radius:18px;
+ display:grid;place-items:center;font-size:27px;font-weight:900;
+ background:#173f2c;color:#57e6a1;border:1px solid #286344;
+}
+.confirm-modal.danger .modal-icon{background:#482323;color:#ff9a9a;border-color:#824343}
+.confirm-modal.warning .modal-icon{background:#47391c;color:#ffd37a;border-color:#80652d}
+.confirm-modal h3{font-size:19px;margin:0 0 9px}
+.confirm-modal p{font-size:13px;color:#b5cbbd;line-height:1.7;margin:0;white-space:pre-line;overflow-wrap:anywhere}
+.modal-actions{display:flex;gap:10px;margin-top:23px}
+.modal-actions button{flex:1;padding:12px 14px;border-radius:9px;border:1px solid transparent;font-size:12px;font-weight:800}
+.modal-cancel{background:#193a2a;color:#c5ddce;border-color:#315d45!important}
+.modal-confirm{background:var(--green);color:#062015}
+.confirm-modal.danger .modal-confirm{background:#e56c6c;color:#260909}
+.confirm-modal.warning .modal-confirm{background:#e8b955;color:#241805}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+@keyframes modalPop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:480px){.confirm-modal{padding:22px 18px}.modal-actions{flex-direction:column-reverse}}
+
 @media(max-width:1000px){
 .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -427,6 +459,18 @@ Use Club Management to create a new club and its owner account.
 </div>
 </section>
 
+<div class="modal-backdrop" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="confirm-modal" id="modalCard">
+  <div class="modal-icon" id="modalIcon">?</div>
+  <h3 id="modalTitle">Please confirm</h3>
+  <p id="modalMessage"></p>
+  <div class="modal-actions" id="modalActions">
+   <button type="button" class="modal-cancel" id="modalCancel">CANCEL</button>
+   <button type="button" class="modal-confirm" id="modalConfirm">CONFIRM</button>
+  </div>
+ </div>
+</div>
+
 <div class="footer">
 PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026
 </div>
@@ -464,6 +508,56 @@ teams:"Teams Management"
 };
 
 let allClubs = [];
+let modalResolver = null;
+
+function closeActionModal(result=false){
+ const modal=document.getElementById("actionModal");
+ modal.classList.remove("show");
+ document.body.style.overflow="";
+ if(modalResolver){
+  const resolve=modalResolver;
+  modalResolver=null;
+  resolve(result);
+ }
+}
+
+function openActionModal({title,message,confirmText="CONFIRM",cancelText="CANCEL",tone="normal",icon="?" ,showCancel=true}){
+ return new Promise(resolve=>{
+  const backdrop=document.getElementById("actionModal");
+  const card=document.getElementById("modalCard");
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalMessage").textContent=message;
+  document.getElementById("modalIcon").textContent=icon;
+  document.getElementById("modalConfirm").textContent=confirmText;
+  document.getElementById("modalCancel").textContent=cancelText;
+  document.getElementById("modalCancel").style.display=showCancel?"block":"none";
+  card.className="confirm-modal "+tone;
+  modalResolver=resolve;
+  backdrop.classList.add("show");
+  document.body.style.overflow="hidden";
+ });
+}
+
+function showConfirm(title,message,options={}){
+ return openActionModal({title,message,...options,showCancel:true});
+}
+
+function showNotice(title,message,tone="normal"){
+ return openActionModal({
+  title,message,confirmText:"GOT IT",tone,
+  icon:tone==="danger"?"!":tone==="warning"?"⚠":"✓",
+  showCancel:false
+ });
+}
+
+document.getElementById("modalCancel").addEventListener("click",()=>closeActionModal(false));
+document.getElementById("modalConfirm").addEventListener("click",()=>closeActionModal(true));
+document.getElementById("actionModal").addEventListener("click",e=>{
+ if(e.target.id==="actionModal")closeActionModal(false);
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape" && document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
+});
 
 const authErrorBox=document.getElementById("authError");
 const authErrorTitle=document.getElementById("authErrorTitle");
@@ -777,7 +871,7 @@ const newOwnerPhone = prompt("Enter Owner Phone:",profile?.phone || "");
 if(newOwnerPhone === null)return;
 
 if(!newClubName.trim() || !newOwnerName.trim()){
-alert("Club Name and Owner Name are required.");
+await showNotice("Missing Information","Club Name and Owner Name are required.","warning");
 return;
 }
 
@@ -805,13 +899,13 @@ if(!data?.success){
 throw new Error(data?.error || "Update failed");
 }
 
-alert("Club details updated successfully!");
+await showNotice("Club Updated","Club details updated successfully.","normal");
 await loadClubs();
 
 }catch(error){
 
 console.error("Edit club error:",error);
-alert("ERROR: "+(error.message || "Update failed"));
+await showNotice("Update Failed",error.message || "Update failed","danger");
 
 editBtn.disabled = false;
 editBtn.textContent = "EDIT";
@@ -834,9 +928,10 @@ statusBtn.onclick = async()=>{
 
 const nextStatus = status==="active"?"suspended":"active";
 
-const confirmation = confirm(
-"Are you sure you want to "+nextStatus+
-" this club?\n\nClub: "+club.club_name
+const confirmation = await showConfirm(
+(nextStatus==="active"?"Activate Club":"Suspend Club"),
+"Are you sure you want to "+nextStatus+" this club?\n\nClub: "+club.club_name,
+{confirmText:nextStatus==="active"?"ACTIVATE":"SUSPEND",tone:nextStatus==="active"?"normal":"danger",icon:nextStatus==="active"?"✓":"!"}
 );
 
 if(!confirmation)return;
@@ -860,13 +955,13 @@ if(data !== true){
 throw new Error("Club status update failed.");
 }
 
-alert("Club status successfully changed to "+nextStatus.toUpperCase());
+await showNotice("Status Updated","Club status successfully changed to "+nextStatus.toUpperCase()+".","normal");
 await loadClubs();
 
 }catch(error){
 
 console.error("Status update error:",error);
-alert("ERROR: "+(error.message||"Update failed"));
+await showNotice("Status Update Failed",error.message||"Update failed","danger");
 
 statusBtn.disabled = false;
 statusBtn.textContent =
@@ -885,9 +980,10 @@ archiveBtn.textContent = "ARCHIVE";
 
 archiveBtn.onclick = async()=>{
 
-const confirmation = confirm(
-"ARCHIVE CLUB?\n\nClub: "+club.club_name+
-"\n\nThis will mark the club as archived. Historical records will be retained."
+const confirmation = await showConfirm(
+"Archive Club?",
+"Club: "+club.club_name+"\n\nThis will mark the club as archived. Historical records will be retained.",
+{confirmText:"ARCHIVE CLUB",tone:"danger",icon:"!"}
 );
 
 if(!confirmation)return;
@@ -913,13 +1009,13 @@ if(!data?.success){
 throw new Error(data?.error || "Archive failed");
 }
 
-alert("Club archived successfully!");
+await showNotice("Club Archived","The club has been archived successfully.","normal");
 await loadClubs();
 
 }catch(error){
 
 console.error("Archive error:",error);
-alert("ERROR: "+(error.message || "Archive failed"));
+await showNotice("Archive Failed",error.message || "Archive failed","danger");
 
 archiveBtn.disabled = false;
 archiveBtn.textContent = "ARCHIVE";
@@ -935,8 +1031,38 @@ actionButtons.appendChild(archiveBtn);
 const archivedText = document.createElement("span");
 archivedText.style.color = "#91aa9d";
 archivedText.textContent = "ARCHIVED";
-
 actionButtons.appendChild(archivedText);
+
+const restoreBtn=document.createElement("button");
+restoreBtn.className="btn btn-green";
+restoreBtn.textContent="RESTORE / ACTIVATE";
+restoreBtn.onclick=async()=>{
+ const confirmation=await showConfirm(
+  "Restore Club?",
+  "Restore "+club.club_name+" and set its status to ACTIVE?",
+  {confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"}
+ );
+ if(!confirmation)return;
+
+ restoreBtn.disabled=true;
+ restoreBtn.textContent="RESTORING...";
+ try{
+  const {data,error}=await db.rpc("admin_update_club_status",{
+   p_club_id:club.id,
+   p_status:"active"
+  });
+  if(error)throw error;
+  if(data!==true)throw new Error("Club restore failed.");
+  await showNotice("Club Restored",club.club_name+" is now ACTIVE.","normal");
+  await loadClubs();
+ }catch(error){
+  console.error("Restore club error:",error);
+  await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");
+  restoreBtn.disabled=false;
+  restoreBtn.textContent="RESTORE / ACTIVATE";
+ }
+};
+actionButtons.appendChild(restoreBtn);
 
 }
 
@@ -1191,7 +1317,7 @@ document.getElementById("logoutBtn").onclick = async()=>{
 const {error}=await db.auth.signOut();
 
 if(error){
-alert("Logout error: "+error.message);
+await showNotice("Logout Failed",error.message,"danger");
 return;
 }
 

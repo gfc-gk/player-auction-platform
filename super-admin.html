@@ -143,6 +143,29 @@ overflow-wrap:anywhere;
 @keyframes modalPop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:480px){.confirm-modal{padding:22px 18px}.modal-actions{flex-direction:column-reverse}}
 
+/* CUSTOM CLUB EDIT FORM */
+.edit-modal-backdrop{
+ position:fixed;inset:0;z-index:1100;display:none;align-items:center;
+ justify-content:center;padding:18px;background:rgba(1,10,6,.82);
+ backdrop-filter:blur(7px);overflow-y:auto;
+}
+.edit-modal-backdrop.show{display:flex;animation:modalFade .18s ease}
+.edit-modal{
+ width:min(560px,100%);max-height:calc(100vh - 36px);overflow-y:auto;
+ background:linear-gradient(160deg,#123425,#0b2117);
+ border:1px solid #2d6247;border-radius:18px;padding:24px;
+ box-shadow:0 24px 80px rgba(0,0,0,.55);animation:modalPop .2s ease;
+}
+.edit-modal-head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.edit-modal-icon{width:45px;height:45px;flex:none;border-radius:13px;display:grid;place-items:center;background:#173f2c;color:#57e6a1;border:1px solid #286344;font-size:22px}
+.edit-modal-head h3{font-size:18px;margin:0 0 5px}
+.edit-modal-head p{font-size:11px;color:#9eb9a9;margin:0}
+.edit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.edit-form-grid .field input{background:#071b12}
+.edit-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.edit-form-actions button{min-width:115px}
+@media(max-width:520px){.edit-form-grid{grid-template-columns:1fr}.edit-form-actions{flex-direction:column-reverse}.edit-form-actions button{width:100%}}
+
 @media(max-width:1000px){
 .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -471,6 +494,38 @@ Use Club Management to create a new club and its owner account.
  </div>
 </div>
 
+<div class="edit-modal-backdrop" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+ <div class="edit-modal">
+  <div class="edit-modal-head">
+   <div class="edit-modal-icon">✎</div>
+   <div>
+    <h3 id="editModalTitle">Edit Club Details</h3>
+    <p>Update club and owner information</p>
+   </div>
+  </div>
+  <form id="editClubForm">
+   <div class="edit-form-grid">
+    <div class="field">
+     <label for="editClubName">CLUB NAME *</label>
+     <input id="editClubName" required maxlength="100" placeholder="Club name">
+    </div>
+    <div class="field">
+     <label for="editOwnerName">OWNER NAME *</label>
+     <input id="editOwnerName" required maxlength="100" placeholder="Owner name">
+    </div>
+    <div class="field">
+     <label for="editOwnerPhone">OWNER PHONE</label>
+     <input id="editOwnerPhone" type="tel" maxlength="30" placeholder="Owner phone">
+    </div>
+   </div>
+   <div class="edit-form-actions">
+    <button type="button" class="btn btn-dark" id="editCancelBtn">CANCEL</button>
+    <button type="submit" class="btn btn-green" id="editSaveBtn">SAVE CHANGES</button>
+   </div>
+  </form>
+ </div>
+</div>
+
 <div class="footer">
 PLAYER AUCTION PLATFORM · SUPER ADMIN CONTROL CENTER · 2026
 </div>
@@ -550,13 +605,49 @@ function showNotice(title,message,tone="normal"){
  });
 }
 
+/* CUSTOM EDIT MODAL */
+
+let editModalResolver=null;
+
+function closeEditModal(result=null){
+ const modal=document.getElementById("editModal");
+ modal.classList.remove("show");
+ document.body.style.overflow="";
+ if(editModalResolver){
+  const resolve=editModalResolver;
+  editModalResolver=null;
+  resolve(result);
+ }
+}
+
+function openEditModal(club,profile){
+ document.getElementById("editClubName").value=club.club_name||"";
+ document.getElementById("editOwnerName").value=profile?.full_name||"";
+ document.getElementById("editOwnerPhone").value=profile?.phone||"";
+ document.getElementById("editModal").classList.add("show");
+ document.body.style.overflow="hidden";
+ document.getElementById("editClubName").focus();
+ return new Promise(resolve=>{editModalResolver=resolve;});
+}
+
+document.getElementById("editCancelBtn").addEventListener("click",()=>closeEditModal(null));
+
+document.getElementById("editModal").addEventListener("click",e=>{
+ if(e.target.id==="editModal")closeEditModal(null);
+});
+
 document.getElementById("modalCancel").addEventListener("click",()=>closeActionModal(false));
 document.getElementById("modalConfirm").addEventListener("click",()=>closeActionModal(true));
+
 document.getElementById("actionModal").addEventListener("click",e=>{
  if(e.target.id==="actionModal")closeActionModal(false);
 });
+
 document.addEventListener("keydown",e=>{
- if(e.key==="Escape" && document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
+ if(e.key==="Escape"){
+  if(document.getElementById("actionModal").classList.contains("show"))closeActionModal(false);
+  if(document.getElementById("editModal").classList.contains("show"))closeEditModal(null);
+ }
 });
 
 const authErrorBox=document.getElementById("authError");
@@ -639,8 +730,6 @@ new Date(now.getTime()+30*24*60*60*1000)
 }
 
 setDateDefaults();
-
-/* AUTHENTICATION CHECK */
 
 async function checkAdmin(){
 
@@ -737,6 +826,23 @@ return String(value??"").replace(/[&<>"']/g,c=>({
 "'":"&#39;"
 }[c]));
 }
+
+/* CUSTOM EDIT FORM SUBMIT */
+
+document.getElementById("editClubForm").addEventListener("submit",e=>{
+ e.preventDefault();
+
+ const club_name=document.getElementById("editClubName").value.trim();
+ const owner_name=document.getElementById("editOwnerName").value.trim();
+ const owner_phone=document.getElementById("editOwnerPhone").value.trim();
+
+ if(!club_name||!owner_name){
+  showNotice("Missing Information","Club Name and Owner Name are required.","warning");
+  return;
+ }
+
+ closeEditModal({club_name,owner_name,owner_phone});
+});
 
 /* LOAD CLUBS */
 
@@ -861,16 +967,10 @@ editBtn.textContent = "EDIT";
 
 editBtn.onclick = async()=>{
 
-const newClubName = prompt("Enter Club Name:",club.club_name);
-if(newClubName === null)return;
+const edited = await openEditModal(club,profile);
+if(!edited)return;
 
-const newOwnerName = prompt("Enter Owner Name:",profile?.full_name || "");
-if(newOwnerName === null)return;
-
-const newOwnerPhone = prompt("Enter Owner Phone:",profile?.phone || "");
-if(newOwnerPhone === null)return;
-
-if(!newClubName.trim() || !newOwnerName.trim()){
+if(!edited.club_name || !edited.owner_name){
 await showNotice("Missing Information","Club Name and Owner Name are required.","warning");
 return;
 }
@@ -886,9 +986,9 @@ const {data,error} = await db.functions.invoke(
 body:{
 action:"update",
 club_id:club.id,
-club_name:newClubName.trim(),
-owner_name:newOwnerName.trim(),
-owner_phone:newOwnerPhone.trim()
+club_name:edited.club_name,
+owner_name:edited.owner_name,
+owner_phone:edited.owner_phone
 }
 }
 );
@@ -907,9 +1007,9 @@ await loadClubs();
 console.error("Edit club error:",error);
 await showNotice("Update Failed",error.message || "Update failed","danger");
 
+}finally{
 editBtn.disabled = false;
 editBtn.textContent = "EDIT";
-
 }
 
 };
@@ -1036,32 +1136,46 @@ actionButtons.appendChild(archivedText);
 const restoreBtn=document.createElement("button");
 restoreBtn.className="btn btn-green";
 restoreBtn.textContent="RESTORE / ACTIVATE";
-restoreBtn.onclick=async()=>{
- const confirmation=await showConfirm(
-  "Restore Club?",
-  "Restore "+club.club_name+" and set its status to ACTIVE?",
-  {confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"}
- );
- if(!confirmation)return;
 
- restoreBtn.disabled=true;
- restoreBtn.textContent="RESTORING...";
- try{
-  const {data,error}=await db.rpc("admin_update_club_status",{
-   p_club_id:club.id,
-   p_status:"active"
-  });
-  if(error)throw error;
-  if(data!==true)throw new Error("Club restore failed.");
-  await showNotice("Club Restored",club.club_name+" is now ACTIVE.","normal");
-  await loadClubs();
- }catch(error){
-  console.error("Restore club error:",error);
-  await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");
-  restoreBtn.disabled=false;
-  restoreBtn.textContent="RESTORE / ACTIVATE";
- }
+restoreBtn.onclick=async()=>{
+
+const confirmation=await showConfirm(
+"Restore Club?",
+"Restore "+club.club_name+" and set its status to ACTIVE?",
+{confirmText:"RESTORE CLUB",tone:"normal",icon:"↻"}
+);
+
+if(!confirmation)return;
+
+restoreBtn.disabled=true;
+restoreBtn.textContent="RESTORING...";
+
+try{
+
+const {data,error}=await db.rpc("admin_update_club_status",{
+p_club_id:club.id,
+p_status:"active"
+});
+
+if(error)throw error;
+
+if(data!==true)throw new Error("Club restore failed.");
+
+await showNotice("Club Restored",club.club_name+" is now ACTIVE.","normal");
+await loadClubs();
+
+}catch(error){
+
+console.error("Restore club error:",error);
+await showNotice("Restore Failed",error.message||"Unable to restore club.","danger");
+
+restoreBtn.disabled=false;
+restoreBtn.textContent="RESTORE / ACTIVATE";
+
+}
+
 };
+
 actionButtons.appendChild(restoreBtn);
 
 }

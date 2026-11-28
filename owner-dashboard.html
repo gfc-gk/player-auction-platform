@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071a13">
 <title>Club Owner Dashboard | Player Auction Platform</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -18,87 +19,481 @@
  --border:#214535;
  --red:#f16c6c;
  --yellow:#f5c451;
+ --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button{font-family:inherit;cursor:pointer}
-.layout{min-height:100vh}
-.sidebar{
- position:fixed;left:0;top:0;bottom:0;width:245px;
- padding:25px 17px;background:#091f16;border-right:1px solid var(--border)
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ min-height:100vh;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,Helvetica,sans-serif;
+ -webkit-tap-highlight-color:transparent;
 }
-.brand{display:flex;align-items:center;gap:12px;padding:0 8px 28px;border-bottom:1px solid var(--border)}
-.logo{width:42px;height:42px;display:grid;place-items:center;background:var(--green);color:#062015;font-size:23px;font-weight:900;border-radius:11px}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,.nav-item:focus-visible{
+ outline:2px solid var(--green);
+ outline-offset:3px;
+}
+.layout{min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+ position:fixed;
+ left:0;top:0;bottom:0;
+ width:250px;
+ padding:25px 17px;
+ background:#091f16;
+ border-right:1px solid var(--border);
+ z-index:30;
+ display:flex;
+ flex-direction:column;
+}
+.brand{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:0 8px 25px;
+ border-bottom:1px solid var(--border);
+}
+.logo{
+ width:43px;height:43px;
+ flex-shrink:0;
+ display:grid;
+ place-items:center;
+ background:var(--green);
+ color:#062015;
+ font-size:23px;
+ font-weight:900;
+ border-radius:12px;
+}
 .brand-title{font-size:14px;font-weight:900}
-.brand-sub{font-size:9px;color:var(--muted);margin-top:5px}
-.nav-label{color:#648575;font-size:9px;letter-spacing:1.5px;margin:27px 10px 12px}
-.nav-item{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:8px;color:#a9c2b3;font-size:12px;margin-bottom:5px;cursor:pointer}
-.nav-item.active,.nav-item:hover{background:#143b29;color:var(--green)}
-.nav-icon{font-size:16px;width:20px;text-align:center}
-.sidebar-bottom{position:absolute;left:17px;right:17px;bottom:22px;border-top:1px solid var(--border);padding-top:15px}
-.logout-btn{width:100%;padding:12px;background:#351d1d;border:1px solid #633333;color:#ffaaaa;border-radius:8px;font-size:11px;font-weight:800}
-.main{margin-left:245px;padding:30px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:30px}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:5px;letter-spacing:.7px}
+.nav-label{
+ color:#648575;
+ font-size:9px;
+ letter-spacing:1.5px;
+ margin:27px 10px 12px;
+}
+.nav-item{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ min-height:45px;
+ padding:12px;
+ border-radius:9px;
+ color:#a9c2b3;
+ font-size:12px;
+ font-weight:700;
+ margin-bottom:5px;
+ cursor:pointer;
+ transition:.2s;
+}
+.nav-item.active,.nav-item:hover{
+ background:#143b29;
+ color:var(--green);
+}
+.nav-icon{font-size:17px;width:22px;text-align:center}
+.sidebar-bottom{
+ margin-top:auto;
+ border-top:1px solid var(--border);
+ padding-top:15px;
+}
+.logout-btn{
+ width:100%;
+ min-height:46px;
+ padding:12px;
+ background:#351d1d;
+ border:1px solid #633333;
+ color:#ffaaaa;
+ border-radius:9px;
+ font-size:11px;
+ font-weight:900;
+}
+
+/* MOBILE OVERLAY */
+.sidebar-overlay{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:25;
+}
+.sidebar-overlay.show{display:block}
+
+/* MAIN */
+.main{
+ margin-left:250px;
+ min-width:0;
+ padding:30px;
+ max-width:1600px;
+}
+.topbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ margin-bottom:28px;
+}
+.top-left{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ min-width:0;
+}
 .page-title{font-size:23px;font-weight:900}
-.page-subtitle{font-size:11px;color:var(--muted);margin-top:7px}
-.owner-chip{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);padding:9px 13px;border-radius:10px}
-.avatar{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#174b32;color:var(--green);font-weight:900}
-.owner-name{font-size:11px;font-weight:800}
+.page-subtitle{
+ font-size:11px;
+ color:var(--muted);
+ margin-top:7px;
+}
+.owner-chip{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--panel);
+ border:1px solid var(--border);
+ padding:9px 13px;
+ border-radius:11px;
+ min-width:0;
+}
+.avatar{
+ width:36px;height:36px;
+ flex-shrink:0;
+ display:grid;
+ place-items:center;
+ border-radius:50%;
+ background:#174b32;
+ color:var(--green);
+ font-weight:900;
+}
+.owner-name{
+ font-size:11px;
+ font-weight:800;
+ max-width:145px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
 .owner-role{font-size:9px;color:var(--muted);margin-top:4px}
-.welcome{padding:25px;border:1px solid #236143;border-radius:13px;background:linear-gradient(120deg,#123c29,#0d251b);margin-bottom:22px}
-.welcome h2{font-size:19px;margin:0 0 9px}
-.welcome p{font-size:11px;color:#b1cdbd;margin:0;line-height:1.7}
-.section-title{font-size:14px;font-weight:900;margin:27px 0 15px}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.stat-card,.panel{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:19px}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:.5px}
-.stat-value{font-size:21px;font-weight:900;margin-top:12px;word-break:break-word}
-.stat-note{font-size:9px;color:#789787;margin-top:7px}
-.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
-.panel-title{font-size:12px;font-weight:900;margin-bottom:18px}
-.info-row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #1d3c2c;font-size:11px}
+
+/* MOBILE MENU BUTTON */
+.mobile-menu{
+ display:none;
+ width:43px;height:43px;
+ flex-shrink:0;
+ background:var(--panel);
+ color:var(--green);
+ border:1px solid var(--border);
+ border-radius:10px;
+ font-size:20px;
+}
+
+/* WELCOME */
+.welcome{
+ padding:25px;
+ border:1px solid #236143;
+ border-radius:14px;
+ background:linear-gradient(120deg,#123c29,#0d251b);
+ margin-bottom:22px;
+}
+.welcome h2{font-size:20px;margin:0 0 9px}
+.welcome p{
+ font-size:12px;
+ color:#b1cdbd;
+ margin:0;
+ line-height:1.7;
+}
+
+/* STATS */
+.section-title{
+ font-size:14px;
+ font-weight:900;
+ margin:28px 0 15px;
+ letter-spacing:.3px;
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:15px;
+}
+.stat-card{
+ min-width:0;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:19px;
+}
+.stat-label{
+ font-size:10px;
+ color:var(--muted);
+ letter-spacing:.6px;
+ font-weight:700;
+}
+.stat-value{
+ font-size:21px;
+ font-weight:900;
+ margin-top:12px;
+ word-break:break-word;
+ overflow-wrap:anywhere;
+ line-height:1.35;
+}
+.stat-note{font-size:10px;color:#789787;margin-top:7px;line-height:1.5}
+.expiry-time{color:var(--green)!important}
+
+/* INFORMATION PANELS */
+.content-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:17px;
+}
+.panel{
+ min-width:0;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:19px;
+}
+.panel-title{
+ font-size:12px;
+ font-weight:900;
+ margin-bottom:12px;
+ letter-spacing:.4px;
+}
+.info-row{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:15px;
+ padding:13px 0;
+ border-bottom:1px solid #1d3c2c;
+ font-size:12px;
+}
 .info-row:last-child{border-bottom:0}
-.info-label{color:var(--muted)}
-.info-value{text-align:right;font-weight:700;word-break:break-word}
-.status{display:inline-block;padding:6px 10px;border-radius:20px;font-size:9px;font-weight:900;background:#123c29;color:#76efb0}
-.status.expired,.status.inactive{background:#401d1d;color:#ffaaaa}
-.status.pending{background:#44351a;color:#f5d27c}
-.auction-card{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px;background:var(--panel);border:1px solid var(--border);border-radius:10px}
-.auction-card h3{font-size:13px;margin:0 0 7px}
-.auction-card p{font-size:10px;color:var(--muted);margin:0;line-height:1.5}
-.coming{font-size:9px;color:var(--yellow);background:#44351a;padding:7px 10px;border-radius:6px;white-space:nowrap}
-.loading{text-align:center;padding:60px 15px;color:var(--muted);font-size:12px}
-.error-box{padding:18px;background:#401d1d;color:#ffaaaa;border:1px solid #633333;border-radius:9px;font-size:12px;line-height:1.7}
-.footer{margin-top:35px;text-align:center;color:#547664;font-size:9px;letter-spacing:1px}
-.mobile-menu{display:none;background:var(--panel);color:var(--green);border:1px solid var(--border);border-radius:7px;padding:9px 12px}
-.expiry-time{color:var(--green);font-weight:900}
-@media(max-width:900px){
- .sidebar{width:210px}
- .main{margin-left:210px;padding:22px}
+.info-label{color:var(--muted);flex:0 0 38%;line-height:1.5}
+.info-value{
+ text-align:right;
+ font-weight:700;
+ flex:1;
+ min-width:0;
+ overflow-wrap:anywhere;
+ line-height:1.5;
+}
+.status{
+ display:inline-block;
+ padding:6px 10px;
+ border-radius:20px;
+ font-size:9px;
+ font-weight:900;
+ background:#123c29;
+ color:#76efb0;
+}
+.status.expired,.status.inactive{
+ background:#401d1d;color:#ffaaaa;
+}
+.status.pending{
+ background:#44351a;color:#f5d27c;
+}
+
+/* AUCTION CARD */
+.auction-card{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ padding:19px;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:12px;
+}
+.auction-card h3{font-size:14px;margin:0 0 7px}
+.auction-card p{
+ font-size:11px;
+ color:var(--muted);
+ margin:0;
+ line-height:1.6;
+}
+.coming{
+ font-size:9px;
+ color:var(--yellow);
+ background:#44351a;
+ padding:8px 11px;
+ border-radius:7px;
+ white-space:nowrap;
+ font-weight:800;
+}
+
+/* LOADING / ERROR */
+.loading{
+ text-align:center;
+ padding:65px 15px;
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.7;
+}
+.loading-icon{
+ font-size:28px;
+ display:block;
+ margin-bottom:13px;
+}
+.error-box{
+ padding:18px;
+ background:#401d1d;
+ color:#ffaaaa;
+ border:1px solid #633333;
+ border-radius:10px;
+ font-size:12px;
+ line-height:1.7;
+ overflow-wrap:anywhere;
+}
+.footer{
+ margin-top:35px;
+ padding:10px 0;
+ text-align:center;
+ color:#547664;
+ font-size:9px;
+ letter-spacing:1px;
+}
+
+/* TABLET */
+@media(max-width:1100px){
+ .main{padding:23px}
+ .sidebar{width:225px}
+ .main{margin-left:225px}
  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:650px){
- .sidebar{display:none;z-index:10;width:245px;box-shadow:10px 0 30px #0008}
- .sidebar.open{display:block}
- .main{margin-left:0;padding:17px}
- .mobile-menu{display:block}
- .topbar{align-items:flex-start}
- .page-title{font-size:19px}
- .owner-chip{padding:7px}
- .owner-name{max-width:100px;overflow:hidden;text-overflow:ellipsis}
- .stats{grid-template-columns:1fr 1fr;gap:10px}
- .stat-card{padding:14px}
- .stat-value{font-size:17px}
- .content-grid{grid-template-columns:1fr}
- .welcome{padding:20px}
+
+/* MOBILE */
+@media(max-width:700px){
+ .sidebar{
+  display:flex;
+  width:min(285px,85vw);
+  left:0;
+  top:0;
+  bottom:0;
+  padding:20px 15px calc(20px + var(--safe-bottom));
+  transform:translateX(-105%);
+  transition:transform .25s ease;
+  box-shadow:none;
+  visibility:hidden;
+ }
+ .sidebar.open{
+  transform:translateX(0);
+  visibility:visible;
+  box-shadow:15px 0 45px #0008;
+ }
+ .sidebar-overlay.show{display:block}
+ .main{
+  margin-left:0;
+  padding:16px;
+  padding-bottom:calc(22px + var(--safe-bottom));
+  width:100%;
+ }
+ .mobile-menu{
+  display:grid;
+  place-items:center;
+ }
+ .topbar{
+  position:relative;
+  gap:9px;
+  margin-bottom:20px;
+  align-items:center;
+ }
+ .top-left{gap:10px}
+ .page-title{font-size:18px}
+ .page-subtitle{font-size:10px;margin-top:5px}
+ .owner-chip{
+  padding:6px 8px;
+  gap:7px;
+  border-radius:9px;
+ }
+ .avatar{width:32px;height:32px;font-size:12px}
+ .owner-name{font-size:10px;max-width:85px}
+ .owner-role{font-size:8px}
+ .welcome{
+  padding:20px 17px;
+  border-radius:12px;
+  margin-bottom:19px;
+ }
+ .welcome h2{font-size:18px}
+ .welcome p{font-size:11px}
+ .section-title{
+  font-size:13px;
+  margin:24px 0 13px;
+ }
+ .stats{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+ }
+ .stat-card{
+  padding:14px 12px;
+  border-radius:11px;
+  min-height:112px;
+ }
+ .stat-label{font-size:9px;line-height:1.5}
+ .stat-value{font-size:17px;margin-top:9px}
+ .stat-note{font-size:9px;margin-top:5px}
+ .content-grid{
+  grid-template-columns:1fr;
+  gap:12px;
+ }
+ .panel{padding:16px}
+ .panel-title{font-size:11px;margin-bottom:8px}
+ .info-row{
+  display:block;
+  padding:12px 0;
+  font-size:12px;
+ }
+ .info-label{
+  display:block;
+  margin-bottom:5px;
+  font-size:10px;
+ }
+ .info-value{
+  display:block;
+  text-align:left;
+  font-size:12px;
+ }
+ .auction-card{
+  align-items:flex-start;
+  padding:16px;
+  gap:10px;
+ }
+ .auction-card h3{font-size:13px}
+ .auction-card p{font-size:10px}
+ .coming{font-size:8px;padding:7px 8px}
+ .footer{font-size:8px;margin-top:27px}
+}
+
+/* VERY SMALL PHONES */
+@media(max-width:370px){
+ .main{padding:12px}
+ .topbar{gap:6px}
+ .mobile-menu{width:39px;height:39px}
+ .page-title{font-size:16px}
+ .page-subtitle{font-size:9px}
+ .owner-chip{padding:5px}
+ .owner-name{max-width:65px;font-size:9px}
+ .avatar{width:29px;height:29px}
+ .stats{gap:8px}
+ .stat-card{padding:12px 10px}
+ .stat-value{font-size:15px}
+ .stat-label{font-size:8px}
+ .welcome{padding:17px 14px}
+ .welcome h2{font-size:16px}
 }
 </style>
 </head>
 
 <body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 <div class="layout">
 
 <aside class="sidebar" id="sidebar">
+
  <div class="brand">
   <div class="logo">P</div>
   <div>
@@ -108,27 +503,44 @@ button{font-family:inherit;cursor:pointer}
  </div>
 
  <div class="nav-label">MAIN MENU</div>
- <div class="nav-item active" onclick="showSection('overview',this)"><span class="nav-icon">⌂</span> Dashboard</div>
- <div class="nav-item" onclick="showSection('club',this)"><span class="nav-icon">♧</span> My Club</div>
- <div class="nav-item" onclick="showSection('subscription',this)"><span class="nav-icon">▣</span> Subscription</div>
+
+ <div class="nav-item active" onclick="showSection('overview',this)">
+  <span class="nav-icon">⌂</span> Dashboard
+ </div>
+
+ <div class="nav-item" onclick="showSection('club',this)">
+  <span class="nav-icon">♧</span> My Club
+ </div>
+
+ <div class="nav-item" onclick="showSection('subscription',this)">
+  <span class="nav-icon">▣</span> Subscription
+ </div>
 
  <div class="nav-label">AUCTION MANAGEMENT</div>
- <div class="nav-item" onclick="showSection('auction',this)"><span class="nav-icon">🏏</span> Auctions</div>
+
+ <div class="nav-item" onclick="showSection('auction',this)">
+  <span class="nav-icon">🏏</span> Auctions
+ </div>
 
  <div class="sidebar-bottom">
   <button class="logout-btn" onclick="logout()">↪ LOGOUT</button>
  </div>
+
 </aside>
 
 <main class="main">
+
  <div class="topbar">
-  <div style="display:flex;align-items:center;gap:12px">
-   <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+  <div class="top-left">
+   <button class="mobile-menu" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+
    <div>
     <div class="page-title" id="pageTitle">Dashboard</div>
     <div class="page-subtitle">Manage your club and cricket auction</div>
    </div>
   </div>
+
   <div class="owner-chip">
    <div class="avatar" id="avatar">O</div>
    <div>
@@ -136,118 +548,224 @@ button{font-family:inherit;cursor:pointer}
     <div class="owner-role">CLUB OWNER</div>
    </div>
   </div>
+
  </div>
 
- <div id="loading" class="loading">VERIFYING ACCOUNT AND LOADING DASHBOARD...</div>
+ <div id="loading" class="loading">
+  <span class="loading-icon">◌</span>
+  VERIFYING ACCOUNT AND LOADING DASHBOARD...
+ </div>
 
  <div id="dashboardContent" style="display:none">
 
   <section id="overviewSection">
+
    <div class="welcome">
     <h2>Welcome, <span id="welcomeName">Owner</span>!</h2>
-    <p>Welcome to your Club Owner Dashboard. Here you can view your club information, subscription details and auction management.</p>
+    <p>
+     Welcome to your Club Owner Dashboard. Here you can view your
+     club information, subscription details and auction management.
+    </p>
    </div>
 
    <div class="stats">
+
     <div class="stat-card">
      <div class="stat-label">MY CLUB</div>
      <div class="stat-value" id="statClubName">-</div>
      <div class="stat-note">Registered club name</div>
     </div>
+
     <div class="stat-card">
      <div class="stat-label">CLUB STATUS</div>
      <div class="stat-value" id="statClubStatus">-</div>
      <div class="stat-note">Current account status</div>
     </div>
+
     <div class="stat-card">
      <div class="stat-label">SUBSCRIPTION PLAN</div>
      <div class="stat-value" id="statPlan">-</div>
      <div class="stat-note">Current subscription</div>
     </div>
+
     <div class="stat-card">
      <div class="stat-label">SUBSCRIPTION STATUS</div>
      <div class="stat-value" id="statSubStatus">-</div>
      <div class="stat-note">Current subscription validity</div>
     </div>
+
     <div class="stat-card">
      <div class="stat-label">SUBSCRIPTION EXPIRY</div>
      <div class="stat-value expiry-time" id="statExpiry">-</div>
      <div class="stat-note">Actual expiry date and time (IST)</div>
     </div>
+
     <div class="stat-card">
      <div class="stat-label">OWNER EMAIL</div>
      <div class="stat-value" id="statEmail" style="font-size:13px">-</div>
      <div class="stat-note">Registered email address</div>
     </div>
+
    </div>
 
    <div class="section-title">CLUB OVERVIEW</div>
+
    <div class="content-grid">
+
     <div class="panel">
      <div class="panel-title">CLUB INFORMATION</div>
-     <div class="info-row"><span class="info-label">Club Name</span><span class="info-value" id="infoClubName">-</span></div>
-     <div class="info-row"><span class="info-label">Club ID</span><span class="info-value" id="infoClubId">-</span></div>
-     <div class="info-row"><span class="info-label">Club Status</span><span class="info-value" id="infoClubStatus">-</span></div>
+
+     <div class="info-row">
+      <span class="info-label">Club Name</span>
+      <span class="info-value" id="infoClubName">-</span>
+     </div>
+
+     <div class="info-row">
+      <span class="info-label">Club ID</span>
+      <span class="info-value" id="infoClubId">-</span>
+     </div>
+
+     <div class="info-row">
+      <span class="info-label">Club Status</span>
+      <span class="info-value" id="infoClubStatus">-</span>
+     </div>
     </div>
+
     <div class="panel">
      <div class="panel-title">OWNER INFORMATION</div>
-     <div class="info-row"><span class="info-label">Owner Name</span><span class="info-value" id="infoOwnerName">-</span></div>
-     <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="infoOwnerEmail">-</span></div>
-     <div class="info-row"><span class="info-label">Phone</span><span class="info-value" id="infoOwnerPhone">-</span></div>
+
+     <div class="info-row">
+      <span class="info-label">Owner Name</span>
+      <span class="info-value" id="infoOwnerName">-</span>
+     </div>
+
+     <div class="info-row">
+      <span class="info-label">Email</span>
+      <span class="info-value" id="infoOwnerEmail">-</span>
+     </div>
+
+     <div class="info-row">
+      <span class="info-label">Phone</span>
+      <span class="info-value" id="infoOwnerPhone">-</span>
+     </div>
     </div>
+
    </div>
 
    <div class="section-title">AUCTION MANAGEMENT</div>
+
    <div class="auction-card">
-    <div><h3>🏏 My Auctions</h3><p>Create and manage your club's cricket player auctions.</p></div>
+    <div>
+     <h3>🏏 My Auctions</h3>
+     <p>Create and manage your club's cricket player auctions.</p>
+    </div>
     <span class="coming">NEXT MODULE</span>
    </div>
+
   </section>
 
   <section id="clubSection" style="display:none">
+
    <div class="section-title">MY CLUB DETAILS</div>
+
    <div class="panel">
-    <div class="info-row"><span class="info-label">Club Name</span><span class="info-value" id="clubPageName">-</span></div>
-    <div class="info-row"><span class="info-label">Club ID</span><span class="info-value" id="clubPageId">-</span></div>
-    <div class="info-row"><span class="info-label">Owner Name</span><span class="info-value" id="clubPageOwner">-</span></div>
-    <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="clubPageEmail">-</span></div>
-    <div class="info-row"><span class="info-label">Phone</span><span class="info-value" id="clubPagePhone">-</span></div>
-    <div class="info-row"><span class="info-label">Status</span><span class="info-value" id="clubPageStatus">-</span></div>
+    <div class="info-row">
+     <span class="info-label">Club Name</span>
+     <span class="info-value" id="clubPageName">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Club ID</span>
+     <span class="info-value" id="clubPageId">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Owner Name</span>
+     <span class="info-value" id="clubPageOwner">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Email</span>
+     <span class="info-value" id="clubPageEmail">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Phone</span>
+     <span class="info-value" id="clubPagePhone">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Status</span>
+     <span class="info-value" id="clubPageStatus">-</span>
+    </div>
    </div>
+
   </section>
 
   <section id="subscriptionSection" style="display:none">
+
    <div class="section-title">MY SUBSCRIPTION</div>
+
    <div class="panel">
-    <div class="info-row"><span class="info-label">Plan Name</span><span class="info-value" id="subPagePlan">-</span></div>
-    <div class="info-row"><span class="info-label">Start Date</span><span class="info-value" id="subPageStart">-</span></div>
+
+    <div class="info-row">
+     <span class="info-label">Plan Name</span>
+     <span class="info-value" id="subPagePlan">-</span>
+    </div>
+
+    <div class="info-row">
+     <span class="info-label">Start Date</span>
+     <span class="info-value" id="subPageStart">-</span>
+    </div>
+
     <div class="info-row">
      <span class="info-label">Expiry Date & Time</span>
      <span class="info-value expiry-time" id="subPageEnd">-</span>
     </div>
-    <div class="info-row"><span class="info-label">Status</span><span class="info-value" id="subPageStatus">-</span></div>
+
+    <div class="info-row">
+     <span class="info-label">Status</span>
+     <span class="info-value" id="subPageStatus">-</span>
+    </div>
+
    </div>
   </section>
 
   <section id="auctionSection" style="display:none">
+
    <div class="section-title">AUCTION MANAGEMENT</div>
+
    <div class="auction-card">
-    <div><h3>🏏 Auction Management</h3><p>The auction management module will be connected in the next step.</p></div>
+    <div>
+     <h3>🏏 Auction Management</h3>
+     <p>The auction management module will be connected in the next step.</p>
+    </div>
     <span class="coming">COMING NEXT</span>
    </div>
+
   </section>
+
  </div>
 
  <div id="errorBox" style="display:none"></div>
- <div class="footer">PLAYER AUCTION PLATFORM · CLUB OWNER PORTAL</div>
+
+ <div class="footer">
+  PLAYER AUCTION PLATFORM · CLUB OWNER PORTAL
+ </div>
+
 </main>
 </div>
 
 <script>
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
 
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_KEY =
+"sb_publishable_VfvcHqVH67lH8ef-UYWjGQ_mHepMoYX";
+
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
 
 let currentUser = null;
 let currentClubId = null;
@@ -274,6 +792,7 @@ function formatDateTime(value){
 
 function formatDate(value){
  if(!value) return "-";
+
  const date = new Date(value);
  if(Number.isNaN(date.getTime())) return "-";
 
@@ -290,15 +809,30 @@ function setText(id,value){
  if(element) element.textContent=value || "-";
 }
 
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,function(char){
+  return {
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[char];
+ });
+}
+
 function setStatus(id,text,type){
  const element=document.getElementById(id);
  if(!element) return;
- element.innerHTML='<span class="status '+type+'">'+String(text).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+'</span>';
+
+ element.innerHTML =
+  '<span class="status '+type+'">'+escapeHTML(text)+'</span>';
 }
 
 function showError(message){
  document.getElementById("loading").style.display="none";
  document.getElementById("dashboardContent").style.display="none";
+
  const box=document.getElementById("errorBox");
  box.style.display="block";
  box.className="error-box";
@@ -306,7 +840,10 @@ function showError(message){
 }
 
 async function loadDashboard(){
+
  try{
+
+  // 1. Check authenticated user
   const {data:authData,error:authError}=await db.auth.getUser();
 
   if(authError || !authData.user){
@@ -316,13 +853,16 @@ async function loadDashboard(){
 
   currentUser=authData.user;
 
+  // 2. Verify owner profile
   const {data:profile,error:profileError}=await db
    .from("profiles")
    .select("id,role,club_id,full_name,phone")
    .eq("id",currentUser.id)
    .maybeSingle();
 
-  if(profileError) throw new Error("Unable to verify owner profile.");
+  if(profileError){
+   throw new Error("Unable to verify owner profile.");
+  }
 
   if(!profile || profile.role!=="club_owner"){
    await db.auth.signOut();
@@ -330,11 +870,15 @@ async function loadDashboard(){
    return;
   }
 
-  if(!profile.club_id) throw new Error("No club is assigned to this owner account.");
+  if(!profile.club_id){
+   throw new Error("No club is assigned to this owner account.");
+  }
 
   currentClubId=profile.club_id;
 
-  const {data:isActive,error:activeError}=await db.rpc("is_active_club_owner");
+  // 3. Server-side owner permission check
+  const {data:isActive,error:activeError}=await db
+   .rpc("is_active_club_owner");
 
   if(activeError || isActive!==true){
    await db.auth.signOut();
@@ -342,13 +886,16 @@ async function loadDashboard(){
    return;
   }
 
+  // 4. Load assigned club only
   const {data:club,error:clubError}=await db
    .from("clubs")
    .select("id,club_name,owner_email,status")
    .eq("id",currentClubId)
    .maybeSingle();
 
-  if(clubError) throw new Error("Unable to load club information.");
+  if(clubError){
+   throw new Error("Unable to load club information.");
+  }
 
   if(!club || club.status!=="active"){
    await db.auth.signOut();
@@ -356,6 +903,7 @@ async function loadDashboard(){
    return;
   }
 
+  // 5. Load latest subscription
   const {data:subscription,error:subError}=await db
    .from("subscriptions")
    .select("id,plan_name,start_date,end_date,status")
@@ -364,7 +912,9 @@ async function loadDashboard(){
    .limit(1)
    .maybeSingle();
 
-  if(subError) throw new Error("Unable to load subscription information.");
+  if(subError){
+   throw new Error("Unable to load subscription information.");
+  }
 
   if(!subscription){
    await db.auth.signOut();
@@ -376,12 +926,17 @@ async function loadDashboard(){
   const startDate=new Date(subscription.start_date);
   const endDate=new Date(subscription.end_date);
 
-  if(subscription.status!=="active" || endDate<=now || startDate>now){
+  if(
+   subscription.status!=="active" ||
+   endDate<=now ||
+   startDate>now
+  ){
    await db.auth.signOut();
    window.location.replace("owner-login.html");
    return;
   }
 
+  // 6. Prepare owner and club information
   const ownerName=profile.full_name || "Club Owner";
   const ownerEmail=club.owner_email || currentUser.email || "-";
   const ownerPhone=profile.phone || "-";
@@ -394,11 +949,9 @@ async function loadDashboard(){
   setText("statClubName",clubName);
   setText("statClubStatus","ACTIVE");
   setText("statPlan",subscription.plan_name);
-
-  // Actual expiry date and time, converted to IST
   setText("statExpiry",formatDateTime(subscription.end_date));
-
   setText("statEmail",ownerEmail);
+
   setStatus("statSubStatus","ACTIVE","active");
 
   setText("infoClubName",clubName);
@@ -418,31 +971,37 @@ async function loadDashboard(){
 
   setText("subPagePlan",subscription.plan_name);
   setText("subPageStart",formatDate(subscription.start_date));
-
-  // Actual expiry date and time, converted to IST
   setText("subPageEnd",formatDateTime(subscription.end_date));
-
   setStatus("subPageStatus","ACTIVE","active");
 
   document.getElementById("loading").style.display="none";
   document.getElementById("dashboardContent").style.display="block";
 
  }catch(error){
+
   console.error("Owner dashboard error:",error);
   showError(error.message || "Could not load dashboard.");
+
  }
 }
 
+// NAVIGATION
 function showSection(section,element){
+
  const sections=["overview","club","subscription","auction"];
 
  sections.forEach(name=>{
-  document.getElementById(name+"Section").style.display=name===section?"block":"none";
+  document.getElementById(name+"Section").style.display=
+   name===section?"block":"none";
  });
 
- document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
+ document.querySelectorAll(".nav-item").forEach(item=>{
+  item.classList.remove("active");
+ });
 
- if(element) element.classList.add("active");
+ if(element){
+  element.classList.add("active");
+ }
 
  const titles={
   overview:"Dashboard",
@@ -452,21 +1011,39 @@ function showSection(section,element){
  };
 
  setText("pageTitle",titles[section] || "Dashboard");
- document.getElementById("sidebar").classList.remove("open");
+
+ closeSidebar();
+
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
+// MOBILE SIDEBAR
 function toggleSidebar(){
- document.getElementById("sidebar").classList.toggle("open");
+ const sidebar=document.getElementById("sidebar");
+ const overlay=document.getElementById("sidebarOverlay");
+
+ sidebar.classList.toggle("open");
+ overlay.classList.toggle("show");
 }
 
+function closeSidebar(){
+ document.getElementById("sidebar").classList.remove("open");
+ document.getElementById("sidebarOverlay").classList.remove("show");
+}
+
+// LOGOUT
 async function logout(){
+
  const confirmed=confirm("Are you sure you want to logout?");
+
  if(!confirmed) return;
+
  await db.auth.signOut();
  window.location.replace("owner-login.html");
 }
 
 loadDashboard();
 </script>
+
 </body>
 </html>

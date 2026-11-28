@@ -9,13 +9,14 @@
 <style>
 :root{
  --bg:#071a13;
- --sidebar:#0a2117;
- --panel:#10291e;
+ --panel:#0d251b;
+ --panel2:#102d20;
  --green:#27d58c;
- --text:#effff5;
+ --text:#f1fff7;
  --muted:#91aa9d;
- --border:#244735;
- --red:#ef7777;
+ --border:#214535;
+ --red:#f16c6c;
+ --yellow:#f5c451;
 }
 *{box-sizing:border-box}
 body{
@@ -24,560 +25,497 @@ body{
  color:var(--text);
  font-family:Arial,sans-serif;
 }
-.layout{display:flex;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+.layout{min-height:100vh}
 .sidebar{
+ position:fixed;
+ left:0;top:0;bottom:0;
  width:245px;
- background:var(--sidebar);
+ padding:25px 17px;
+ background:#091f16;
  border-right:1px solid var(--border);
- padding:24px 15px;
- display:flex;
- flex-direction:column;
- flex-shrink:0;
 }
 .brand{
  display:flex;
  align-items:center;
  gap:12px;
- padding:0 10px 27px;
+ padding:0 8px 28px;
  border-bottom:1px solid var(--border);
 }
-.brand-logo{
- width:40px;height:40px;
+.logo{
+ width:42px;height:42px;
  display:grid;place-items:center;
  background:var(--green);
  color:#062015;
- font-size:22px;font-weight:900;
+ font-size:23px;
+ font-weight:900;
  border-radius:11px;
 }
-.brand-name{font-size:14px;font-weight:900}
+.brand-title{font-size:14px;font-weight:900}
 .brand-sub{font-size:9px;color:var(--muted);margin-top:5px}
-.menu-title{
+.nav-label{
+ color:#648575;
  font-size:9px;
- color:#668a75;
  letter-spacing:1.5px;
- margin:25px 10px 12px;
+ margin:27px 10px 12px;
 }
-.nav-btn{
- width:100%;
- border:0;
- background:transparent;
- color:#a8c2b2;
- text-align:left;
+.nav-item{
+ display:flex;
+ align-items:center;
+ gap:12px;
  padding:13px 12px;
- margin:3px 0;
  border-radius:8px;
- cursor:pointer;
+ color:#a9c2b3;
  font-size:12px;
+ margin-bottom:5px;
+ cursor:pointer;
 }
-.nav-btn:hover,.nav-btn.active{
- background:#173d2b;
+.nav-item.active,.nav-item:hover{
+ background:#143b29;
  color:var(--green);
 }
-.sidebar-bottom{margin-top:auto}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-bottom{
+ position:absolute;
+ left:17px;right:17px;bottom:22px;
+ border-top:1px solid var(--border);
+ padding-top:15px;
+}
 .logout-btn{
  width:100%;
- border:1px solid #593333;
- background:#291919;
- color:#ffaaaa;
  padding:12px;
+ background:#351d1d;
+ border:1px solid #633333;
+ color:#ffaaaa;
  border-radius:8px;
- cursor:pointer;
  font-size:11px;
+ font-weight:800;
 }
-.main{flex:1;min-width:0}
+.main{
+ margin-left:245px;
+ padding:30px;
+}
 .topbar{
- height:76px;
- padding:0 30px;
- border-bottom:1px solid var(--border);
  display:flex;
  justify-content:space-between;
  align-items:center;
+ gap:15px;
+ margin-bottom:30px;
 }
-.topbar h2{font-size:16px;margin:0}
-.user-info{text-align:right}
-.user-name{font-size:12px;font-weight:bold}
-.user-role{font-size:9px;color:var(--muted);margin-top:5px}
-.content{padding:30px}
-.welcome{margin-bottom:25px}
-.welcome h1{font-size:24px;margin:0 0 8px}
-.welcome p{font-size:12px;color:var(--muted);margin:0}
-.grid{
- display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
- gap:16px;
- margin-bottom:22px;
-}
-.card{
+.page-title{font-size:23px;font-weight:900}
+.page-subtitle{font-size:11px;color:var(--muted);margin-top:7px}
+.owner-chip{
+ display:flex;align-items:center;gap:10px;
  background:var(--panel);
  border:1px solid var(--border);
- border-radius:12px;
- padding:20px;
- min-width:0;
+ padding:9px 13px;
+ border-radius:10px;
 }
-.card-label{
- font-size:10px;
- color:var(--muted);
- margin-bottom:13px;
+.avatar{
+ width:34px;height:34px;
+ display:grid;place-items:center;
+ border-radius:50%;
+ background:#174b32;
+ color:var(--green);
+ font-weight:900;
 }
-.card-value{
- font-size:19px;
- font-weight:800;
- overflow-wrap:anywhere;
+.owner-name{font-size:11px;font-weight:800}
+.owner-role{font-size:9px;color:var(--muted);margin-top:4px}
+.welcome{
+ padding:25px;
+ border:1px solid #236143;
+ border-radius:13px;
+ background:linear-gradient(120deg,#123c29,#0d251b);
+ margin-bottom:22px;
 }
-.card-note{font-size:10px;color:var(--muted);margin-top:9px}
-.section-title{font-size:14px;margin:0 0 15px}
-.details-grid{
+.welcome h2{font-size:19px;margin:0 0 9px}
+.welcome p{font-size:11px;color:#b1cdbd;margin:0;line-height:1.7}
+.section-title{
+ font-size:14px;font-weight:900;
+ margin:27px 0 15px;
+}
+.stats{
  display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
+ grid-template-columns:repeat(3,minmax(0,1fr));
  gap:15px;
 }
-.detail{
- padding:15px;
- background:#0a2117;
+.stat-card,.panel{
+ background:var(--panel);
  border:1px solid var(--border);
- border-radius:9px;
- min-width:0;
+ border-radius:11px;
+ padding:19px;
 }
-.detail-label{font-size:9px;color:var(--muted);margin-bottom:8px}
-.detail-value{font-size:12px;font-weight:bold;overflow-wrap:anywhere}
+.stat-label{
+ font-size:10px;
+ color:var(--muted);
+ letter-spacing:.5px;
+}
+.stat-value{
+ font-size:21px;
+ font-weight:900;
+ margin-top:12px;
+ word-break:break-word;
+}
+.stat-note{font-size:9px;color:#789787;margin-top:7px}
+.content-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:17px;
+}
+.panel-title{
+ font-size:12px;
+ font-weight:900;
+ margin-bottom:18px;
+}
+.info-row{
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ padding:12px 0;
+ border-bottom:1px solid #1d3c2c;
+ font-size:11px;
+}
+.info-row:last-child{border-bottom:0}
+.info-label{color:var(--muted)}
+.info-value{
+ text-align:right;
+ font-weight:700;
+ word-break:break-word;
+}
 .status{
  display:inline-block;
  padding:6px 10px;
  border-radius:20px;
  font-size:9px;
- background:#123e2b;
- color:#7af0b5;
+ font-weight:900;
+ background:#123c29;
+ color:#76efb0;
 }
-.status.expired{background:#482222;color:#ffaaaa}
-.page{display:none}
-.page.active{display:block}
-.placeholder{
- background:var(--panel);
- border:1px solid var(--border);
- border-radius:12px;
- padding:35px;
- text-align:center;
+.status.expired,.status.inactive{
+ background:#401d1d;color:#ffaaaa;
 }
-.placeholder h3{font-size:16px}
-.placeholder p{font-size:12px;color:var(--muted);line-height:1.7}
-#loading,#fatal{
- margin:25px;
- padding:18px;
+.status.pending{
+ background:#44351a;color:#f5d27c;
+}
+.auction-card{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ padding:17px;
  background:var(--panel);
  border:1px solid var(--border);
  border-radius:10px;
+}
+.auction-card h3{font-size:13px;margin:0 0 7px}
+.auction-card p{font-size:10px;color:var(--muted);margin:0;line-height:1.5}
+.coming{
+ font-size:9px;
+ color:var(--yellow);
+ background:#44351a;
+ padding:7px 10px;
+ border-radius:6px;
+ white-space:nowrap;
+}
+.loading{
+ text-align:center;
+ padding:60px 15px;
+ color:var(--muted);
+ font-size:12px;
+}
+.error-box{
+ padding:18px;
+ background:#401d1d;
+ color:#ffaaaa;
+ border:1px solid #633333;
+ border-radius:9px;
  font-size:12px;
  line-height:1.7;
 }
-#fatal{color:#ffaaaa;display:none}
-.mobile-menu{display:none}
-
-@media(max-width:800px){
- .sidebar{width:205px}
- .content{padding:20px}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:600px){
- .layout{display:block}
- .sidebar{
-  width:100%;
-  padding:12px;
-  border-right:0;
-  border-bottom:1px solid var(--border);
- }
- .brand{padding:0 5px 12px}
- .menu-title{margin:14px 5px 7px}
- .nav-list{display:flex;overflow-x:auto;gap:5px}
- .nav-btn{white-space:nowrap;width:auto;margin:0;padding:10px}
- .sidebar-bottom{margin-top:12px}
- .logout-btn{padding:9px}
- .topbar{height:62px;padding:0 16px}
- .content{padding:16px}
- .welcome h1{font-size:20px}
- .grid{grid-template-columns:1fr}
- .details-grid{grid-template-columns:1fr}
-}
-
-/* AUCTION MANAGEMENT STYLES */
-.auction-toolbar{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- flex-wrap:wrap;
- margin-bottom:16px
-}
-.primary-btn,.secondary-btn{
- border:0;
- border-radius:8px;
- padding:11px 15px;
- font-size:11px;
- font-weight:700;
- cursor:pointer
-}
-.primary-btn{
- background:var(--green);
- color:#062015
-}
-.secondary-btn{
- background:#173d2b;
- color:#bdf5d7;
- border:1px solid var(--border)
-}
-.auction-form{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:14px
-}
-.auction-form .field{
- display:flex;
- flex-direction:column;
- gap:7px
-}
-.auction-form label{
- font-size:10px;
- color:var(--muted)
-}
-.auction-form input,.auction-form select{
- width:100%;
- background:#071a13;
- color:var(--text);
- border:1px solid var(--border);
- border-radius:8px;
- padding:12px;
- font-size:12px;
- outline:none
-}
-.auction-form input:focus,.auction-form select:focus{
- border-color:var(--green)
-}
-.auction-form .full{grid-column:1/-1}
-.auction-message{
- font-size:11px;
- line-height:1.6;
- margin-top:12px;
- white-space:pre-wrap
-}
-.auction-message.error{color:#ffaaaa}
-.auction-message.success{color:#7af0b5}
-.auction-table-wrap{overflow-x:auto}
-.auction-table{
- width:100%;
- border-collapse:collapse;
- min-width:620px
-}
-.auction-table th,.auction-table td{
- padding:12px 10px;
- border-bottom:1px solid var(--border);
- text-align:left;
- font-size:11px
-}
-.auction-table th{
- color:var(--muted);
- font-weight:600
-}
-.auction-empty{
- padding:24px;
+.footer{
+ margin-top:35px;
  text-align:center;
- color:var(--muted);
- font-size:12px
-}
-.auction-status{
- display:inline-block;
- padding:5px 9px;
- border-radius:20px;
- background:#173d2b;
- color:#7af0b5;
+ color:#547664;
  font-size:9px;
- text-transform:uppercase
+ letter-spacing:1px;
 }
-@media(max-width:600px){
- .auction-form{grid-template-columns:1fr}
- .auction-form .full{grid-column:auto}
+.mobile-menu{
+ display:none;
+ background:var(--panel);
+ color:var(--green);
+ border:1px solid var(--border);
+ border-radius:7px;
+ padding:9px 12px;
+}
+@media(max-width:900px){
+ .sidebar{width:210px}
+ .main{margin-left:210px;padding:22px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:650px){
+ .sidebar{
+  display:none;
+  z-index:10;
+  width:245px;
+  box-shadow:10px 0 30px #0008;
+ }
+ .sidebar.open{display:block}
+ .main{margin-left:0;padding:17px}
+ .mobile-menu{display:block}
+ .topbar{align-items:flex-start}
+ .page-title{font-size:19px}
+ .owner-chip{padding:7px}
+ .owner-name{max-width:100px;overflow:hidden;text-overflow:ellipsis}
+ .stats{grid-template-columns:1fr 1fr;gap:10px}
+ .stat-card{padding:14px}
+ .stat-value{font-size:17px}
+ .content-grid{grid-template-columns:1fr}
+ .welcome{padding:20px}
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading">Loading your club dashboard...</div>
-<div id="fatal"></div>
+<div class="layout">
 
-<div class="layout" id="app" style="display:none">
+<aside class="sidebar" id="sidebar">
 
- <aside class="sidebar">
+ <div class="brand">
+  <div class="logo">P</div>
+  <div>
+   <div class="brand-title">PLAYER AUCTION</div>
+   <div class="brand-sub">CLUB OWNER PORTAL</div>
+  </div>
+ </div>
 
-  <div class="brand">
-   <div class="brand-logo">P</div>
+ <div class="nav-label">MAIN MENU</div>
+
+ <div class="nav-item active" onclick="showSection('overview',this)">
+  <span class="nav-icon">⌂</span> Dashboard
+ </div>
+
+ <div class="nav-item" onclick="showSection('club',this)">
+  <span class="nav-icon">♧</span> My Club
+ </div>
+
+ <div class="nav-item" onclick="showSection('subscription',this)">
+  <span class="nav-icon">▣</span> Subscription
+ </div>
+
+ <div class="nav-label">AUCTION MANAGEMENT</div>
+
+ <div class="nav-item" onclick="showSection('auction',this)">
+  <span class="nav-icon">🏏</span> Auctions
+ </div>
+
+ <div class="sidebar-bottom">
+  <button class="logout-btn" onclick="logout()">↪ LOGOUT</button>
+ </div>
+
+</aside>
+
+<main class="main">
+
+ <div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+   <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
    <div>
-    <div class="brand-name">PLAYER AUCTION</div>
-    <div class="brand-sub">CLUB OWNER PORTAL</div>
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="page-subtitle">Manage your club and cricket auction</div>
    </div>
   </div>
 
-  <div class="menu-title">MAIN MENU</div>
-
-  <div class="nav-list">
-   <button class="nav-btn active" data-page="dashboard">▦ Dashboard</button>
-   <button class="nav-btn" data-page="players">♟ Players</button>
-   <button class="nav-btn" data-page="teams">◈ Teams</button>
-   <button class="nav-btn" data-page="auction">⚡ Auction</button>
-   <button class="nav-btn" data-page="subscription">▤ Subscription</button>
-  </div>
-
-  <div class="sidebar-bottom">
-   <button class="logout-btn" id="logoutBtn">↪ LOGOUT</button>
-  </div>
-
- </aside>
-
- <main class="main">
-
-  <header class="topbar">
-   <h2 id="topTitle">Dashboard</h2>
-   <div class="user-info">
-    <div class="user-name" id="headerName">Club Owner</div>
-    <div class="user-role">CLUB OWNER</div>
+  <div class="owner-chip">
+   <div class="avatar" id="avatar">O</div>
+   <div>
+    <div class="owner-name" id="topOwnerName">Loading...</div>
+    <div class="owner-role">CLUB OWNER</div>
    </div>
-  </header>
-
-  <div class="content">
-
-   <!-- DASHBOARD -->
-   <section class="page active" id="page-dashboard">
-
-    <div class="welcome">
-     <h1>Welcome, <span id="welcomeName">Owner</span>!</h1>
-     <p>Manage your cricket club from one place.</p>
-    </div>
-
-    <div class="grid">
-
-     <div class="card">
-      <div class="card-label">YOUR CLUB</div>
-      <div class="card-value" id="clubNameCard">—</div>
-      <div class="card-note">Club Name</div>
-     </div>
-
-     <div class="card">
-      <div class="card-label">SUBSCRIPTION PLAN</div>
-      <div class="card-value" id="planCard">—</div>
-      <div class="card-note">Current Plan</div>
-     </div>
-
-     <div class="card">
-      <div class="card-label">SUBSCRIPTION STATUS</div>
-      <div class="card-value">
-       <span class="status" id="statusCard">Checking</span>
-      </div>
-      <div class="card-note" id="expiryCard">Checking expiry...</div>
-     </div>
-
-    </div>
-
-    <div class="card">
-     <h3 class="section-title">Club Information</h3>
-
-     <div class="details-grid">
-
-      <div class="detail">
-       <div class="detail-label">CLUB NAME</div>
-       <div class="detail-value" id="detailClubName">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">CLUB ID</div>
-       <div class="detail-value" id="detailClubId">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">OWNER NAME</div>
-       <div class="detail-value" id="detailOwner">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">OWNER EMAIL</div>
-       <div class="detail-value" id="detailEmail">—</div>
-      </div>
-
-     </div>
-    </div>
-
-   </section>
-
-   <!-- PLAYERS -->
-   <section class="page" id="page-players">
-    <div class="placeholder">
-     <h3>Player Management</h3>
-     <p>Player Management module will be connected here.</p>
-    </div>
-   </section>
-
-   <!-- TEAMS -->
-   <section class="page" id="page-teams">
-    <div class="placeholder">
-     <h3>Teams Management</h3>
-     <p>Teams Management module will be connected here.</p>
-    </div>
-   </section>
-
-   <!-- AUCTION MANAGEMENT -->
-   <section class="page" id="page-auction">
-
-    <div class="welcome">
-     <h1>Auction Management</h1>
-     <p>Create and manage auctions for your club.</p>
-    </div>
-
-    <div class="card" style="margin-bottom:18px">
-
-     <h3 class="section-title">Create New Auction</h3>
-
-     <form id="auctionForm" class="auction-form">
-
-      <div class="field full">
-       <label for="auctionName">AUCTION NAME</label>
-       <input
-        id="auctionName"
-        type="text"
-        maxlength="100"
-        placeholder="Example: GFC Premier League Auction 2026"
-        required
-       >
-      </div>
-
-      <div class="field">
-       <label for="auctionMode">AUCTION MODE</label>
-       <select id="auctionMode" required>
-        <option value="live">Live Auction</option>
-        <option value="offline">Offline Auction</option>
-       </select>
-      </div>
-
-      <div class="field">
-       <label for="biddingMode">BIDDING MODE</label>
-       <select id="biddingMode" required>
-        <option value="open">Open Bidding</option>
-        <option value="sealed">Sealed Bidding</option>
-       </select>
-      </div>
-
-      <div class="field">
-       <label for="auctionCurrency">CURRENCY</label>
-       <select id="auctionCurrency">
-        <option value="INR">INR (₹)</option>
-       </select>
-      </div>
-
-      <div class="field">
-       <label>INITIAL STATUS</label>
-       <input type="text" value="Draft" disabled>
-      </div>
-
-      <div class="field full">
-       <button
-        class="primary-btn"
-        id="createAuctionBtn"
-        type="submit"
-       >＋ CREATE AUCTION</button>
-
-       <div
-        id="auctionFormMessage"
-        class="auction-message"
-        role="status"
-       ></div>
-      </div>
-
-     </form>
-    </div>
-
-    <!-- AUCTION LIST -->
-    <div class="card">
-
-     <div class="auction-toolbar">
-      <h3 class="section-title" style="margin:0">Your Auctions</h3>
-      <button
-       type="button"
-       class="secondary-btn"
-       id="refreshAuctionsBtn"
-      >↻ REFRESH</button>
-     </div>
-
-     <div id="auctionListMessage" class="auction-message"></div>
-
-     <div class="auction-table-wrap">
-      <table class="auction-table">
-
-       <thead>
-        <tr>
-         <th>AUCTION NAME</th>
-         <th>AUCTION MODE</th>
-         <th>BIDDING MODE</th>
-         <th>STATUS</th>
-         <th>CREATED</th>
-        </tr>
-       </thead>
-
-       <tbody id="auctionTableBody">
-        <tr>
-         <td colspan="5" class="auction-empty">
-          Loading auctions...
-         </td>
-        </tr>
-       </tbody>
-
-      </table>
-     </div>
-
-    </div>
-
-   </section>
-
-   <!-- SUBSCRIPTION -->
-   <section class="page" id="page-subscription">
-
-    <div class="card">
-     <h3 class="section-title">Subscription Details</h3>
-
-     <div class="details-grid">
-
-      <div class="detail">
-       <div class="detail-label">PLAN NAME</div>
-       <div class="detail-value" id="subPlan">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">AMOUNT</div>
-       <div class="detail-value" id="subAmount">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">START DATE</div>
-       <div class="detail-value" id="subStart">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">END DATE</div>
-       <div class="detail-value" id="subEnd">—</div>
-      </div>
-
-      <div class="detail">
-       <div class="detail-label">STATUS</div>
-       <div class="detail-value" id="subStatus">—</div>
-      </div>
-
-     </div>
-    </div>
-
-   </section>
-
   </div>
- </main>
+ </div>
+
+ <div id="loading" class="loading">
+  VERIFYING ACCOUNT AND LOADING DASHBOARD...
+ </div>
+
+ <div id="dashboardContent" style="display:none">
+
+  <section id="overviewSection">
+
+   <div class="welcome">
+    <h2>Welcome, <span id="welcomeName">Owner</span>!</h2>
+    <p>
+     Welcome to your Club Owner Dashboard. Here you can view your
+     club information, subscription details and auction management.
+    </p>
+   </div>
+
+   <div class="stats">
+
+    <div class="stat-card">
+     <div class="stat-label">MY CLUB</div>
+     <div class="stat-value" id="statClubName">-</div>
+     <div class="stat-note">Registered club name</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">CLUB STATUS</div>
+     <div class="stat-value" id="statClubStatus">-</div>
+     <div class="stat-note">Current account status</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">SUBSCRIPTION PLAN</div>
+     <div class="stat-value" id="statPlan">-</div>
+     <div class="stat-note">Current subscription</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">SUBSCRIPTION STATUS</div>
+     <div class="stat-value" id="statSubStatus">-</div>
+     <div class="stat-note">Current subscription validity</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">SUBSCRIPTION EXPIRY</div>
+     <div class="stat-value" id="statExpiry">-</div>
+     <div class="stat-note">Subscription end date</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">OWNER EMAIL</div>
+     <div class="stat-value" id="statEmail" style="font-size:13px">-</div>
+     <div class="stat-note">Registered email address</div>
+    </div>
+
+   </div>
+
+   <div class="section-title">CLUB OVERVIEW</div>
+
+   <div class="content-grid">
+
+    <div class="panel">
+     <div class="panel-title">CLUB INFORMATION</div>
+     <div class="info-row">
+      <span class="info-label">Club Name</span>
+      <span class="info-value" id="infoClubName">-</span>
+     </div>
+     <div class="info-row">
+      <span class="info-label">Club ID</span>
+      <span class="info-value" id="infoClubId">-</span>
+     </div>
+     <div class="info-row">
+      <span class="info-label">Club Status</span>
+      <span class="info-value" id="infoClubStatus">-</span>
+     </div>
+    </div>
+
+    <div class="panel">
+     <div class="panel-title">OWNER INFORMATION</div>
+     <div class="info-row">
+      <span class="info-label">Owner Name</span>
+      <span class="info-value" id="infoOwnerName">-</span>
+     </div>
+     <div class="info-row">
+      <span class="info-label">Email</span>
+      <span class="info-value" id="infoOwnerEmail">-</span>
+     </div>
+     <div class="info-row">
+      <span class="info-label">Phone</span>
+      <span class="info-value" id="infoOwnerPhone">-</span>
+     </div>
+    </div>
+
+   </div>
+
+   <div class="section-title">AUCTION MANAGEMENT</div>
+
+   <div class="auction-card">
+    <div>
+     <h3>🏏 My Auctions</h3>
+     <p>Create and manage your club's cricket player auctions.</p>
+    </div>
+    <span class="coming">NEXT MODULE</span>
+   </div>
+
+  </section>
+
+  <section id="clubSection" style="display:none">
+   <div class="section-title">MY CLUB DETAILS</div>
+   <div class="panel">
+    <div class="info-row">
+     <span class="info-label">Club Name</span>
+     <span class="info-value" id="clubPageName">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Club ID</span>
+     <span class="info-value" id="clubPageId">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Owner Name</span>
+     <span class="info-value" id="clubPageOwner">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Email</span>
+     <span class="info-value" id="clubPageEmail">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Phone</span>
+     <span class="info-value" id="clubPagePhone">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Status</span>
+     <span class="info-value" id="clubPageStatus">-</span>
+    </div>
+   </div>
+  </section>
+
+  <section id="subscriptionSection" style="display:none">
+   <div class="section-title">MY SUBSCRIPTION</div>
+   <div class="panel">
+    <div class="info-row">
+     <span class="info-label">Plan Name</span>
+     <span class="info-value" id="subPagePlan">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Start Date</span>
+     <span class="info-value" id="subPageStart">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Expiry Date</span>
+     <span class="info-value" id="subPageEnd">-</span>
+    </div>
+    <div class="info-row">
+     <span class="info-label">Status</span>
+     <span class="info-value" id="subPageStatus">-</span>
+    </div>
+   </div>
+  </section>
+
+  <section id="auctionSection" style="display:none">
+   <div class="section-title">AUCTION MANAGEMENT</div>
+   <div class="auction-card">
+    <div>
+     <h3>🏏 Auction Management</h3>
+     <p>The auction management module will be connected in the next step.</p>
+    </div>
+    <span class="coming">COMING NEXT</span>
+   </div>
+  </section>
+
+ </div>
+
+ <div id="errorBox" style="display:none"></div>
+
+ <div class="footer">
+  PLAYER AUCTION PLATFORM · CLUB OWNER PORTAL
+ </div>
+
+</main>
 </div>
 
 <script>
-
-// SUPABASE CONFIGURATION
 const SUPABASE_URL = "https://jxanxkhjpadvmxjhupit.supabase.co";
 
 const SUPABASE_KEY =
@@ -588,464 +526,236 @@ const db = window.supabase.createClient(
  SUPABASE_KEY
 );
 
-let currentProfile = null;
+let currentUser = null;
+let currentClubId = null;
 
-
-// SHOW ERROR
-function showFatal(text){
-
- document.getElementById("loading").style.display="none";
- document.getElementById("app").style.display="none";
-
- const box=document.getElementById("fatal");
- box.textContent=text;
- box.style.display="block";
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,function(char){
+  return {
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[char];
+ });
 }
 
-
-// FORMAT DATE
 function formatDate(value){
-
- if(!value) return "—";
-
- return new Date(value).toLocaleString("en-IN",{
-  timeZone:"Asia/Kolkata",
+ if(!value) return "-";
+ const date = new Date(value);
+ if(Number.isNaN(date.getTime())) return "-";
+ return date.toLocaleDateString("en-IN",{
   day:"2-digit",
   month:"short",
-  year:"numeric",
-  hour:"2-digit",
-  minute:"2-digit",
-  hour12:true
+  year:"numeric"
  });
-
 }
 
+function setText(id,value){
+ const element = document.getElementById(id);
+ if(element) element.textContent = value || "-";
+}
 
-// LOAD DASHBOARD
+function setStatus(id,text,type){
+ const element = document.getElementById(id);
+ if(!element) return;
+
+ element.innerHTML =
+  '<span class="status '+type+'">'+escapeHTML(text)+'</span>';
+}
+
+function showError(message){
+ document.getElementById("loading").style.display="none";
+ document.getElementById("dashboardContent").style.display="none";
+
+ const box=document.getElementById("errorBox");
+ box.style.display="block";
+ box.className="error-box";
+ box.textContent=message;
+}
+
 async function loadDashboard(){
 
  try{
 
-  // 1. Verify logged-in session
-  const {data:sessionData,error:sessionError} =
-   await db.auth.getSession();
+  // 1. Check authenticated user
+  const {data:authData,error:authError}=await db.auth.getUser();
 
-  if(sessionError) throw sessionError;
-
-  const session=sessionData.session;
-
-  if(!session){
+  if(authError || !authData.user){
    window.location.replace("owner-login.html");
    return;
   }
 
+  currentUser=authData.user;
 
-  // 2. Verify Club Owner profile
-  const {data:profile,error:profileError} = await db
+  // 2. Verify owner profile
+  const {data:profile,error:profileError}=await db
    .from("profiles")
-   .select("id,full_name,role,club_id")
-   .eq("id",session.user.id)
+   .select("id,role,club_id,full_name,phone")
+   .eq("id",currentUser.id)
    .maybeSingle();
 
-  if(profileError) throw profileError;
+  if(profileError) throw new Error("Unable to verify owner profile.");
 
-  if(!profile || profile.role!=="club_owner" || !profile.club_id){
-   throw new Error("This account is not assigned to a valid club.");
+  if(!profile || profile.role!=="club_owner"){
+   await db.auth.signOut();
+   window.location.replace("owner-login.html");
+   return;
   }
 
-  currentProfile=profile;
+  if(!profile.club_id){
+   throw new Error("No club is assigned to this owner account.");
+  }
 
+  currentClubId=profile.club_id;
 
-  // 3. Load only the owner's own club
-  const {data:club,error:clubError} = await db
+  // 3. Server-side owner permission check
+  const {data:isActive,error:activeError}=await db
+   .rpc("is_active_club_owner");
+
+  if(activeError || isActive!==true){
+   await db.auth.signOut();
+   window.location.replace("owner-login.html");
+   return;
+  }
+
+  // 4. Load assigned club only
+  const {data:club,error:clubError}=await db
    .from("clubs")
-   .select("id,club_name,owner_email,owner_user_id")
-   .eq("id",profile.club_id)
-   .eq("owner_user_id",session.user.id)
+   .select("id,club_name,owner_email,status")
+   .eq("id",currentClubId)
    .maybeSingle();
 
-  if(clubError) throw clubError;
+  if(clubError) throw new Error("Unable to load club information.");
 
-  if(!club){
-   throw new Error("Your club could not be found.");
+  if(!club || club.status!=="active"){
+   await db.auth.signOut();
+   window.location.replace("owner-login.html");
+   return;
   }
 
-
-  // 4. Verify active subscription
-  const now=new Date().toISOString();
-
-  const {data:subscription,error:subError} = await db
+  // 5. Load latest subscription for this club
+  const {data:subscription,error:subError}=await db
    .from("subscriptions")
-   .select("id,plan_name,amount,start_date,end_date,status")
-   .eq("club_id",club.id)
-   .eq("status","active")
-   .lte("start_date",now)
-   .gt("end_date",now)
+   .select("id,plan_name,start_date,end_date,status")
+   .eq("club_id",currentClubId)
    .order("end_date",{ascending:false})
    .limit(1)
    .maybeSingle();
 
-  if(subError) throw subError;
+  if(subError) throw new Error("Unable to load subscription information.");
 
   if(!subscription){
-   throw new Error("Your subscription has expired or is not active. Please contact the platform administrator.");
-  }
-
-
-  // 5. Display dashboard information
-  const name=profile.full_name || "Club Owner";
-
-  document.getElementById("headerName").textContent=name;
-  document.getElementById("welcomeName").textContent=name;
-
-  document.getElementById("clubNameCard").textContent=club.club_name;
-  document.getElementById("planCard").textContent=subscription.plan_name;
-
-  document.getElementById("detailClubName").textContent=club.club_name;
-  document.getElementById("detailClubId").textContent=club.id;
-  document.getElementById("detailOwner").textContent=name;
-
-  document.getElementById("detailEmail").textContent=
-   club.owner_email || session.user.email || "—";
-
-  document.getElementById("statusCard").textContent="ACTIVE";
-
-  document.getElementById("expiryCard").textContent=
-   "Expires: "+formatDate(subscription.end_date);
-
-  document.getElementById("subPlan").textContent=subscription.plan_name;
-
-  document.getElementById("subAmount").textContent=
-   "₹"+Number(subscription.amount).toLocaleString("en-IN");
-
-  document.getElementById("subStart").textContent=
-   formatDate(subscription.start_date);
-
-  document.getElementById("subEnd").textContent=
-   formatDate(subscription.end_date);
-
-  document.getElementById("subStatus").textContent="ACTIVE";
-
-  document.getElementById("loading").style.display="none";
-  document.getElementById("app").style.display="flex";
-
- }catch(error){
-
-  console.error("Dashboard error:",error);
-
-  await db.auth.signOut();
-
-  showFatal(
-   (error.message || "Unable to load dashboard.")+
-   " Please contact the platform administrator or login again."
-  );
-
-  setTimeout(()=>{
+   await db.auth.signOut();
    window.location.replace("owner-login.html");
-  },4000);
-
- }
-
-}
-
-
-// SIDEBAR NAVIGATION
-document.querySelectorAll(".nav-btn").forEach(button=>{
-
- button.addEventListener("click",()=>{
-
-  const page=button.dataset.page;
-
-  // Players is a separate standalone page
-  if(page==="players"){
-   window.location.href="players.html";
    return;
   }
 
-  document.querySelectorAll(".nav-btn").forEach(item=>{
-   item.classList.remove("active");
-  });
+  const now=new Date();
+  const startDate=new Date(subscription.start_date);
+  const endDate=new Date(subscription.end_date);
 
-  document.querySelectorAll(".page").forEach(item=>{
-   item.classList.remove("active");
-  });
-
-  button.classList.add("active");
-
-  document.getElementById("page-"+page).classList.add("active");
-
-  if(page==="auction"){
-   loadAuctions();
+  if(
+   subscription.status!=="active" ||
+   endDate<=now ||
+   startDate>now
+  ){
+   await db.auth.signOut();
+   window.location.replace("owner-login.html");
+   return;
   }
 
-  const titles={
-   dashboard:"Dashboard",
-   players:"Players Management",
-   teams:"Teams Management",
-   auction:"Auction Management",
-   subscription:"Subscription"
-  };
+  // 6. Prepare owner and club information
+  const ownerName=profile.full_name || "Club Owner";
+  const ownerEmail=club.owner_email || currentUser.email || "-";
+  const ownerPhone=profile.phone || "-";
+  const clubName=club.club_name || "My Club";
 
-  document.getElementById("topTitle").textContent=titles[page];
+  setText("topOwnerName",ownerName);
+  setText("avatar",ownerName.charAt(0).toUpperCase());
+  setText("welcomeName",ownerName);
 
+  setText("statClubName",clubName);
+  setText("statClubStatus","ACTIVE");
+  setText("statPlan",subscription.plan_name);
+  setText("statExpiry",formatDate(subscription.end_date));
+  setText("statEmail",ownerEmail);
+
+  setStatus("statSubStatus","ACTIVE","active");
+
+  setText("infoClubName",clubName);
+  setText("infoClubId",club.id);
+  setStatus("infoClubStatus","ACTIVE","active");
+
+  setText("infoOwnerName",ownerName);
+  setText("infoOwnerEmail",ownerEmail);
+  setText("infoOwnerPhone",ownerPhone);
+
+  setText("clubPageName",clubName);
+  setText("clubPageId",club.id);
+  setText("clubPageOwner",ownerName);
+  setText("clubPageEmail",ownerEmail);
+  setText("clubPagePhone",ownerPhone);
+  setStatus("clubPageStatus","ACTIVE","active");
+
+  setText("subPagePlan",subscription.plan_name);
+  setText("subPageStart",formatDate(subscription.start_date));
+  setText("subPageEnd",formatDate(subscription.end_date));
+  setStatus("subPageStatus","ACTIVE","active");
+
+  document.getElementById("loading").style.display="none";
+  document.getElementById("dashboardContent").style.display="block";
+
+ }catch(error){
+
+  console.error("Owner dashboard error:",error);
+  showError(error.message || "Could not load dashboard.");
+ }
+}
+
+function showSection(section,element){
+
+ const sections=["overview","club","subscription","auction"];
+
+ sections.forEach(name=>{
+  document.getElementById(name+"Section").style.display=
+   name===section?"block":"none";
  });
 
-});
+ document.querySelectorAll(".nav-item").forEach(item=>{
+  item.classList.remove("active");
+ });
 
+ if(element) element.classList.add("active");
 
-// LOGOUT
-document.getElementById("logoutBtn").addEventListener("click",async()=>{
-
- const button=document.getElementById("logoutBtn");
-
- button.disabled=true;
- button.textContent="LOGGING OUT...";
-
- const {error}=await db.auth.signOut();
-
- if(error){
-
-  alert("Logout failed. Please try again.");
-
-  button.disabled=false;
-  button.textContent="↪ LOGOUT";
-
-  return;
- }
-
- window.location.replace("owner-login.html");
-
-});
-
-
-// =====================================
-// AUCTION MANAGEMENT
-// =====================================
-
-
-// ESCAPE TEXT
-function escapeAuctionText(value){
-
- return String(value ?? "").replace(/[&<>"']/g,char=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[char]));
-
-}
-
-
-// DISPLAY MODE
-function prettyAuctionMode(value){
-
- const labels={
-  live:"Live Auction",
-  offline:"Offline Auction",
-  open:"Open Bidding",
-  sealed:"Sealed Bidding"
+ const titles={
+  overview:"Dashboard",
+  club:"My Club",
+  subscription:"Subscription",
+  auction:"Auction Management"
  };
 
- return labels[value] || String(value || "—").replaceAll("_"," ");
+ setText("pageTitle",titles[section] || "Dashboard");
 
+ document.getElementById("sidebar").classList.remove("open");
 }
 
-
-// SHOW AUCTION MESSAGE
-function showAuctionMessage(id,message,type=""){
-
- const el=document.getElementById(id);
-
- if(!el) return;
-
- el.textContent=message;
-
- el.className="auction-message"+(type ? " "+type : "");
-
+function toggleSidebar(){
+ document.getElementById("sidebar").classList.toggle("open");
 }
 
+async function logout(){
 
-// LOAD AUCTIONS
-async function loadAuctions(){
+ const confirmed=confirm("Are you sure you want to logout?");
 
- const body=document.getElementById("auctionTableBody");
+ if(!confirmed) return;
 
- if(!body || !currentProfile?.club_id) return;
-
- body.innerHTML=
- '<tr><td colspan="5" class="auction-empty">Loading auctions...</td></tr>';
-
- showAuctionMessage("auctionListMessage","");
-
-
- const {data,error}=await db
-  .from("auctions")
-  .select("id,club_id,auction_name,auction_mode,bidding_mode,status,created_at")
-  .eq("club_id",currentProfile.club_id)
-  .order("created_at",{ascending:false});
-
-
- if(error){
-
-  body.innerHTML=
-  '<tr><td colspan="5" class="auction-empty">Could not load auctions.</td></tr>';
-
-  showAuctionMessage(
-   "auctionListMessage",
-   "Auction load failed: "+error.message,
-   "error"
-  );
-
-  console.error("Load auctions error:",error);
-
-  return;
- }
-
-
- if(!data || data.length===0){
-
-  body.innerHTML=
-  '<tr><td colspan="5" class="auction-empty">No auctions created yet. Create your first auction above.</td></tr>';
-
-  return;
- }
-
-
- body.innerHTML=data.map(a=>{
-
-  const created=a.created_at
-   ? new Date(a.created_at).toLocaleDateString("en-IN",{
-      timeZone:"Asia/Kolkata",
-      day:"2-digit",
-      month:"short",
-      year:"numeric"
-     })
-   : "—";
-
-  return `<tr>
-
-   <td><strong>${escapeAuctionText(a.auction_name)}</strong></td>
-
-   <td>${escapeAuctionText(prettyAuctionMode(a.auction_mode))}</td>
-
-   <td>${escapeAuctionText(prettyAuctionMode(a.bidding_mode))}</td>
-
-   <td>
-    <span class="auction-status">
-     ${escapeAuctionText(a.status || "draft")}
-    </span>
-   </td>
-
-   <td>${created}</td>
-
-  </tr>`;
-
- }).join("");
-
+ await db.auth.signOut();
+ window.location.replace("owner-login.html");
 }
 
-
-// CREATE AUCTION
-document.getElementById("auctionForm").addEventListener("submit",async event=>{
-
- event.preventDefault();
-
- const button=document.getElementById("createAuctionBtn");
-
- const name=document.getElementById("auctionName").value.trim();
-
-
- if(!currentProfile?.club_id){
-
-  showAuctionMessage(
-   "auctionFormMessage",
-   "Your club information is missing. Reload the dashboard.",
-   "error"
-  );
-
-  return;
- }
-
-
- if(!name){
-
-  showAuctionMessage(
-   "auctionFormMessage",
-   "Please enter an auction name.",
-   "error"
-  );
-
-  return;
- }
-
-
- button.disabled=true;
- button.textContent="CREATING...";
-
- showAuctionMessage("auctionFormMessage","");
-
-
- const {error}=await db
-  .from("auctions")
-  .insert([{
-
-   club_id:currentProfile.club_id,
-
-   auction_name:name,
-
-   auction_mode:document.getElementById("auctionMode").value,
-
-   bidding_mode:document.getElementById("biddingMode").value,
-
-   status:"draft",
-
-   currency:document.getElementById("auctionCurrency").value
-
-  }]);
-
-
- button.disabled=false;
- button.textContent="＋ CREATE AUCTION";
-
-
- if(error){
-
-  console.error("Create auction error:",error);
-
-  showAuctionMessage(
-   "auctionFormMessage",
-   "Auction creation failed: "+error.message,
-   "error"
-  );
-
-  return;
- }
-
-
- document.getElementById("auctionForm").reset();
-
- showAuctionMessage(
-  "auctionFormMessage",
-  "Auction created successfully as Draft.",
-  "success"
- );
-
- await loadAuctions();
-
-});
-
-
-// REFRESH AUCTION LIST
-document.getElementById("refreshAuctionsBtn").addEventListener(
- "click",
- loadAuctions
-);
-
-
-// START DASHBOARD
 loadDashboard();
-
 </script>
 
 </body>
